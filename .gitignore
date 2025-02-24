@@ -11,7 +11,7 @@ media
 Pipfile
 venv
 db.sqlite3
-migrations
+migrations/
 update*
 celerybeat-schedule.bak
 celerybeat-schedule.dat
