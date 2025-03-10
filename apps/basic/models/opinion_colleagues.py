@@ -4,7 +4,7 @@ from apps.basic.models.read_more import ReadMore
 from apps.basic.models.specialists import Specialist
 
 
-class OpinioColleague(models.Model):
+class OpinionColleague(models.Model):
     comment = models.TextField()
     opinion = models.ForeignKey(Specialist, on_delete=models.CASCADE)
     read_more = models.ForeignKey(ReadMore, on_delete=models.CASCADE)
