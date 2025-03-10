@@ -11,3 +11,7 @@ class Service(models.Model):
 
     def __str__(self):
         return self.type
+
+    class Meta:
+        verbose_name = 'Услуги'
+        verbose_name_plural = 'Услуги'

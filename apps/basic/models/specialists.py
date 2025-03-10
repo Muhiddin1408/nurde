@@ -28,3 +28,7 @@ class Specialist(models.Model):
 
     def __str__(self):
         return self.type + " - " + str(self.user)
+
+    class Meta:
+        verbose_name = 'Специалисты'
+        verbose_name_plural = 'Специалисты'

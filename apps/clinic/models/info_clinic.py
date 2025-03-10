@@ -14,6 +14,10 @@ class InfoClinic(models.Model):
     def __str__(self):
         return self.clinic_name
 
+    class Meta:
+        verbose_name_plural = 'Инфо о клиниках'
+        verbose_name = 'Инфо о клиниках'
+
 
 class Description(models.Model):
     description = models.CharField(max_length=500)
@@ -22,6 +26,10 @@ class Description(models.Model):
     def __str__(self):
         return self.description
 
+    class Meta:
+        verbose_name_plural = 'Описания'
+        verbose_name = 'Описания'
+
 
 class Photo(models.Model):
     parent = models.ForeignKey(InfoClinic, on_delete=models.CASCADE)
@@ -29,3 +37,7 @@ class Photo(models.Model):
 
     def __str__(self):
         return self.parent.clinic_name.name
+
+    class Meta:
+        verbose_name = 'Фото'
+        verbose_name_plural = 'Фото'

@@ -14,3 +14,7 @@ class ReadMore(models.Model):
 
     def __str__(self):
         return self.name + " " + self.specialists.user.last_name
+
+    class Meta:
+        verbose_name_plural = 'Читать далее'
+        verbose_name = 'Читать далее'

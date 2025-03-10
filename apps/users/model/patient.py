@@ -10,3 +10,6 @@ class Patient(models.Model):
     longitude = models.IntegerField(null=True, blank=True)
     pol = models.CharField(max_length=25)
 
+    class Meta:
+        verbose_name = 'Пациенты'
+        verbose_name_plural = 'Пациенты'

@@ -11,3 +11,7 @@ class OpinionColleague(models.Model):
 
     def __str__(self):
         return self.opinion.user.last_name + " " + self.comment
+
+    class Meta:
+        verbose_name = 'Мнение коллег'
+        verbose_name_plural = 'Мнение коллег'

@@ -15,3 +15,7 @@ class CommentReadMore(models.Model):
     def __str__(self):
         return self.comment + " " + self.user.last_name
 
+    class Meta:
+        verbose_name_plural = 'Комментарий'
+        verbose_name = 'Комментарий'
+
