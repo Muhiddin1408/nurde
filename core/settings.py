@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'drf_yasg',
+    'parler',
 ]
 
 MIDDLEWARE = [
@@ -124,7 +125,23 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'ru'
 
-TIME_ZONE = 'UTC'
+LANGUAGES = (
+    ('ru', 'Russian'),
+    ('en', 'English'),
+    ('uz', 'Uzbek'),
+)
+PARLER_LANGUAGES = {
+    None: (
+        {'code': 'en'},
+        {'code': 'ru'},
+        {'code': 'uz'},
+    ),
+    'default': {
+        'fallbacks': ['en'],
+        'hide_untranslated': False,
+    }
+}
+TIME_ZONE = 'Asia/Tashkent'
 
 USE_I18N = True
 
