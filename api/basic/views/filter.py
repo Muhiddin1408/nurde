@@ -16,9 +16,9 @@ from apps.service.models.service import WorkTime
 def filter_list(request):
     today = date.today()
     data = {
-        'today': f'{today.strftime('%A'), today, count(today)}',
-        'tomorrow': f'{(today + timedelta(days=1)).strftime('%A'), today + timedelta(days=1), count(today+ timedelta(days=1))}',
-        'after_tomorrow': f'{(today + timedelta(days=2)).strftime('%A'), today + timedelta(days=2), count(today+ timedelta(days=2))}',
+        # 'today': f'{today.strftime('%A'), today, count(today)}',
+        # 'tomorrow': f'{(today + timedelta(days=1)).strftime('%A'), today + timedelta(days=1), count(today+ timedelta(days=1))}',
+        # 'after_tomorrow': f'{(today + timedelta(days=2)).strftime('%A'), today + timedelta(days=2), count(today+ timedelta(days=2))}',
     }
     return Response(data)
 
