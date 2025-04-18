@@ -72,7 +72,7 @@ def sms_conf(request):
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
-@action(methods='POST', detail=False)
+@api_view(['POST'])
 @permission_classes([AllowAny, ])
 def password_conf(request):
     try:

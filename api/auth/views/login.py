@@ -11,7 +11,7 @@ from apps.users.models import User
 @permission_classes([AllowAny, ])
 def login(request):
     try:
-        phone = request.data.get('phone')
+        phone = request.data.get('username')
         password = request.data.get('password')
         user = User.objects.filter(username=phone).first()
         if user and user.check_password(password):
