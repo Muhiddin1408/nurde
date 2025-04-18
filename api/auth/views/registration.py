@@ -41,7 +41,6 @@ class RegisterView(APIView):
             user = User.objects.get(username=phone)
             user.sms_code = sms_code
             user.sms_code_time = datetime.now() + timedelta(minutes=2)
-            print(user.sms_code_time)
             user.save()
             SendSmsApiWithEskiz(message="https://star-one.uz/ Tasdiqlash kodi " + str(sms_code), phone=int(phone)).send()
             return Response(status=status.HTTP_200_OK)
