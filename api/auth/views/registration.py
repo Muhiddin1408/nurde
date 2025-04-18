@@ -1,5 +1,7 @@
 import random
 from datetime import timedelta, datetime
+
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.core.validators import validate_email
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import viewsets, status
@@ -93,33 +95,49 @@ def sms_conf(request):
 
 
 @api_view(['POST'])
-@permission_classes([AllowAny, ])
+@permission_classes([AllowAny])
 def password_conf(request):
     try:
+        required_fields = ['username', 'password', 'passport', 'date_of_birth']
+        for field in required_fields:
+            if field not in request.data:
+                raise ValidationError(f"{field} is required.")
+
         phone = request.data['username']
         password = request.data['password']
         passport = request.data['passport']
         date_of_birth = request.data['date_of_birth']
+
+        try:
+            data = datetime.strptime(date_of_birth, "%d.%m.%Y").date()
+        except ValueError:
+            return Response({"detail": "date_of_birth must be in DD.MM.YYYY format."},
+                            status=status.HTTP_400_BAD_REQUEST)
+
         user = User.objects.get(username=phone)
 
+        user.set_password(password)
+        user.passport = passport
+        user.is_active = True
+        user.save()
+
+        if not Patient.objects.filter(user=user).exists():
+            Patient.objects.create(user=user, date_of_birth=data, pinfl=passport)
+
+        token = RefreshToken.for_user(user)
         result = {
-            'access': None,
-            'refresh': None,
+            'access': str(token.access_token),
+            'refresh': str(token)
         }
-        if user:
-            user.set_password(password)
-            user.passport = passport
-            user.is_active = True
-            user.save()
-            Patient.objects.create(user=user, birth_date=date_of_birth, pinfl=passport)
-            token = RefreshToken.for_user(user)
-            result = {
-                'access': str(token.access_token),
-                'refresh': str(token)
-            }
+
         return Response(result, status=status.HTTP_200_OK)
-    except:
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    except ObjectDoesNotExist:
+        return Response({"detail": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+    except ValidationError as ve:
+        return Response({"detail": str(ve)}, status=status.HTTP_400_BAD_REQUEST)
+    except Exception as e:
+        return Response({"detail": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
 # @api_view(['POST'])
