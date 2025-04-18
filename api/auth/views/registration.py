@@ -1,9 +1,6 @@
 import random
 from datetime import timedelta, datetime
-from django.utils.timezone import localtime, now as timezone_now
-from django.utils.decorators import method_decorator
-from django.utils.timezone import localtime
-from django.views.decorators.csrf import csrf_exempt
+from django.core.validators import validate_email
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import viewsets, status
 from rest_framework.decorators import action, api_view, permission_classes
@@ -29,23 +26,29 @@ class RegisterView(APIView):
     )
     def post(self, request):
         phone = request.data.get('username')
-        print(phone)
         user = User.objects.filter(username=phone).last()
-        print(user)
         if user is None:
             serializer = RegisterSerializer(data=request.data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
-        if not user.is_active:
+            sms_code = random.randint(1000, 9999)
+            user = User.objects.get(username=phone)
+            user.sms_code = sms_code
+            user.sms_code_time = datetime.now() + timedelta(minutes=2)
+            user.save()
+            SendSmsApiWithEskiz(message="https://star-one.uz/ Tasdiqlash kodi " + str(sms_code),
+                                phone=int(phone)).send()
+            return Response({'status': False},status=status.HTTP_200_OK)
+        elif not user.is_active and not validate_email(phone):
             sms_code = random.randint(1000, 9999)
             user = User.objects.get(username=phone)
             user.sms_code = sms_code
             user.sms_code_time = datetime.now() + timedelta(minutes=2)
             user.save()
             SendSmsApiWithEskiz(message="https://star-one.uz/ Tasdiqlash kodi " + str(sms_code), phone=int(phone)).send()
-            return Response(status=status.HTTP_200_OK)
+            return Response({'status': False},status=status.HTTP_200_OK)
         else:
-            return Response({"msg": "This user already exists."}, status=status.HTTP_200_OK)
+            return Response({'status': True}, status=status.HTTP_200_OK)
 #
 
 # @api_view(['POST'])

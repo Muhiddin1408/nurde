@@ -4,6 +4,6 @@ from api.clinic.serializers.clinic import ClinicSerializers
 from apps.clinic.models import Clinic
 
 
-class ClinicViewSet(viewsets.ModelViewSet):
+class ClinicViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Clinic.objects.filter(type='clinic')
     serializer_class = ClinicSerializers

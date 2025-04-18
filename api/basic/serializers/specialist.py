@@ -28,8 +28,27 @@ class SpecialistSerializers(serializers.Serializer):
                   'work_time')
     def get_work_time(self, obj):
         now = datetime.now()
+        date = self.context['date']
+        time = self.context['time']
         weekday = now.weekday()
         work = WorkTime.objects.filter(user=obj.id, weekday__name=weekday)
+        if date:
+            work = WorkTime.objects.filter(user=obj.id, weekday__name=weekday, date__date=date)
+        if time == 'before':
+            now = datetime.now()
+            twelve_pm_today = datetime.combine(now.date(), time(12, 0))
+            work = work(user=obj.id, date__hour__lte=12)
+        elif time == 'mid':
+            work = work(user=obj.id, date__hour__gt=12, date__hour__lte=18)
+        elif time == 'after':
+            work = work(user=obj.id, date__hour__gt=18)
+        else:
+            WorkTime.objects.filter(user=obj.id, weekday__name=weekday)
+
+
+
+
+
         booked_ids = Booked.objects.filter(
             worktime__in=work
         ).values_list('worktime_id', flat=True)
