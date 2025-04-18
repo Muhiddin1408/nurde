@@ -8,7 +8,9 @@ class Patient(models.Model):
     date_of_birth = models.DateField(null=True, blank=True)
     latitude = models.IntegerField(null=True, blank=True)
     longitude = models.IntegerField(null=True, blank=True)
-    pol = models.CharField(max_length=25)
+    pol = models.CharField(max_length=25, blank=True, null=True)
+    pinfl = models.IntegerField(blank=True, null=True)
+
 
     class Meta:
         verbose_name = 'Пациенты'

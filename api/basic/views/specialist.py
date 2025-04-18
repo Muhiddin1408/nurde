@@ -20,7 +20,7 @@ class SpecialistCategoryViewSet(viewsets.ReadOnlyModelViewSet):
         category_id = self.request.query_params.get('category')
         if category_id:
             queryset = queryset.filter(category__id=category_id)
-        return SpecialistSerializers(queryset, many=True).data
+        return queryset
 
 
 

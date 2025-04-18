@@ -11,7 +11,7 @@ Pipfile
 venv
 db.sqlite3
 
-update*
+
 celerybeat-schedule.bak
 celerybeat-schedule.dat
 celerybeat-schedule.dir

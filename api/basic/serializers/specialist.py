@@ -1,6 +1,9 @@
-from rest_framework import serializers
 
+from rest_framework import serializers
+from datetime import datetime
 from apps.basic.models import Specialist
+from apps.service.models.booked import Booked
+from apps.service.models.service import WorkTime
 from apps.utils.models import Category
 
 
@@ -9,7 +12,6 @@ class CategorySerializers(serializers.Serializer):
     class Meta:
         model = Category
         fields = '__all__'
-        read_only_fields = ('id',)
 
 
 class SpecialistSerializers(serializers.Serializer):
@@ -22,4 +24,15 @@ class SpecialistSerializers(serializers.Serializer):
 
     class Meta:
         model = Specialist
-        fields = ('id', 'last_name', 'first_name', 'middle_name', 'experience', 'category', 'ranking', 'comment')
+        fields = ('id', 'last_name', 'first_name', 'middle_name', 'experience', 'category', 'ranking', 'comment',
+                  'work_time')
+    def get_work_time(self, obj):
+        now = datetime.now()
+        weekday = now.weekday()
+        work = WorkTime.objects.filter(user=obj.id, weekday__name=weekday)
+        booked_ids = Booked.objects.filter(
+            worktime__in=work
+        ).values_list('worktime_id', flat=True)
+        free_worktimes = work.exclude(id__in=booked_ids)
+        return free_worktimes
+
