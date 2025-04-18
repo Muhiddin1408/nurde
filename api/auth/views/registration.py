@@ -80,7 +80,7 @@ def sms_conf(request):
         result = {
             'code': False,
         }
-        if user and user.sms_code == sms_code:
+        if user and int(user.sms_code) == int(sms_code):
             result = {
                 'code': True,
             }
