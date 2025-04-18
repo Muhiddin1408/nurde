@@ -33,14 +33,13 @@ class RegisterView(APIView):
             serializer.save()
             sms_code = random.randint(1000, 9999)
             user = User.objects.get(username=phone)
-            if not validate_email(phone):
-                user.sms_code = sms_code
-                user.sms_code_time = datetime.now() + timedelta(minutes=2)
-                user.save()
-                SendSmsApiWithEskiz(message="https://star-one.uz/ Tasdiqlash kodi " + str(sms_code),
-                                phone=int(phone)).send()
+            user.sms_code = sms_code
+            user.sms_code_time = datetime.now() + timedelta(minutes=2)
+            user.save()
+            SendSmsApiWithEskiz(message="https://star-one.uz/ Tasdiqlash kodi " + str(sms_code),
+                            phone=int(phone)).send()
             return Response({'status': False},status=status.HTTP_200_OK)
-        elif not user.is_active and not validate_email(phone):
+        elif not user.is_active:
             sms_code = random.randint(1000, 9999)
             user = User.objects.get(username=phone)
             user.sms_code = sms_code
