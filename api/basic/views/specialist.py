@@ -19,7 +19,7 @@ class SpecialistCategoryViewSet(viewsets.ReadOnlyModelViewSet):
     def get_queryset(self):
         queryset = super().get_queryset()
         category_id = self.request.query_params.get('category')
-        date = self.request.query_params.get('date')
+        # date = self.request.query_params.get('date')
         if category_id:
             queryset = queryset.filter(category__id=category_id)
         return queryset
