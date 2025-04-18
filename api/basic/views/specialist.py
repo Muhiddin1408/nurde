@@ -1,4 +1,6 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, permissions
+from rest_framework.exceptions import NotFound
+from rest_framework.response import Response
 
 from api.basic.serializers.specialist import CategorySerializers, SpecialistSerializers
 from apps.basic.models import Specialist
@@ -15,14 +17,19 @@ class SpecialistViewSet(viewsets.ReadOnlyModelViewSet):
 class SpecialistCategoryViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Specialist.objects.all()
     serializer_class = SpecialistSerializers
+    permission_classes = [permissions.AllowAny]
 
     def get_queryset(self):
-        queryset = super().get_queryset()
-        category_id = self.request.query_params.get('category')
-        # date = self.request.query_params.get('date')
-        if category_id:
-            queryset = queryset.filter(category__id=category_id)
-        return queryset
+        category_ids = self.request.query_params.get('category')
+
+        if category_ids:
+            category = Category.objects.get(pk=category_ids)
+            queryset = Specialist.objects.filter(category=category)
+
+
+
+            return queryset
+        return Specialist.objects.all()
 
 
 
