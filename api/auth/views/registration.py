@@ -14,8 +14,15 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 from api.auth.serializers.register import RegisterSerializer, PasswordSerializers
 from api.utils.eskiz import SendSmsApiWithEskiz
+from api.utils.gmail_sms import send_verification_email
 from apps.users.model import Patient
 from apps.users.models import User
+
+
+def is_all_digits(value):
+    if isinstance(value, str):
+        return value.isdigit()
+    return False
 
 class RegisterView(APIView):
     permission_classes = [AllowAny,]
@@ -37,10 +44,14 @@ class RegisterView(APIView):
             sms_code = random.randint(1000, 9999)
             user = User.objects.get(username=phone)
             user.sms_code = sms_code
-            user.sms_code_time = datetime.now() + timedelta(minutes=2)
             user.save()
-            SendSmsApiWithEskiz(message="https://star-one.uz/ Tasdiqlash kodi " + str(sms_code),
+            print(is_all_digits(phone), "aaaaaaaaaaaaaaaaaaaaaaa")
+            if is_all_digits(phone):
+                SendSmsApiWithEskiz(message="https://star-one.uz/ Tasdiqlash kodi " + str(sms_code),
                             phone=int(phone)).send()
+
+            else:
+                send_verification_email(phone, sms_code)
             return Response({'status': False},status=status.HTTP_200_OK)
         elif not user.is_active:
             sms_code = random.randint(1000, 9999)
@@ -48,7 +59,12 @@ class RegisterView(APIView):
             user.sms_code = sms_code
             user.sms_code_time = datetime.now() + timedelta(minutes=2)
             user.save()
-            SendSmsApiWithEskiz(message="https://star-one.uz/ Tasdiqlash kodi " + str(sms_code), phone=int(phone)).send()
+            if is_all_digits(phone):
+                SendSmsApiWithEskiz(message="https://star-one.uz/ Tasdiqlash kodi " + str(sms_code),
+                                    phone=int(phone)).send()
+
+            # else:
+            #     send_verification_email(phone, sms_code)
             return Response({'status': False},status=status.HTTP_200_OK)
         else:
             return Response({'status': True}, status=status.HTTP_200_OK)

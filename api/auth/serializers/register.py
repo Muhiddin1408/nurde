@@ -6,7 +6,7 @@ from apps.users.models import User
 
 
 class NestedCreateMobileUserSerializer(serializers.Serializer):
-    username = serializers.CharField(max_length=20, required=False)
+    username = serializers.CharField(max_length=50, required=False)
 
     def validate_username(self, value):
         if User.objects.filter(username=value).exists():
