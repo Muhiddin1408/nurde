@@ -29,7 +29,9 @@ class RegisterView(APIView):
     )
     def post(self, request):
         phone = request.data.get('username')
+        print(phone)
         user = User.objects.filter(username=phone).last()
+        print(user)
         if user is None:
             serializer = RegisterSerializer(data=request.data)
             serializer.is_valid(raise_exception=True)
