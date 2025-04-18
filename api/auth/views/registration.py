@@ -12,6 +12,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 from api.auth.serializers.register import RegisterSerializer, PasswordSerializers
 from api.utils.eskiz import SendSmsApiWithEskiz
+from apps.users.model import Patient
 from apps.users.models import User
 
 class RegisterView(APIView):
@@ -97,6 +98,8 @@ def password_conf(request):
     try:
         phone = request.data['username']
         password = request.data['password']
+        passport = request.data['passport']
+        date_of_birth = request.data['date_of_birth']
         user = User.objects.get(username=phone)
 
         result = {
@@ -105,8 +108,10 @@ def password_conf(request):
         }
         if user:
             user.set_password(password)
+            user.passport = passport
             user.is_active = True
             user.save()
+            Patient.objects.create(user=user, birth_date=date_of_birth, pinfl=passport)
             token = RefreshToken.for_user(user)
             result = {
                 'access': str(token.access_token),
