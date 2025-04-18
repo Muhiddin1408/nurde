@@ -74,20 +74,13 @@ def sms_conf(request):
         sms_code = request.data['code']
         phone = request.data['username']
         user = User.objects.get(username=phone)
-        result = {
-            'access': None,
-            'refresh': None,
-        }
-        if user and user.sms_code == sms_code and localtime(user.sms_code_time) >= timezone_now():
-            user.is_active = True
-            user.save()
-            token = RefreshToken.for_user(user)
+        if user and user.sms_code == sms_code:
             result = {
-                'access': str(token.access_token),
-                'refresh': str(token),
                 'username': user.username,
             }
-        return Response(result, status=status.HTTP_200_OK)
+            return Response(result, status=status.HTTP_200_OK)
+        else:
+            return Response({"msg": "Invalid code."}, status=status.HTTP_400_BAD_REQUEST)
     except:
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
