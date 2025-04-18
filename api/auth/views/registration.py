@@ -65,19 +65,37 @@ def sms_conf(request):
             result = {
                 'access': str(token.access_token),
                 'refresh': str(token),
+                'username': user.username,
             }
         return Response(result, status=status.HTTP_200_OK)
     except:
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
+
 @action(methods='POST', detail=False)
+@permission_classes([AllowAny, ])
 def password_conf(request):
-    serializer = PasswordSerializers(request.data)
-    serializer.save()
-    return Response(status=status.HTTP_200_OK)
+    try:
+        phone = request.data['username']
+        password = request.data['password']
+        user = User.objects.get(username=phone)
 
-
-
+        result = {
+            'access': None,
+            'refresh': None,
+        }
+        if user:
+            user.set_password(password)
+            user.is_active = True
+            user.save()
+            token = RefreshToken.for_user(user)
+            result = {
+                'access': str(token.access_token),
+                'refresh': str(token)
+            }
+        return Response(result, status=status.HTTP_200_OK)
+    except:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 # @api_view(['POST'])
