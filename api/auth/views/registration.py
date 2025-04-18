@@ -34,7 +34,7 @@ class RegisterView(APIView):
             serializer = RegisterSerializer(data=request.data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
-        if user.is_active:
+        if not user.is_active:
             sms_code = random.randint(1000, 9999)
             user = User.objects.get(username=phone)
             user.sms_code = sms_code
@@ -45,8 +45,27 @@ class RegisterView(APIView):
             return Response(status=status.HTTP_200_OK)
         else:
             return Response({"msg": "This user already exists."}, status=status.HTTP_200_OK)
+#
 
-
+# @api_view(['POST'])
+# @permission_classes([AllowAny, ])
+# def register(request):
+#     try:
+#         phone = request.data['username']
+#         user = User.objects.get(username=phone)
+#         result = {
+#             'access': None,
+#             'refresh': None,
+#         }
+#         if User.objects.filter(username=phone).exists():
+#             result = {
+#                 'username': user.username,
+#             }
+#         else:
+#
+#         return Response(result, status=status.HTTP_200_OK)
+#     except:
+#         return Response(status=status.HTTP_400_BAD_REQUEST)
 @api_view(['POST'])
 @permission_classes([AllowAny, ])
 def sms_conf(request):
