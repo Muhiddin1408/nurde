@@ -74,13 +74,15 @@ def sms_conf(request):
         sms_code = request.data['code']
         phone = request.data['username']
         user = User.objects.filter(username=phone).last()
+        result = {
+            'code': False,
+        }
         if user and user.sms_code == sms_code:
             result = {
-                'username': user.username,
+                'code': True,
             }
-            return Response(result, status=status.HTTP_200_OK)
-        else:
-            return Response({"msg": "Invalid code."}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(result, status=status.HTTP_200_OK)
+
     except:
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
