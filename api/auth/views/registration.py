@@ -80,10 +80,15 @@ def sms_conf(request):
         result = {
             'code': False,
         }
+        print(user)
+        print(sms_code)
+        print(user.sms_code)
         if user and user.sms_code == sms_code:
+            print(sms_code)
             result = {
                 'code': True,
             }
+            return Response(result, status=status.HTTP_200_OK)
         return Response(result, status=status.HTTP_200_OK)
 
     except:
