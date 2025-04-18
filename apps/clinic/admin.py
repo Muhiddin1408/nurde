@@ -1,6 +1,7 @@
 from django.contrib import admin
 
 from apps.clinic.models import Clinic, InfoClinic, Service, Description, Photo
+from apps.clinic.models.comment import Comment
 
 
 # Register your models here.
@@ -12,5 +13,6 @@ class ClinicAdmin(admin.ModelAdmin):
 
 admin.site.register(InfoClinic)
 admin.site.register(Service)
+admin.site.register(Comment)
 admin.site.register(Description)
 admin.site.register(Photo)

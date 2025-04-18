@@ -5,10 +5,11 @@ from apps.basic.models import Specialist
 from apps.utils.models import Category
 
 
-class SpecialistViewSet(viewsets.ModelViewSet):
+class SpecialistViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializers
     search_fields = ['name']
+
 
 
 class SpecialistCategoryViewSet(viewsets.ReadOnlyModelViewSet):

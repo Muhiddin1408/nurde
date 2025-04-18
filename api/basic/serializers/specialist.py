@@ -8,10 +8,17 @@ from apps.utils.models import Category
 
 
 class CategorySerializers(serializers.Serializer):
+    id = serializers.IntegerField()
+    name = serializers.CharField()
+    icon = serializers.FileField()
 
     class Meta:
         model = Category
-        fields = '__all__'
+        fields = ('id', 'name', 'icon')
+
+    def get_icon(self, obj):
+        print(obj)
+        return obj.icon.url
 
 
 class SpecialistSerializers(serializers.Serializer):
