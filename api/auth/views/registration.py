@@ -73,7 +73,7 @@ def sms_conf(request):
     try:
         sms_code = request.data['code']
         phone = request.data['username']
-        user = User.objects.get(username=phone)
+        user = User.objects.filter(username=phone).last()
         if user and user.sms_code == sms_code:
             result = {
                 'username': user.username,
