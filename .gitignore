@@ -1,5 +1,4 @@
 .idea
-.env
 server.env
 local.env
 log
