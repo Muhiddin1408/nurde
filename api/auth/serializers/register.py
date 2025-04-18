@@ -6,24 +6,18 @@ from apps.users.models import User
 
 
 class NestedCreateMobileUserSerializer(serializers.Serializer):
-    phone = serializers.CharField(max_length=20, required=False)
+    username = serializers.CharField(max_length=20, required=False)
     last_name = serializers.CharField()
     first_name = serializers.CharField()
     middle_name = serializers.CharField(required=False, allow_blank=True)
-    gen = serializers.CharField()
+    # gen = serializers.CharField()
     lang = serializers.CharField(min_length=2, max_length=10, required=False)
     pin = serializers.IntegerField()
-    email = serializers.EmailField()
-    city = serializers.CharField()
+    passport = serializers.CharField()
 
-    def validate_phone(self, value):
+    def validate_username(self, value):
         if User.objects.filter(username=value).exists():
             raise serializers.ValidationError("Phone already exist")
-        return value
-
-    def validate_email(self, value):
-        if User.objects.filter(email=value).exists():
-            raise serializers.ValidationError("Bu email bilan foydalanuvchi allaqachon mavjud.")
         return value
 
     def validate_pin(self, value):
@@ -32,7 +26,8 @@ class NestedCreateMobileUserSerializer(serializers.Serializer):
         return value
 
     def validate(self, attrs):
-        required_fields = ['phone', 'first_name', 'last_name', 'gen', 'pin', 'email', 'city']
+        print(attrs)
+        required_fields = ['username', 'first_name', 'last_name', 'pin', 'passport', 'lang']
         missing = [field for field in required_fields if not attrs.get(field)]
         if missing:
             raise serializers.ValidationError(f"Quyidagi maydonlar to‘ldirilishi shart: {', '.join(missing)}")
@@ -44,7 +39,7 @@ class RegisterSerializer(NestedCreateMobileUserSerializer):
     @transaction.atomic
     def save(self):
         validated_data = self.validated_data
-
+        print(self.validated_data)
         user = User.objects.create_user(
             username=validated_data.get('username'),
             first_name=validated_data.get('first_name'),
@@ -52,9 +47,8 @@ class RegisterSerializer(NestedCreateMobileUserSerializer):
             middle_name=validated_data.get('middle_name', ''),
             password=validated_data.get('password'),
             pin=validated_data.get('pin'),
-            # city=validated_data.get('city'),
-            # lang=validated_data.get('lang', 'uz'),
-            # gen=validated_data.get('gen'),
+            passport=validated_data.get('passport'),
+            lang=validated_data.get('lang', 'uz'),
         )
         return user
 

@@ -1,9 +1,12 @@
 import random
 from datetime import timedelta, datetime
-
+from django.utils.timezone import localtime, now as timezone_now
+from django.utils.decorators import method_decorator
+from django.utils.timezone import localtime
+from django.views.decorators.csrf import csrf_exempt
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import viewsets, status
-from rest_framework.decorators import action
+from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.throttling import ScopedRateThrottle
@@ -16,7 +19,7 @@ from apps.users.models import User
 
 class RegisterView(APIView):
     permission_classes = [AllowAny,]
-    throttle_scope = "authentication"
+    # throttle_scope = "authentication"
     throttle_classes = [ScopedRateThrottle,]
 
     @swagger_auto_schema(
@@ -25,33 +28,53 @@ class RegisterView(APIView):
         responses={201: RegisterSerializer}
     )
     def post(self, request):
-        serializer = RegisterSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        phone = request.data('phone')
-        sms_code = random.randint(1000, 9999)
-        user = User.objects.get(username=phone)
-        user.sms_code = sms_code
-        user.sms_code_time = datetime.now() + timedelta(minutes=2)
-        SendSmsApiWithEskiz(message="https://star-one.uz/ Tasdiqlash kodi " + str(sms_code), phone=phone).send()
-        return Response(status=status.HTTP_200_OK)
-
-    @action(methods='POST', detail=False)
-    def sms_conf(self, request, *args, **kwargs):
-        try:
-            sms_code = request.data['code']
-            phone = request.data['phone']
+        phone = request.data.get('username')
+        user = User.objects.filter(username=phone).last()
+        if user is None:
+            serializer = RegisterSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+        if user.is_active:
+            sms_code = random.randint(1000, 9999)
             user = User.objects.get(username=phone)
-            if user and user.sms_code == sms_code and user.sms_code_time <= datetime.now():
-                return Response(status=status.HTTP_200_OK)
-        except:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            user.sms_code = sms_code
+            user.sms_code_time = datetime.now() + timedelta(minutes=2)
+            print(user.sms_code_time)
+            user.save()
+            SendSmsApiWithEskiz(message="https://star-one.uz/ Tasdiqlash kodi " + str(sms_code), phone=int(phone)).send()
+            return Response(status=status.HTTP_200_OK)
+        else:
+            return Response({"msg": "This user already exists."}, status=status.HTTP_200_OK)
 
-    @action(methods='POST', detail=False)
-    def password_conf(self, request, *args, **kwargs):
-        serializer = PasswordSerializers(request.data)
-        serializer.save()
-        return Response(status=status.HTTP_200_OK)
+
+@api_view(['POST'])
+@permission_classes([AllowAny, ])
+def sms_conf(request):
+    try:
+        sms_code = request.data['code']
+        phone = request.data['username']
+        user = User.objects.get(username=phone)
+        result = {
+            'access': None,
+            'refresh': None,
+        }
+        if user and user.sms_code == sms_code and localtime(user.sms_code_time) >= timezone_now():
+            user.is_active = True
+            user.save()
+            token = RefreshToken.for_user(user)
+            result = {
+                'access': str(token.access_token),
+                'refresh': str(token),
+            }
+        return Response(result, status=status.HTTP_200_OK)
+    except:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+@action(methods='POST', detail=False)
+def password_conf(request):
+    serializer = PasswordSerializers(request.data)
+    serializer.save()
+    return Response(status=status.HTTP_200_OK)
 
 
 

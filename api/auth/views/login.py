@@ -24,7 +24,7 @@ def login(request):
 
             return Response(result, status=status.HTTP_200_OK)
         else:
-            return Response({'msg': "username yoki password xato"}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'msg': "Username or password incorrect"}, status=status.HTTP_404_NOT_FOUND)
 
     except KeyError:
         res = {
