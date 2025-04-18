@@ -7,5 +7,5 @@ from apps.users.model.weekday import Weekday
 class WorkTime(models.Model):
     user = models.ForeignKey(Specialist, on_delete=models.CASCADE)
     weekday = models.ForeignKey(Weekday, on_delete=models.CASCADE)
-    date = models.DateTimeField(blank=True, null=True)
+    date = models.TimeField(blank=True, null=True)
 

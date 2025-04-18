@@ -61,7 +61,6 @@ class SpecialistSerializers(serializers.ModelSerializer):
 
     def get_work_time(self, obj):
         now = datetime.now()
-        print(self.context['request'])
         request = self.context['request']
         date = request.GET.get('date')
         time = request.GET.get('time')
@@ -78,12 +77,8 @@ class SpecialistSerializers(serializers.ModelSerializer):
         elif time == 'after':
             work = work(user=obj.id, date__hour__gt=18)
         else:
-            WorkTime.objects.filter(user=obj.id, weekday__name=weekday)
-
-
-
-
-
+            work = WorkTime.objects.filter(user=obj.id, weekday__name=weekday)
+        print(work)
         booked_ids = Booked.objects.filter(
             worktime__in=work
         ).values_list('worktime_id', flat=True)
