@@ -17,14 +17,15 @@ def forget(request):
     try:
         username = request.data['username']
         user = User.objects.filter(username=username).last()
+        print(user)
         if user:
+            print(user)
             sms_code = random.randint(1000, 9999)
             user = User.objects.get(username=username)
             user.sms_code = sms_code
-            user.sms_code_time = datetime.now() + timedelta(minutes=2)
             user.save()
             SendSmsApiWithEskiz(message="https://star-one.uz/ Tasdiqlash kodi " + str(sms_code),
-                                phone=int(user)).send()
+                                phone=int(username)).send()
             return Response({'status': True}, status=status.HTTP_200_OK)
         else:
             return Response({'status': False}, status=status.HTTP_404_NOT_FOUND)
