@@ -12,6 +12,7 @@ class Clinic(models.Model):
     address = models.CharField(max_length=100)
     phone = models.CharField(max_length=100)
     license = models.CharField(max_length=100)
+    type = models.CharField(max_length=100, choices=TYPE, default='clinic')
 
     def __str__(self):
         return self.name

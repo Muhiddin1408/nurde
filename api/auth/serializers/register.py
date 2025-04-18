@@ -46,15 +46,15 @@ class RegisterSerializer(NestedCreateMobileUserSerializer):
         validated_data = self.validated_data
 
         user = User.objects.create_user(
-            username=validated_data.get('phone'),
+            username=validated_data.get('username'),
             first_name=validated_data.get('first_name'),
             last_name=validated_data.get('last_name'),
             middle_name=validated_data.get('middle_name', ''),
-            email=validated_data.get('email'),
+            password=validated_data.get('password'),
             pin=validated_data.get('pin'),
-            city=validated_data.get('city'),
-            lang=validated_data.get('lang', 'uz'),
-            gen=validated_data.get('gen'),
+            # city=validated_data.get('city'),
+            # lang=validated_data.get('lang', 'uz'),
+            # gen=validated_data.get('gen'),
         )
         return user
 
