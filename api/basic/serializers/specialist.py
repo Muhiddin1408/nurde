@@ -67,7 +67,7 @@ class SpecialistSerializers(serializers.ModelSerializer):
         return obj.user.middle_name
 
     def get_category(self, obj):
-        return
+        return [{'id':obj.category.id, "name":obj.category.name}]
 
     def get_work_time(self, obj):
         now = datetime.now()
@@ -103,8 +103,5 @@ class SpecialistSerializers(serializers.ModelSerializer):
     def get_comment(self, obj):
         comment = CommentReadMore.objects.filter(read_more=obj.id)
         return CommentSerializer(comment, many=True).data
-
-
-
 
 
