@@ -5,7 +5,7 @@ from django.db import models
 
 
 class User(AbstractUser):
-    name = models.CharField(max_length=120)
+    name = models.CharField(max_length=120, blank=True, null=True)
     sms_code = models.IntegerField(blank=True, null=True)
     sms_code_time = models.DateTimeField(blank=True, null=True)
     sms_status = models.BooleanField(default=False)

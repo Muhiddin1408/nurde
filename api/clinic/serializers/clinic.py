@@ -10,16 +10,11 @@ class ClinicSerializers(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
     name = serializers.CharField(read_only=True)
     address = serializers.CharField(read_only=True)
-    image = serializers.SerializerMethodField()
+    image = serializers.ImageField(read_only=True)
     phone = serializers.CharField(read_only=True)
     class Meta:
         model = Clinic
         fields = ('id', 'name', 'address', 'phone', 'image')
-
-    def get_image(self, obj):
-        if obj.image:
-            return obj.image.url
-        return None
 
 
 class ClinicDetailSerializers(serializers.ModelSerializer):
@@ -27,17 +22,13 @@ class ClinicDetailSerializers(serializers.ModelSerializer):
     name = serializers.CharField(read_only=True)
     address = serializers.CharField(read_only=True)
     phone = serializers.CharField(read_only=True)
-    image = serializers.SerializerMethodField()
+    image = serializers.ImageField(read_only=True)
     comment = serializers.SerializerMethodField()
 
     class Meta:
         model = Clinic
         fields = '__all__'
 
-    def get_image(self, obj):
-        if obj.image:
-            return obj.image.url
-        return None
 
     def get_comment(self, obj):
         comment = Comment.objects.filter(clinic_id=obj.id)
