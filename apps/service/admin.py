@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from apps.service.models.booked import Booked
-from apps.service.models.service import WorkTime
+from apps.service.models.service import WorkTime, Service
 
 
 # Register your models here.
@@ -14,3 +14,5 @@ class WorkTimeAdmin(admin.ModelAdmin):
 class BookedAdmin(admin.ModelAdmin):
     list_display = ('date',)
 
+
+admin.site.register(Service)

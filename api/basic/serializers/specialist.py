@@ -1,12 +1,13 @@
 from django.db.models import Sum
 from rest_framework import serializers
-from datetime import datetime
+from datetime import datetime, time as time_obj
 
-from api.basic.serializers.comment import CommentSerializer
+from api.basic.serializers.service import ServiceSerializer
 from apps.basic.models import Specialist, CommentReadMore
 from apps.service.models.booked import Booked
-from apps.service.models.service import WorkTime
+from apps.service.models.service import WorkTime, Service
 from apps.utils.models import Category
+
 
 class WorkTimeSerializer(serializers.ModelSerializer):
     class Meta:
@@ -43,11 +44,13 @@ class SpecialistSerializers(serializers.ModelSerializer):
     avatar = serializers.SerializerMethodField()
     comment = serializers.SerializerMethodField()
     ranking = serializers.SerializerMethodField()
+    service = serializers.SerializerMethodField()
+    price = serializers.SerializerMethodField()
 
     class Meta:
         model = Specialist
         fields = (
-            'id', 'last_name', 'first_name', 'middle_name',
+            'id', 'last_name', 'first_name', 'middle_name', 'service', 'price',
             'experience', 'category', 'type', 'type_service', 'photo', 'work_time', 'avatar', 'comment', 'ranking'
         )
 
@@ -67,33 +70,31 @@ class SpecialistSerializers(serializers.ModelSerializer):
         return obj.user.middle_name
 
     def get_category(self, obj):
-        return [{'id':obj.category.id, "name":obj.category.name}]
+        return CategorySerializer(obj.category, many=True).data
 
     def get_work_time(self, obj):
-        now = datetime.now()
         request = self.context['request']
-        date = request.GET.get('date')
-        time = request.GET.get('time')
-        weekday = now.weekday()
-        work = WorkTime.objects.filter(user=obj.id, weekday__name=weekday)
-        if date:
-            work = WorkTime.objects.filter(user=obj.id, weekday__name=weekday, date__date=date)
-        if time == 'before':
-            now = datetime.now()
-            twelve_pm_today = datetime.combine(now.date(), time(12, 0))
-            work = work(user=obj.id, date__hour__lte=12)
-        elif time == 'mid':
-            work = work(user=obj.id, date__hour__gt=12, date__hour__lte=18)
-        elif time == 'after':
-            work = work(user=obj.id, date__hour__gt=18)
+        now = datetime.now()
+        now_time = now.time()
+        today_weekday = now.weekday()
+        query_date = request.GET.get('date')
+        query_time = request.GET.get('time')
+        work_qs = WorkTime.objects.filter(user=obj.id)
+
+        if query_date:
+            work_qs = work_qs.filter(date__date=query_date)
         else:
-            work = WorkTime.objects.filter(user=obj.id, weekday__name=weekday)
-        print(work)
-        booked_ids = Booked.objects.filter(
-            worktime__in=work
-        ).values_list('worktime_id', flat=True)
-        free_worktimes = work.exclude(id__in=booked_ids)
-        return WorkTimeSerializer(free_worktimes, many=True).data
+            work_qs = work_qs.filter(weekday__name=today_weekday)
+        if query_time == 'before':
+            work_qs = work_qs.filter(date__lt=time_obj(12, 0))
+        elif query_time == 'mid':
+            work_qs = work_qs.filter(date__gte=time_obj(12, 0), date__lt=time_obj(18, 0))
+        elif query_time == 'after':
+            work_qs = work_qs.filter(date__gte=time_obj(18, 0))
+        booked_ids = Booked.objects.filter(worktime__in=work_qs).values_list('worktime_id', flat=True)
+        available_times = work_qs.exclude(id__in=booked_ids)
+        final_times = available_times.filter(date__gt=now_time)
+        return WorkTimeSerializer(final_times, many=True).data
 
     def get_ranking(self, obj):
         total_ranking = CommentReadMore.objects.filter(read_more=obj).aggregate(Sum('ranking'))['ranking__sum'] or 0
@@ -101,7 +102,19 @@ class SpecialistSerializers(serializers.ModelSerializer):
         return total_ranking/len
 
     def get_comment(self, obj):
-        comment = CommentReadMore.objects.filter(read_more=obj.id)
-        return CommentSerializer(comment, many=True).data
+        comment = CommentReadMore.objects.filter(read_more=obj.id).count()
+        return comment
+
+    def get_price(self, obj):
+        service = Service.objects.filter(user=obj.id).order_by('price').first()
+        return service.price
+
+    def get_service(self, obj):
+        service = Service.objects.filter(user=obj.id)
+        return ServiceSerializer(service, many=True).data
+
+
+
+
 
 

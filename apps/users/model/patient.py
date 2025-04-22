@@ -10,6 +10,7 @@ class Patient(models.Model):
     longitude = models.IntegerField(null=True, blank=True)
     pol = models.CharField(max_length=25, blank=True, null=True)
     pinfl = models.CharField(max_length=125, blank=True, null=True)
+    image = models.ImageField(upload_to='patients/', blank=True, null=True)
 
 
     class Meta:

@@ -13,9 +13,10 @@ class CommentReadMore(models.Model):
     service_rendered = models.DateField(blank=True, null=True)
     experts_response = models.CharField(max_length=255, blank=True, null=True)
     read_more = models.ForeignKey(Specialist, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
 
     def __str__(self):
-        return self.comment + " " + self.user.last_name
+        return self.comment + " "
 
     class Meta:
         verbose_name_plural = 'Комментарий'
