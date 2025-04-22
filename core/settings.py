@@ -43,12 +43,15 @@ INSTALLED_APPS = [
     'apps.basic',
     'apps.service',
     'apps.clinic',
+    'apps.order',
     'rest_framework',
     'rest_framework_simplejwt',
     'drf_yasg',
     'parler',
     'corsheaders',
 ]
+
+APPEND_SLASH = True
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

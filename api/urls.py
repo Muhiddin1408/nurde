@@ -4,4 +4,5 @@ urlpatterns = [
     path('auth/', include('api.auth.urls')),
     path('clinic/', include('api.clinic.urls'), name='clinic'),
     path('specialist/', include('api.basic.urls'), name='specialist'),
+    path('symptom/', include('api.symptom.urls'), name='symptom'),
 ]
