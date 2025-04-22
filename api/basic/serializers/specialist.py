@@ -2,8 +2,10 @@ from django.db.models import Sum
 from rest_framework import serializers
 from datetime import datetime, time as time_obj
 
+from api.basic.serializers.in_work import InWorkSerializer
 from api.basic.serializers.service import ServiceSerializer
 from apps.basic.models import Specialist, CommentReadMore
+from apps.basic.models.in_work import InWork
 from apps.service.models.booked import Booked
 from apps.service.models.service import WorkTime, Service
 from apps.utils.models import Category
@@ -46,12 +48,14 @@ class SpecialistSerializers(serializers.ModelSerializer):
     ranking = serializers.SerializerMethodField()
     service = serializers.SerializerMethodField()
     price = serializers.SerializerMethodField()
+    in_work = serializers.SerializerMethodField()
 
     class Meta:
         model = Specialist
         fields = (
             'id', 'last_name', 'first_name', 'middle_name', 'service', 'price',
-            'experience', 'category', 'type', 'type_service', 'photo', 'work_time', 'avatar', 'comment', 'ranking'
+            'experience', 'category', 'type', 'type_service', 'photo', 'work_time', 'avatar', 'comment',
+            'ranking', 'in_work'
         )
 
     def get_avatar(self, obj):
@@ -112,6 +116,10 @@ class SpecialistSerializers(serializers.ModelSerializer):
     def get_service(self, obj):
         service = Service.objects.filter(user=obj.id)
         return ServiceSerializer(service, many=True).data
+
+    def get_in_work(self, obj):
+        in_work = InWork.objects.filter(specialist=obj)
+        return InWorkSerializer(in_work, many=True).data
 
 
 
