@@ -7,12 +7,14 @@ class AnkitaSerializer(serializers.ModelSerializer):
     relative = serializers.PrimaryKeyRelatedField(
         queryset=Relative.objects.all()
     )
+    relative_info = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = Ankita
         fields = [
             'id',
             'name',
             'relative',
+            'relative_info',
             'birthday',
             'gen',
             'height',
@@ -28,8 +30,13 @@ class AnkitaSerializer(serializers.ModelSerializer):
             validated_data['user'] = patient
         return super().create(validated_data)
 
-    def get_relative(self, obj):
-        return {'id': obj.relative.id, 'name': obj.relative.name}
+    def get_relative_info(self, obj):
+        if obj.relative:
+            return {
+                'id': obj.relative.id,
+                'name': obj.relative.name
+            }
+        return None
 
 
 class RelativeSerializer(serializers.ModelSerializer):
