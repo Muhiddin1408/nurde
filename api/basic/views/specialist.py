@@ -1,11 +1,12 @@
-from rest_framework import viewsets, permissions, status
+from rest_framework import viewsets, permissions, status, generics
 from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from api.basic.serializers.info import SpecialistInfoSerializer, CommentReadMoreSerializer
+from api.basic.serializers.info import SpecialistInfoSerializer, CommentReadMoreSerializer, \
+    CommentReadMoreCreateSerializer
 from api.basic.serializers.service import ServiceSerializer
 from api.basic.serializers.specialist import CategorySerializers, SpecialistSerializers, SpecialistByIdSerializers
 from apps.basic.models import Specialist, CommentReadMore
@@ -57,6 +58,12 @@ class SpecialistCategoryViewSet(viewsets.ReadOnlyModelViewSet):
         query = Specialist.objects.get(id=pk)
         comment = CommentReadMore.objects.filter(read_more=query)
         return Response(CommentReadMoreSerializer(comment, many=True).data)
+
+
+class Comment(generics.CreateAPIView):
+    queryset = CommentReadMore.objects.all()
+    serializer_class = CommentReadMoreCreateSerializer
+    permission_classes = [permissions.IsAuthenticated,]
 
 
 class SpecialistByIdViewSet(APIView):

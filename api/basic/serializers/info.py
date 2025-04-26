@@ -2,6 +2,8 @@ from rest_framework import serializers
 
 from apps.basic.models import Specialist, CommentReadMore
 from apps.basic.models.education import Education
+from apps.users.model import Patient
+
 
 class EducationSerializer(serializers.ModelSerializer):
     class Meta:
@@ -48,4 +50,26 @@ class CommentReadMoreSerializer(serializers.Serializer):
         if obj.user.image:
             return obj.user.image.url
         return None
+
+
+class CommentReadMoreCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CommentReadMore
+        fields = [
+            'id',
+            'ranking',
+            'comment',
+            'service_rendered',
+            'experts_response',
+            'read_more',
+            'created_at',
+        ]
+        read_only_fields = ['id', 'created_at']
+
+    def create(self, validated_data):
+        request = self.context.get('request')
+        if request and hasattr(request, 'user'):
+            patient = Patient.objects.filter(user=request.user).last()
+            validated_data['user'] = patient
+        return super().create(validated_data)
 
