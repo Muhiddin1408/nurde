@@ -14,6 +14,10 @@ class CommentView(RetrieveAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
 
+    def get_queryset(self):
+        clinic_id = self.kwargs.get('clinic_id')
+        return Comment.objects.filter(clinic__id=clinic_id)
+
 
 class ClinicServiceDetailView(ListAPIView):
     serializer_class = ClinicServiceSerializers
