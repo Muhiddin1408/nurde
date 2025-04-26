@@ -31,8 +31,10 @@ class ClinicSerializers(serializers.Serializer):
                   'comment', 'ranking', 'types')
 
     def get_image(self, obj):
-        image = Image.objects.filter(clinic=obj)
-        return ImageSerializer(image, many=True).data
+        image = Image.objects.filter(clinic=obj).first()
+        if image:
+            return image.image.url
+        return None
 
     def get_like(self, obj):
         user = self.context['request'].user
