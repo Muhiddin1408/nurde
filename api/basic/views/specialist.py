@@ -26,7 +26,7 @@ class SmallPagesPagination(PageNumberPagination):
 class SpecialistCategoryViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Specialist.objects.all()
     serializer_class = SpecialistSerializers
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.AllowAny,]
     pagination_class = SmallPagesPagination
 
     def get_queryset(self):
@@ -60,7 +60,10 @@ class SpecialistCategoryViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class SpecialistByIdViewSet(APIView):
+    permission_classes = [permissions.AllowAny,]
+
     def get(self, request, pk):
+        print('==', request.user)
         try:
             specialist = Specialist.objects.get(pk=pk)
         except Specialist.DoesNotExist:
