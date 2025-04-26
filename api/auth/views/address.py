@@ -2,6 +2,7 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from api.auth.serializers.address import AddressSerializer
+from api.basic.views.specialist import SmallPagesPagination
 from apps.users.model import Address, Patient
 
 
@@ -9,6 +10,7 @@ class AddressViewSet(viewsets.ModelViewSet):
     queryset = Address.objects.all()
     serializer_class = AddressSerializer
     permission_classes = [AllowAny]
+    pagination_class = SmallPagesPagination
 
     def get_queryset(self):
         user = self.request.user
