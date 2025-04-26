@@ -1,5 +1,6 @@
 from rest_framework import viewsets, permissions
 
+from api.basic.views.specialist import SmallPagesPagination
 from api.users.serializers.ankita import AnkitaSerializer, RelativeSerializer
 from apps.users.model import Ankita, Patient, Relative
 
@@ -14,6 +15,7 @@ class AnkitaView(viewsets.ModelViewSet):
     queryset = Ankita.objects.all()
     serializer_class = AnkitaSerializer
     permission_classes = [permissions.IsAuthenticated]
+    pagination_class = SmallPagesPagination
 
     def get_queryset(self):
         user = self.request.user
