@@ -28,7 +28,7 @@ class AnkitaSerializer(serializers.ModelSerializer):
         return super().create(validated_data)
 
     def get_relative(self, obj):
-        return obj.relative.name
+        return {'id': obj.relative.id, 'name': obj.relative.name}
 
 
 class RelativeSerializer(serializers.ModelSerializer):
