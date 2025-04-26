@@ -75,7 +75,7 @@ class OrderSerializers(serializers.ModelSerializer):
         read_only_fields = ['id', 'created_at']
 
     def create(self, validated_data):
-        uploaded_files = validated_data.pop('files', [])
+        uploaded_files = validated_data.pop('image', [])
         service_data = validated_data.pop('service', [])
         phone_numbers = validated_data.pop('phone_numbers', [])
 
@@ -100,7 +100,6 @@ class OrderSerializers(serializers.ModelSerializer):
 
         # Fayllarni saqlash
         if uploaded_files:
-
             order.image.add(uploaded_files)
 
         return order
