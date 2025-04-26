@@ -10,7 +10,7 @@ from apps.clinic.models import Clinic, Service
 from apps.clinic.models.comment import Comment
 
 
-class CommentView(RetrieveAPIView):
+class CommentView(ListAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
 
