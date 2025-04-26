@@ -69,7 +69,7 @@ class ClinicDetailSerializers(serializers.ModelSerializer):
 
     class Meta:
         model = Comment
-        fields = ('id', 'ranking', 'comment', 'costumer')
+        fields = ('id', 'ranking', 'comment', 'costumer', 'costumer_image', 'created_at')
 
     def get_costumer(self, obj):
         return obj.author.last_name + " " + obj.author.first_name
