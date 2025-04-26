@@ -48,10 +48,9 @@ class OrderSerializers(serializers.ModelSerializer):
         write_only=True,
         required=False
     )
-    uploaded_files = serializers.ListField(
-        child=serializers.FileField(),
-        write_only=True,
-        required=False
+    uploaded_files = serializers.PrimaryKeyRelatedField(
+        many=True,
+        queryset=OrderFile.objects.all()
     )
 
     class Meta:
