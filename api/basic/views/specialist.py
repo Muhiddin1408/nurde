@@ -63,7 +63,6 @@ class SpecialistByIdViewSet(APIView):
     permission_classes = [permissions.AllowAny,]
 
     def get(self, request, pk):
-        print('==', request.user)
         try:
             specialist = Specialist.objects.get(pk=pk)
         except Specialist.DoesNotExist:
