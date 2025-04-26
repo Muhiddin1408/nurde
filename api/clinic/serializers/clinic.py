@@ -93,7 +93,6 @@ class ClinicServiceSerializers(serializers.ModelSerializer):
 
 
 class SpecialistServiceSerializers(serializers.ModelSerializer):
-    category = serializers.SerializerMethodField()
 
     class Meta:
         model = Service

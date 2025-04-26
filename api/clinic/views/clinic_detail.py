@@ -1,4 +1,7 @@
 from rest_framework.generics import RetrieveAPIView, ListAPIView
+
+from api.basic.serializers.specialist import SpecialistSerializers
+from api.basic.views.specialist import SmallPagesPagination
 from api.clinic.serializers.clinic import ClinicSerializers, ClinicServiceSerializers, SpecialistServiceSerializers, \
     CommentServiceSerializers, ClinicDetailSerializers
 from apps.basic.models import Specialist
@@ -20,7 +23,8 @@ class ClinicServiceDetailView(ListAPIView):
 
 
 class SpecialistServiceDetailView(ListAPIView):
-    serializer_class = SpecialistServiceSerializers
+    serializer_class = SpecialistSerializers
+    pagination_class = SmallPagesPagination
 
     def get_queryset(self):
         clinic_id = self.kwargs.get('clinic_id')
