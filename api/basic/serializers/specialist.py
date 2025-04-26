@@ -48,7 +48,6 @@ class SpecialistSerializers(serializers.ModelSerializer):
     middle_name = serializers.SerializerMethodField()
     category = serializers.SerializerMethodField()
     work_time = serializers.SerializerMethodField()
-    avatar = serializers.SerializerMethodField()
     comment = serializers.SerializerMethodField()
     ranking = serializers.SerializerMethodField()
     price = serializers.SerializerMethodField()
@@ -59,14 +58,9 @@ class SpecialistSerializers(serializers.ModelSerializer):
         model = Specialist
         fields = (
             'id', 'last_name', 'first_name', 'middle_name', 'price',
-            'experience', 'category', 'type', 'type_service', 'photo', 'work_time', 'avatar', 'comment',
+            'experience', 'category', 'type', 'type_service', 'photo', 'work_time', 'comment',
             'ranking', 'in_work', 'is_favorite'
         )
-
-    def get_avatar(self, obj):
-        if obj.photo:
-            return obj.photo.url
-        return None
 
     def get_last_name(self, obj):
         print(obj)
