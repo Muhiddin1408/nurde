@@ -98,7 +98,7 @@ class OrderSerializers(serializers.ModelSerializer):
 
         # Fayllarni saqlash
         if uploaded_files:
-            order.image.add(uploaded_files)
+            order.image.set(uploaded_files)
 
         return order
 
