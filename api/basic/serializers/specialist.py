@@ -82,18 +82,22 @@ class SpecialistSerializers(serializers.ModelSerializer):
         return CategorySerializer(obj.category, many=True).data
 
     def get_work_time(self, obj):
-        now = datetime.now()
         today = datetime.today().date()
-
         data = []
         for i in range(11):
             date = today + timedelta(days=i)
             time = []
             work_qs = WorkTime.objects.filter(user=obj.id, weekday__name=date.weekday())
             for i in work_qs:
+                in_time = i.date
+                if in_time is None:
+                    in_time = dt_time(0, 0)
+                now = datetime.now()
+                combined_datetime = datetime.combine(date, in_time)
                 book = Booked.objects.filter(worktime=i).exists()
-                if not book:
+                if not book and combined_datetime > now and not i.date is None:
                     time.append({'time': i.date})
+
             data.append({'date': date, 'time': time})
 
         return data
@@ -147,12 +151,12 @@ class SpecialistByIdSerializers(serializers.ModelSerializer):
         )
 
     def get_avatar(self, obj):
+        request = self.context['request']
         if obj.photo:
             return obj.photo.url
         return None
 
     def get_last_name(self, obj):
-        print(obj)
         return obj.user.last_name
 
     def get_first_name(self, obj):
@@ -165,7 +169,6 @@ class SpecialistByIdSerializers(serializers.ModelSerializer):
         return CategorySerializer(obj.category, many=True).data
 
     def get_work_time(self, obj):
-        now = datetime.now()
         today = datetime.today().date()
 
         data = []
@@ -184,8 +187,6 @@ class SpecialistByIdSerializers(serializers.ModelSerializer):
                     time.append({'time': i.date})
 
             data.append({'date': date, 'time': time})
-
-
         return data
 
     def get_ranking(self, obj):
