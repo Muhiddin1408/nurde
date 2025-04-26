@@ -114,7 +114,9 @@ class SpecialistSerializers(serializers.ModelSerializer):
         return InWorkSerializer(in_work, many=True).data
 
     def get_is_favorite(self, obj):
-        user = self.context['request'].user
+        user = self.context['request']
+        if not user.user.is_authenticated:
+            return False
         is_favorite = Like.objects.filter(user=obj, costumer__user=user).exists()
         return is_favorite
 
@@ -199,7 +201,9 @@ class SpecialistByIdSerializers(serializers.ModelSerializer):
         return InWorkSerializer(in_work, many=True).data
 
     def get_is_favorite(self, obj):
-        user = self.context['request'].user
+        user = self.context['request']
+        if not user.user.is_authenticated:
+            return False
         is_favorite = Like.objects.filter(user=obj, costumer__user=user).exists()
         return is_favorite
 
