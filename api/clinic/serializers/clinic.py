@@ -62,7 +62,7 @@ class ClinicSerializers(serializers.Serializer):
         return None
 
 
-class ClinicDetailSerializers(serializers.Serializer):
+class ClinicDetailSerializers(serializers.ModelSerializer):
     author = serializers.SerializerMethodField()
 
     class Meta:
