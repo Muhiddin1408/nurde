@@ -24,7 +24,6 @@ class ClinicServiceDetailView(ListAPIView):
 
 class SpecialistServiceDetailView(ListAPIView):
     serializer_class = SpecialistSerializers
-    pagination_class = SmallPagesPagination
 
     def get_queryset(self):
         clinic_id = self.kwargs.get('clinic_id')
