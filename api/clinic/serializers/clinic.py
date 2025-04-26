@@ -5,6 +5,7 @@ from api.basic.serializers.comment import CommentSerializer
 from api.utils.serializsers.image import ImageSerializer
 from apps.clinic.models import Clinic, Service
 from apps.clinic.models.comment import Comment
+from apps.users.model import Patient
 from apps.users.model.image import Image
 from apps.utils.models.like import Like
 
@@ -63,14 +64,24 @@ class ClinicSerializers(serializers.Serializer):
 
 
 class ClinicDetailSerializers(serializers.ModelSerializer):
-    author = serializers.SerializerMethodField()
+    costumer = serializers.SerializerMethodField()
+    costumer_image = serializers.SerializerMethodField()
 
     class Meta:
         model = Comment
-        fields = ('id', 'ranking', 'comment', 'author')
+        fields = ('id', 'ranking', 'comment', 'costumer')
 
-    def get_author(self, obj):
+    def get_costumer(self, obj):
         return obj.author.last_name + " " + obj.author.first_name
+
+    def get_costumer_image(self, obj):
+        image = Patient.objects.filter(user=obj.user).first()
+        if image:
+            return image.image.url
+        return None
+
+
+
 
 
 class ClinicServiceSerializers(serializers.ModelSerializer):
