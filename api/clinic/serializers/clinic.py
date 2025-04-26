@@ -80,9 +80,16 @@ class ClinicDetailSerializers(serializers.Serializer):
 
 
 class ClinicServiceSerializers(serializers.ModelSerializer):
+    category = serializers.SerializerMethodField()
+
     class Meta:
         model = Service
-        fields = '__all__'
+        fields = ('id', 'category', 'price', 'preparation', 'time', 'description', 'created_at', 'updated_at')
+
+    def get_category(self, obj):
+        if obj.category:
+            return obj.category.name
+        return None
 
 
 class SpecialistServiceSerializers(serializers.ModelSerializer):
