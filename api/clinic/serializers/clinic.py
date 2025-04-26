@@ -36,11 +36,10 @@ class ClinicSerializers(serializers.Serializer):
 
     def get_like(self, obj):
         user = self.context['request'].user
-        like = Like.objects.filter(clinic=obj, costumer__user=user)
-        if like:
-            return True
-        else:
+        if not user.is_authenticated:
             return False
+        like = Like.objects.filter(clinic=obj, costumer__user=user).exists()
+        return like
         
     def get_comment(self, obj):
         comment = Comment.objects.filter(clinic=obj).count()

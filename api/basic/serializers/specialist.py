@@ -202,9 +202,10 @@ class SpecialistByIdSerializers(serializers.ModelSerializer):
 
     def get_is_favorite(self, obj):
         user = self.context['request']
+        print(user.user)
         if not user.user.is_authenticated:
             return False
-        is_favorite = Like.objects.filter(user=obj, costumer__user=user).exists()
+        is_favorite = Like.objects.filter(user=obj, costumer__user=user.user).exists()
         return is_favorite
 
     def get_education(self, obj):
