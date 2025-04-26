@@ -75,7 +75,7 @@ class ClinicDetailSerializers(serializers.ModelSerializer):
         return obj.author.last_name + " " + obj.author.first_name
 
     def get_costumer_image(self, obj):
-        image = Patient.objects.filter(user=obj.user).first()
+        image = Patient.objects.filter(user=obj.author).first()
         if image:
             return image.image.url
         return None
