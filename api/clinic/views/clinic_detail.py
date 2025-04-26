@@ -1,5 +1,6 @@
 from rest_framework.generics import RetrieveAPIView, ListAPIView
 
+from api.basic.serializers.comment import CommentSerializer
 from api.basic.serializers.specialist import SpecialistSerializers
 from api.basic.views.specialist import SmallPagesPagination
 from api.clinic.serializers.clinic import ClinicSerializers, ClinicServiceSerializers, SpecialistServiceSerializers, \
@@ -9,9 +10,9 @@ from apps.clinic.models import Clinic, Service
 from apps.clinic.models.comment import Comment
 
 
-class ClinicDetailView(RetrieveAPIView):
-    queryset = Clinic.objects.all()
-    serializer_class = ClinicDetailSerializers
+class CommentView(RetrieveAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
 
 
 class ClinicServiceDetailView(ListAPIView):

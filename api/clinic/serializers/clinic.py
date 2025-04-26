@@ -71,7 +71,7 @@ class ClinicDetailSerializers(serializers.Serializer):
     comment = serializers.SerializerMethodField()
 
     class Meta:
-        model = Clinic
+        model = Comment
         fields = '__all__'
 
     def get_comment(self, obj):
