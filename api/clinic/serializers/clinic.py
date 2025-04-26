@@ -63,20 +63,14 @@ class ClinicSerializers(serializers.Serializer):
 
 
 class ClinicDetailSerializers(serializers.Serializer):
-    id = serializers.IntegerField(read_only=True)
-    name = serializers.CharField(read_only=True)
-    address = serializers.CharField(read_only=True)
-    phone = serializers.CharField(read_only=True)
-    image = serializers.ImageField(read_only=True)
-    comment = serializers.SerializerMethodField()
+    user = serializers.SerializerMethodField()
 
     class Meta:
         model = Comment
         fields = '__all__'
 
-    def get_comment(self, obj):
-        comment = Comment.objects.filter(clinic_id=obj.id)
-        return CommentSerializer(comment, many=True).data, comment.count()
+    def get_user(self, obj):
+        return obj.user.lastname + " " + obj.user.firstname
 
 
 class ClinicServiceSerializers(serializers.ModelSerializer):

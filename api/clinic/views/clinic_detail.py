@@ -12,7 +12,7 @@ from apps.clinic.models.comment import Comment
 
 class CommentView(ListAPIView):
     queryset = Comment.objects.all()
-    serializer_class = CommentSerializer
+    serializer_class = ClinicDetailSerializers
 
     def get_queryset(self):
         clinic_id = self.kwargs.get('clinic_id')
