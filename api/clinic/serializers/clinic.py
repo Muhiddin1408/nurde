@@ -90,7 +90,7 @@ class SpecialistServiceSerializers(serializers.ModelSerializer):
 
     class Meta:
         model = Service
-        fields = '__all__'
+        fields = ('id', 'category', 'price', 'preparation', 'time', 'description', 'created_at', 'updated_at')
 
     def get_category(self, obj):
         if obj.category:
