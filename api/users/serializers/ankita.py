@@ -4,8 +4,9 @@ from apps.users.model import Ankita, Relative, Patient
 
 
 class AnkitaSerializer(serializers.ModelSerializer):
-    relative = serializers.SerializerMethodField()
-
+    relative = serializers.PrimaryKeyRelatedField(
+        queryset=Relative.objects.all()
+    )
     class Meta:
         model = Ankita
         fields = [
