@@ -63,14 +63,14 @@ class ClinicSerializers(serializers.Serializer):
 
 
 class ClinicDetailSerializers(serializers.Serializer):
-    user = serializers.SerializerMethodField()
+    author = serializers.SerializerMethodField()
 
     class Meta:
         model = Comment
-        fields = '__all__'
+        fields = ('id', 'ranking', 'comment', 'author')
 
-    def get_user(self, obj):
-        return obj.user.lastname + " " + obj.user.firstname
+    def get_author(self, obj):
+        return obj.author.lastname + " " + obj.author.firstname
 
 
 class ClinicServiceSerializers(serializers.ModelSerializer):
