@@ -28,7 +28,6 @@ class Order(models.Model):
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='active')
     datetime = models.DateTimeField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
-    file = models.FileField(upload_to='orders/', blank=True, null=True)
     image = models.ManyToManyField(OrderFile, blank=True, null=True)
     ankita = models.ForeignKey(Ankita, on_delete=models.CASCADE, blank=True, null=True)
     service = models.ManyToManyField(Service, blank=True, null=True)

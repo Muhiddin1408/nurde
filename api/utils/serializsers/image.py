@@ -10,3 +10,4 @@ class ImageSerializer(serializers.Serializer):
     class Meta:
         model = Image
         fields = '__all__'
+
