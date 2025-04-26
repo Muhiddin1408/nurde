@@ -48,7 +48,7 @@ class OrderSerializers(serializers.ModelSerializer):
         write_only=True,
         required=False
     )
-    uploaded_files = serializers.PrimaryKeyRelatedField(
+    image = serializers.PrimaryKeyRelatedField(
         many=True,
         queryset=OrderFile.objects.all()
     )
@@ -64,7 +64,6 @@ class OrderSerializers(serializers.ModelSerializer):
             'status',
             'datetime',
             'created_at',
-            'uploaded_files',
             'image',
             'ankita',
             'service',

@@ -2,7 +2,7 @@ from django.db import models
 
 from apps.basic.models import Specialist
 from apps.service.models.service import Service
-from apps.users.model import Patient, Address, Ankita, Image
+from apps.users.model import Patient, Address, Ankita
 
 
 class Phone(models.Model):
