@@ -13,7 +13,7 @@ class Order(models.Model):
     doctor = models.ForeignKey(Specialist, on_delete=models.CASCADE)
     address = models.ForeignKey(Address, on_delete=models.CASCADE)
     payment_status = models.BooleanField(default=False)
-    payment_type = models.CharField(max_length=20)
+    payment_type = models.CharField(max_length=20, blank=True, null=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='active')
     datetime = models.DateTimeField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)

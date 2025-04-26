@@ -1,11 +1,13 @@
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from api.basic.serializers.info import SpecialistInfoSerializer, CommentReadMoreSerializer
 from api.basic.serializers.service import ServiceSerializer
-from api.basic.serializers.specialist import CategorySerializers, SpecialistSerializers
+from api.basic.serializers.specialist import CategorySerializers, SpecialistSerializers, SpecialistByIdSerializers
 from apps.basic.models import Specialist, CommentReadMore
 from apps.service.models.service import Service
 from apps.utils.models import Category
@@ -17,11 +19,15 @@ class SpecialistViewSet(viewsets.ReadOnlyModelViewSet):
     search_fields = ['name']
 
 
+class SmallPagesPagination(PageNumberPagination):
+    page_size = 20
+
 
 class SpecialistCategoryViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Specialist.objects.all()
     serializer_class = SpecialistSerializers
     permission_classes = [permissions.AllowAny]
+    pagination_class = SmallPagesPagination
 
     def get_queryset(self):
         category_ids = self.request.query_params.get('category')
@@ -52,6 +58,16 @@ class SpecialistCategoryViewSet(viewsets.ReadOnlyModelViewSet):
         comment = CommentReadMore.objects.filter(read_more=query)
         return Response(CommentReadMoreSerializer(comment, many=True).data)
 
+
+class SpecialistByIdViewSet(APIView):
+    def get(self, request, pk):
+        try:
+            specialist = Specialist.objects.get(pk=pk)
+        except Specialist.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        serializer = SpecialistByIdSerializers(specialist, context={'request': request})
+        return Response(serializer.data)
 
 
 

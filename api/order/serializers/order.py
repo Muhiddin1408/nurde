@@ -19,3 +19,10 @@ class MyOrderSerializers(serializers.Serializer):
     def get_specialist(self, obj):
         return SpecialistSerializers(obj.specialist).data
 
+
+class OrderSerializers(serializers.Serializer):
+
+    class Meta:
+        model = Order
+        fields = '__all__'
+
