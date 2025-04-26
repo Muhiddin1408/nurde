@@ -4,7 +4,6 @@ from apps.users.model import Ankita, Relative, Patient
 
 
 class AnkitaSerializer(serializers.ModelSerializer):
-    relative = serializers.SerializerMethodField()
 
     class Meta:
         model = Ankita
@@ -28,7 +27,7 @@ class AnkitaSerializer(serializers.ModelSerializer):
         return super().create(validated_data)
 
     def get_relative(self, obj):
-        return obj.relative
+        return obj.relative.name
 
 
 class RelativeSerializer(serializers.ModelSerializer):
