@@ -70,7 +70,7 @@ class ClinicDetailSerializers(serializers.Serializer):
         fields = ('id', 'ranking', 'comment', 'author')
 
     def get_author(self, obj):
-        return obj.author.last_name + " " + obj.author.firs_tname
+        return obj.author.last_name + " " + obj.author.first_name
 
 
 class ClinicServiceSerializers(serializers.ModelSerializer):
