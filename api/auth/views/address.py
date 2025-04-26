@@ -15,7 +15,7 @@ class AddressViewSet(viewsets.ModelViewSet):
         if user.is_authenticated:
             patient = Patient.objects.filter(user=user).first()
             if patient:
-                return Address.objects.filter(patient=patient)
+                return Address.objects.filter(patient=patient).order_by('-id')
         return Address.objects.none()
 
     def perform_create(self, serializer):
