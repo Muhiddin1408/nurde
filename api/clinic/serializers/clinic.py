@@ -53,7 +53,7 @@ class ClinicSerializers(serializers.Serializer):
         return total_ranking / count
 
     def get_types(self, obj):
-        if obj.types.name:
+        if obj.types:
             return obj.types.name
         return None
 
