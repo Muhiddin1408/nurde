@@ -6,6 +6,7 @@ from apps.users.model import Address, Patient
 
 
 class AddressViewSet(viewsets.ModelViewSet):
+    queryset = Address.objects.all()
     serializer_class = AddressSerializer
     permission_classes = [AllowAny]
 
