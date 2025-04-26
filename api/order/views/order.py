@@ -1,4 +1,4 @@
-from rest_framework import viewsets, permissions, status
+from rest_framework import viewsets, permissions, status, generics
 from rest_framework.response import Response
 
 from api.order.serializers.order import MyOrderSerializers, OrderSerializers
@@ -11,13 +11,10 @@ class MyOrderViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
 
-class OrderViewSet(viewsets.GenericViewSet):
+class OrderViewSet(generics.CreateAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderSerializers
+    permission_classes = [permissions.IsAuthenticated]
 
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
 

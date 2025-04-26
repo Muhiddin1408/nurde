@@ -45,7 +45,6 @@ class RegisterView(APIView):
             user = User.objects.get(username=phone)
             user.sms_code = sms_code
             user.save()
-            print(is_all_digits(phone), "aaaaaaaaaaaaaaaaaaaaaaa")
             if is_all_digits(phone):
                 SendSmsApiWithEskiz(message="https://star-one.uz/ Tasdiqlash kodi " + str(sms_code),
                             phone=int(phone)).send()

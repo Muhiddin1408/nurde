@@ -35,6 +35,7 @@ class CommentReadMoreSerializer(serializers.Serializer):
     experts_response = serializers.CharField()
     costumer = serializers.SerializerMethodField()
     costumer_image = serializers.SerializerMethodField()
+    created_at = serializers.DateTimeField()
 
     class Meta:
         model = CommentReadMore

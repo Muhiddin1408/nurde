@@ -1,7 +1,18 @@
 from django.db import models
 
 from apps.basic.models import Specialist
-from apps.users.model import Patient, Address
+from apps.service.models.service import Service
+from apps.users.model import Patient, Address, Ankita, Image
+
+
+class Phone(models.Model):
+    phone = models.CharField(max_length=12, unique=True)
+
+
+class OrderFile(models.Model):
+    file = models.FileField(upload_to='orders/')
+
+
 
 
 class Order(models.Model):
@@ -18,5 +29,8 @@ class Order(models.Model):
     datetime = models.DateTimeField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     file = models.FileField(upload_to='orders/', blank=True, null=True)
-    image = models.ImageField(upload_to='orders/', blank=True, null=True)
+    image = models.ManyToManyField(OrderFile, blank=True, null=True)
+    ankita = models.ForeignKey(Ankita, on_delete=models.CASCADE, blank=True, null=True)
+    service = models.ManyToManyField(Service, blank=True, null=True)
+    phone = models.ManyToManyField(Phone, blank=True, null=True)
 
