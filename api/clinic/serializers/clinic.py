@@ -31,9 +31,12 @@ class ClinicSerializers(serializers.Serializer):
                   'comment', 'ranking', 'types')
 
     def get_image(self, obj):
+        request = self.context.get('request')  # request ni olib olamiz
         image = Image.objects.filter(clinic=obj).first()
-        if image:
-            return image.image.url
+        if image and image.image:
+            if request is not None:
+                return request.build_absolute_uri(image.image.url)  # to'liq URL yasaydi
+            return image.image.url  # fallback
         return None
 
     def get_like(self, obj):
