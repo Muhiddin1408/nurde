@@ -28,7 +28,7 @@ class SpecialistServiceDetailView(ListAPIView):
 
     def get_queryset(self):
         clinic_id = self.kwargs.get('clinic_id')
-        return Specialist.objects.filter(clinic__id=clinic_id)
+        return Specialist.objects.filter(staff__id=clinic_id)
 
 
 class CommentServiceDetailView(ListAPIView):
