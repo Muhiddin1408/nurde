@@ -9,17 +9,16 @@ class SymptomSubTypeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SymptomSubType
-        fields = ('id', 'name', 'category')
+        fields = ('id', 'name')
 
 
 class SymptomTypeSerializer(serializers.ModelSerializer):
     id = serializers.ReadOnlyField()
     name = serializers.ReadOnlyField()
-    symptom_sub = serializers.SerializerMethodField()
 
     class Meta:
         model = SymptomType
-        fields = ('id', 'name', 'description', 'symptom_sub')
+        fields = ('id', 'name', 'description', 'symptom_sub', 'category')
     
     def get_symptom_sub(self, obj):
         query = SymptomSubType.objects.filter(symptom_id=obj.id)
@@ -35,7 +34,7 @@ class SymptomSerializers(serializers.Serializer):
 
     class Meta:
         model = Symptom
-        fields = ('id', 'name', 'description')
+        fields = ('id', 'name', 'description', 'info')
         read_only_fields = ('id',)
 
     def get_info(self, obj):
