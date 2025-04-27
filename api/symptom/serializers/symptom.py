@@ -6,9 +6,10 @@ from apps.clinic.models import Symptom, SymptomType, SymptomSubType
 class SymptomSubTypeSerializer(serializers.ModelSerializer):
     id = serializers.ReadOnlyField()
     name = serializers.ReadOnlyField()
+
     class Meta:
         model = SymptomSubType
-        fields = ('id', 'name')
+        fields = ('id', 'name', 'category')
 
 
 class SymptomTypeSerializer(serializers.ModelSerializer):
