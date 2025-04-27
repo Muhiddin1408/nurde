@@ -15,6 +15,7 @@ class SymptomSubTypeSerializer(serializers.ModelSerializer):
 class SymptomTypeSerializer(serializers.ModelSerializer):
     id = serializers.ReadOnlyField()
     name = serializers.ReadOnlyField()
+    symptom_sub = serializers.SerializerMethodField()
 
     class Meta:
         model = SymptomType
