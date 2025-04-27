@@ -49,8 +49,7 @@ class DiagnosisViewSet(viewsets.ReadOnlyModelViewSet):
         pk = self.kwargs.get('pk')
 
         try:
-            order = Order.objects.get(pk=pk)
-            diagnosis = Diagnosis.objects.filter(order=order).last()
+            diagnosis = Diagnosis.objects.get(id=pk)
         except Diagnosis.DoesNotExist:
             return None
 
