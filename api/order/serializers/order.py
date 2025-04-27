@@ -22,7 +22,7 @@ class MyOrderListSerializers(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = ('id', 'doctor', 'address', 'ankita_name', 'price', 'payment_status', 'service', 'type')
+        fields = ('id', 'doctor', 'address', 'ankita_name', 'price', 'payment_status', 'service', 'type', 'datetime')
 
     def get_service(self, obj):
         return ServiceSerializer(obj.service.all(), many=True, context={'request': self.context['request']}).data
