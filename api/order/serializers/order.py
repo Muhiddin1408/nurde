@@ -14,7 +14,7 @@ from apps.users.model import Patient, Image, Address, Ankita
 
 
 class MyOrderListSerializers(serializers.ModelSerializer):
-    category = serializers.SerializerMethodField()
+    service = serializers.SerializerMethodField()
     type = serializers.SerializerMethodField()
     doctor = serializers.SerializerMethodField()
     address = serializers.SerializerMethodField()
@@ -22,10 +22,10 @@ class MyOrderListSerializers(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = ('id', 'doctor', 'address', 'ankita', 'price', 'payment_status', 'category', 'type')
+        fields = ('id', 'doctor', 'address', 'ankita', 'price', 'payment_status', 'service', 'type')
 
-    def get_category(self, obj):
-        return obj.doctor.category.name
+    def get_service(self, obj):
+        return ServiceSerializer(obj.service.all(), many=True, context={'request': self.context['request']}).data
 
     def get_type(self, obj):
         return obj.doctor.type
@@ -40,10 +40,8 @@ class MyOrderListSerializers(serializers.ModelSerializer):
         return AddressSerializer(obj.address, context={'request': self.context['request']}).data
 
     def get_ankita(self, obj):
-        full_name = f"{obj.ankita.last_name} {obj.ankita.first_name}"
-        if obj.ankita.middle_name:
-            full_name += f" {obj.ankita.middle_name}"
-        return full_name
+
+        return obj.ankita.name
 
 
 class MyOrderSerializers(serializers.ModelSerializer):
@@ -53,7 +51,6 @@ class MyOrderSerializers(serializers.ModelSerializer):
     address = serializers.SerializerMethodField()
     datetime = serializers.DateTimeField(read_only=True)
     price = serializers.IntegerField(read_only=True)
-    category = serializers.SerializerMethodField()
     type = serializers.SerializerMethodField()
     ankita = serializers.SerializerMethodField()
     service = serializers.SerializerMethodField()
@@ -63,7 +60,7 @@ class MyOrderSerializers(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = ('id', 'specialist', 'payment_status', 'address', 'datetime', 'created_at', 'price',
-                  'category', 'type', 'ankita', 'service', 'payment_type', 'image', 'diagnosis')
+                'type', 'ankita', 'service', 'payment_type', 'image', 'diagnosis')
 
     def get_specialist(self, obj):
         request = self.context.get('request')
@@ -79,9 +76,6 @@ class MyOrderSerializers(serializers.ModelSerializer):
 
     def get_address(self, obj):
         return AddressSerializer(obj.address, context={'request': self.context['request']}).data
-
-    def get_category(self, obj):
-        return obj.category.name
 
     def get_type(self, obj):
         return obj.doctor.type
