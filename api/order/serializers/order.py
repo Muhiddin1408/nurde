@@ -13,6 +13,39 @@ from apps.service.models.service import Service
 from apps.users.model import Patient, Image, Address, Ankita
 
 
+class MyOrderListSerializers(serializers.ModelSerializer):
+    category = serializers.SerializerMethodField()
+    type = serializers.SerializerMethodField()
+    doctor = serializers.SerializerMethodField()
+    address = serializers.SerializerMethodField()
+    ankita = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Order
+        fields = ('id', 'doctor', 'address', 'ankita', 'price', 'payment_status', 'category', 'type')
+
+    def get_category(self, obj):
+        return obj.doctor.category.name
+
+    def get_type(self, obj):
+        return obj.doctor.type
+
+    def get_doctor(self, obj):
+        full_name = f"{obj.doctor.user.last_name} {obj.doctor.user.first_name}"
+        if obj.doctor.user.middle_name:
+            full_name += f" {obj.doctor.user.middle_name}"
+        return full_name
+
+    def get_address(self, obj):
+        return AddressSerializer(obj.address, context={'request': self.context['request']}).data
+
+    def get_ankita(self, obj):
+        full_name = f"{obj.ankita.last_name} {obj.ankita.first_name}"
+        if obj.ankita.middle_name:
+            full_name += f" {obj.ankita.middle_name}"
+        return full_name
+
+
 class MyOrderSerializers(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     specialist = serializers.SerializerMethodField()
@@ -33,7 +66,14 @@ class MyOrderSerializers(serializers.ModelSerializer):
                   'category', 'type', 'ankita', 'service', 'payment_type', 'image', 'diagnosis')
 
     def get_specialist(self, obj):
-        return SpecialistSerializers(obj.doctor, context={'request': self.context['request']}).data
+        full_name = f"{obj.doctor.user.last_name} {obj.doctor.user.first_name}"
+        if obj.doctor.user.middle_name:
+            full_name += f" {obj.doctor.user.middle_name}"
+        photo_url = None
+        if obj.doctor.photo:
+            photo_url = obj.doctor.photo.url
+
+        return {"full_name": full_name, "photo": photo_url}
 
 
     def get_address(self, obj):

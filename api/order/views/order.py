@@ -3,14 +3,15 @@ from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 
 from api.basic.views.specialist import SmallPagesPagination
-from api.order.serializers.order import MyOrderSerializers, OrderSerializers, OrderFileSerializer, DiagnosisSerializers
+from api.order.serializers.order import MyOrderSerializers, OrderSerializers, OrderFileSerializer, DiagnosisSerializers, \
+    MyOrderListSerializers
 from apps.order.models import Order, OrderFile, Diagnosis
 from apps.users.model import Patient
 
 
 class MyOrderViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Order.objects.all()
-    serializer_class = MyOrderSerializers
+    serializer_class = MyOrderListSerializers
     permission_classes = [permissions.IsAuthenticated]
     pagination_class = SmallPagesPagination
 
@@ -21,6 +22,12 @@ class MyOrderViewSet(viewsets.ReadOnlyModelViewSet):
         if status:
             queryset = queryset.filter(status=status)
         return queryset
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        return Response(MyOrderSerializers(instance, context={'request': request}).data)
+
+
 
 
 
