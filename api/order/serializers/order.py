@@ -57,7 +57,7 @@ class MyOrderSerializers(serializers.ModelSerializer):
     def get_diagnosis(self, obj):
         diagnosis = Diagnosis.objects.filter(order=obj)
         if diagnosis.exists():
-            return DiagnosisSerializers(diagnosis, many=True).data
+            return DiagnosisSerializers(diagnosis, many=True, context={'request': self.context['request']}).data
         return None
 
 
