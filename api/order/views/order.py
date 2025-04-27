@@ -4,12 +4,22 @@ from rest_framework.response import Response
 
 from api.order.serializers.order import MyOrderSerializers, OrderSerializers, OrderFileSerializer
 from apps.order.models import Order, OrderFile
+from apps.users.model import Patient
 
 
 class MyOrderViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Order.objects.all()
     serializer_class = MyOrderSerializers
     permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        status = self.request.query_params.get('status', None)
+        queryset = Order.objects.filter(customer=Patient.objects.filter(user=user).last()).order_by('-id')
+        if status:
+            queryset = queryset.filter(status=status)
+        return queryset
+
 
 
 class OrderViewSet(generics.CreateAPIView):

@@ -1,27 +1,59 @@
 from django.db import transaction
 from rest_framework import serializers
 
+from api.auth.serializers.address import AddressSerializer
+from api.basic.serializers.service import ServiceSerializer
 from api.basic.serializers.specialist import SpecialistSerializers
+from api.users.serializers.ankita import AnkitaSerializer
 from apps.basic.models import Specialist
 from apps.order.models import Order, OrderFile, Phone
 from apps.service.models.service import Service
 from apps.users.model import Patient, Image, Address, Ankita
 
 
-class MyOrderSerializers(serializers.Serializer):
+class MyOrderSerializers(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     specialist = serializers.SerializerMethodField()
-    service = serializers.SerializerMethodField()
-    payment = serializers.SerializerMethodField()
+    payment_status = serializers.BooleanField(read_only=True)
     address = serializers.SerializerMethodField()
-    datetime = serializers.SerializerMethodField()
+    datetime = serializers.DateTimeField(read_only=True)
+    price = serializers.IntegerField(read_only=True)
+    category = serializers.SerializerMethodField()
+    type = serializers.SerializerMethodField()
+    ankita = serializers.SerializerMethodField()
+    service = serializers.SerializerMethodField()
+    image = serializers.SerializerMethodField()
 
     class Meta:
         model = Order
-        fields = ('id', 'specialist', 'service', 'payment', 'address', 'datetime', 'created_at', 'costumer', 'file')
+        fields = ('id', 'specialist', 'payment_status', 'address', 'datetime', 'created_at', 'price',
+                  'category', 'type', 'ankita', 'service', 'payment_type', 'image')
 
     def get_specialist(self, obj):
-        return SpecialistSerializers(obj.specialist).data
+        return SpecialistSerializers(obj.doctor, context={'request': self.context['request']}).data
+
+
+    def get_address(self, obj):
+        return AddressSerializer(obj.address, context={'request': self.context['request']}).data
+
+    def get_category(self, obj):
+        return obj.doctor.category.name
+
+    def get_type(self, obj):
+        return obj.doctor.type
+
+    def get_ankita(self, obj):
+        return AnkitaSerializer(obj.ankita, context={'request': self.context['request']}).data
+
+    def get_service(self, obj):
+        return ServiceSerializer(obj.service.all(), many=True, context={'request': self.context['request']}).data
+
+    def get_image(self, obj):
+        return OrderFileSerializer(obj.image.all(), many=True, context={'request': self.context['request']}).data
+
+
+
+
 
 
 from rest_framework import serializers
@@ -68,7 +100,8 @@ class OrderSerializers(serializers.ModelSerializer):
             'ankita',
             'service',
             'phone',
-            'phone_numbers'  # Bu joyni qo'shdik
+            'phone_numbers',
+            'price'
         ]
         read_only_fields = ['id', 'created_at']
 
@@ -76,6 +109,10 @@ class OrderSerializers(serializers.ModelSerializer):
         uploaded_files = validated_data.pop('image', [])
         service_data = validated_data.pop('service', [])
         phone_numbers = validated_data.pop('phone_numbers', [])
+        price = 0
+        for i in service_data:
+            service = Service.objects.get(id=i)
+            price += service.price
 
         request = self.context.get('request')
         if request and hasattr(request, 'user'):
@@ -84,11 +121,9 @@ class OrderSerializers(serializers.ModelSerializer):
 
         order = Order.objects.create(**validated_data)
 
-        # service larni bog'lash
         if service_data:
             order.service.set(service_data)
 
-        # Telefon raqamlarini yaratish va bog'lash
         phone_instances = []
         for number in phone_numbers:
             phone_instance = Phone.objects.create(phone=number)
@@ -99,11 +134,12 @@ class OrderSerializers(serializers.ModelSerializer):
         # Fayllarni saqlash
         if uploaded_files:
             order.image.set(uploaded_files)
-
+        order.price = price
+        order.save()
         return order
 
 
-class OrderFileSerializer(serializers.Serializer):
+class OrderFileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = OrderFile

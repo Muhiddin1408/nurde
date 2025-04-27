@@ -24,4 +24,6 @@ class ServiceSerializer(serializers.Serializer):
         fields = '__all__'
 
     def get_category(self, obj):
-        return obj.category.name
+        if obj.category:
+            return obj.category.name
+        return None

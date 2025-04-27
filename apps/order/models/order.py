@@ -19,6 +19,7 @@ class Order(models.Model):
     STATUS_CHOICES = (
         ('active', 'active'),
         ('inactive', 'inactive'),
+        ('cancellation', 'cancellation'),
     )
     customer = models.ForeignKey(Patient, on_delete=models.CASCADE)
     doctor = models.ForeignKey(Specialist, on_delete=models.CASCADE)
@@ -32,4 +33,5 @@ class Order(models.Model):
     ankita = models.ForeignKey(Ankita, on_delete=models.CASCADE, blank=True, null=True)
     service = models.ManyToManyField(Service, blank=True, null=True)
     phone = models.ManyToManyField(Phone, blank=True, null=True)
+    price = models.IntegerField(blank=True, null=True)
 
