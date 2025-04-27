@@ -2,6 +2,7 @@ from rest_framework import viewsets, permissions, status, generics
 from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 
+from api.basic.views.specialist import SmallPagesPagination
 from api.order.serializers.order import MyOrderSerializers, OrderSerializers, OrderFileSerializer, DiagnosisSerializers
 from apps.order.models import Order, OrderFile, Diagnosis
 from apps.users.model import Patient
@@ -11,6 +12,7 @@ class MyOrderViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Order.objects.all()
     serializer_class = MyOrderSerializers
     permission_classes = [permissions.IsAuthenticated]
+    pagination_class = SmallPagesPagination
 
     def get_queryset(self):
         user = self.request.user
