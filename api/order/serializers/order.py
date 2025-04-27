@@ -1,3 +1,5 @@
+from datetime import date
+
 from django.db import transaction
 from rest_framework import serializers
 
@@ -6,7 +8,7 @@ from api.basic.serializers.service import ServiceSerializer
 from api.basic.serializers.specialist import SpecialistSerializers
 from api.users.serializers.ankita import AnkitaSerializer
 from apps.basic.models import Specialist
-from apps.order.models import Order, OrderFile, Phone
+from apps.order.models import Order, OrderFile, Phone, Diagnosis, Recommendations
 from apps.service.models.service import Service
 from apps.users.model import Patient, Image, Address, Ankita
 
@@ -23,11 +25,12 @@ class MyOrderSerializers(serializers.ModelSerializer):
     ankita = serializers.SerializerMethodField()
     service = serializers.SerializerMethodField()
     image = serializers.SerializerMethodField()
+    diagnosis = serializers.SerializerMethodField()
 
     class Meta:
         model = Order
         fields = ('id', 'specialist', 'payment_status', 'address', 'datetime', 'created_at', 'price',
-                  'category', 'type', 'ankita', 'service', 'payment_type', 'image')
+                  'category', 'type', 'ankita', 'service', 'payment_type', 'image', 'diagnosis')
 
     def get_specialist(self, obj):
         return SpecialistSerializers(obj.doctor, context={'request': self.context['request']}).data
@@ -51,6 +54,11 @@ class MyOrderSerializers(serializers.ModelSerializer):
     def get_image(self, obj):
         return OrderFileSerializer(obj.image.all(), many=True, context={'request': self.context['request']}).data
 
+    def get_diagnosis(self, obj):
+        diagnosis = Diagnosis.objects.filter(order=obj)
+        if diagnosis.exists():
+            return DiagnosisSerializers(diagnosis, many=True).data
+        return None
 
 
 
@@ -144,3 +152,48 @@ class OrderFileSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderFile
         fields = '__all__'
+
+
+class DiagnosisSerializers(serializers.ModelSerializer):
+    costumer = serializers.SerializerMethodField()
+    age = serializers.SerializerMethodField()
+    recommendation = serializers.SerializerMethodField()
+    doctor = serializers.SerializerMethodField()
+    type = serializers.SerializerMethodField()
+    category = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Diagnosis
+        fields = ('id', 'costumer', 'age', 'recommendation', 'doctor', 'type', 'category', 'diagnosis', 'comment')
+
+    def get_costumer(self, obj):
+        return AnkitaSerializer(obj.order.ankita, context={'request': self.context['request']}).data
+
+    def get_age(self, obj):
+        today = date.today()
+        age = today.year - obj.order.ankita.birthday.year - (
+                (today.month, today.day) < (obj.order.ankita.birthday.month, obj.order.ankita.birthday.day)
+        )
+        return age
+
+    def get_recommendation(self, obj):
+        recommendation = Recommendations.objects.filter(diagnosis=obj)
+        return RecommendationsSerializer(recommendation, many=True, context={'request': self.context['request']}).data
+
+    def get_doctor(self, obj):
+        full_name = f"{obj.order.doctor.user.last_name} {obj.order.doctor.user.first_name}"
+        if obj.order.doctor.user.middle_name:
+            full_name += f" {obj.order.doctor.user.middle_name}"
+        return full_name
+
+    def get_type(self, obj):
+        return obj.order.doctor.type
+
+    def get_category(self, obj):
+        return obj.order.doctor.category.name
+
+
+class RecommendationsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Recommendations
+        fields = ('id', 'recommendation')

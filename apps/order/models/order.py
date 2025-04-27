@@ -35,3 +35,15 @@ class Order(models.Model):
     phone = models.ManyToManyField(Phone, blank=True, null=True)
     price = models.IntegerField(blank=True, null=True)
 
+
+class Diagnosis(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    diagnosis = models.TextField()
+    date = models.DateField(auto_now_add=True)
+    comment = models.TextField()
+
+
+class Recommendations(models.Model):
+    diagnosis = models.ForeignKey(Diagnosis, on_delete=models.CASCADE)
+    recommendation = models.TextField()
+

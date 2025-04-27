@@ -7,6 +7,7 @@ from apps.clinic.models import Symptom
 class SymptomView(viewsets.ReadOnlyModelViewSet):
     queryset = Symptom.objects.filter(type='symptom')
     serializer_class = SymptomSerializers
+    search_fields = ('name',)
 
 
 class DiagnosesView(viewsets.ReadOnlyModelViewSet):

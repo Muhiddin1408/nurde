@@ -2,8 +2,8 @@ from rest_framework import viewsets, permissions, status, generics
 from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 
-from api.order.serializers.order import MyOrderSerializers, OrderSerializers, OrderFileSerializer
-from apps.order.models import Order, OrderFile
+from api.order.serializers.order import MyOrderSerializers, OrderSerializers, OrderFileSerializer, DiagnosisSerializers
+from apps.order.models import Order, OrderFile, Diagnosis
 from apps.users.model import Patient
 
 
@@ -37,6 +37,26 @@ class ImageViewSet(ListAPIView):
         file = request.data['file']
         image = OrderFile.objects.create(file=file)
         return Response({'id':image.id}, status=status.HTTP_201_CREATED)
+
+
+class DiagnosisViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Diagnosis.objects.all()
+    serializer_class = DiagnosisSerializers
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        pk = self.kwargs.get('pk')
+
+        try:
+            order = Order.objects.get(pk=pk)
+            diagnosis = Diagnosis.objects.filter(order=order).last()
+        except Diagnosis.DoesNotExist:
+            return None
+
+        if diagnosis.order.customer.user == user:
+            return Diagnosis.objects.filter(id=pk)  # yoki kerakli queryset
+        return None
 
 
 
