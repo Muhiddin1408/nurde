@@ -81,7 +81,7 @@ class MyOrderSerializers(serializers.ModelSerializer):
         return AddressSerializer(obj.address, context={'request': self.context['request']}).data
 
     def get_category(self, obj):
-        return obj.doctor.category.name
+        return obj.category.name
 
     def get_type(self, obj):
         return obj.doctor.type

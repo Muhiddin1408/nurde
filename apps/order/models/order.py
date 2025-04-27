@@ -3,6 +3,7 @@ from django.db import models
 from apps.basic.models import Specialist
 from apps.service.models.service import Service
 from apps.users.model import Patient, Address, Ankita
+from apps.utils.models import Category
 
 
 class Phone(models.Model):
@@ -34,6 +35,7 @@ class Order(models.Model):
     service = models.ManyToManyField(Service, blank=True, null=True)
     phone = models.ManyToManyField(Phone, blank=True, null=True)
     price = models.IntegerField(blank=True, null=True)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, blank=True, null=True)
 
 
 class Diagnosis(models.Model):
