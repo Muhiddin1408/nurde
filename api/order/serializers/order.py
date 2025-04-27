@@ -66,12 +66,13 @@ class MyOrderSerializers(serializers.ModelSerializer):
                   'category', 'type', 'ankita', 'service', 'payment_type', 'image', 'diagnosis')
 
     def get_specialist(self, obj):
+        request = self.context.get('request')
         full_name = f"{obj.doctor.user.last_name} {obj.doctor.user.first_name}"
         if obj.doctor.user.middle_name:
             full_name += f" {obj.doctor.user.middle_name}"
         photo_url = None
         if obj.doctor.photo:
-            photo_url = obj.doctor.photo.url
+            photo_url = request.build_absolute_uri(obj.doctor.photo.url)
 
         return {"full_name": full_name, "photo": photo_url}
 
