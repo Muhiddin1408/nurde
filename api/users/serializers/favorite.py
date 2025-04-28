@@ -25,8 +25,16 @@ class LikeSerializer(serializers.ModelSerializer):
     def get_clinic(self, obj):
         if obj.clinic:
             return ClinicSerializers(obj.clinic, context={'request': self.context.get('request')}).data
+        return None
 
     def create(self, validated_data):
-        request = self.context.get('request')
-        validated_data['costumer'] = Patient.objects.filter(user=request.user).last()
-        return super().create(validated_data)
+        request = self.context['request']
+        specialist_id = request.data.get('user')  # user id keladi
+        clinic_id = request.data.get('clinic')    # clinic id keladi
+
+        like, created = Like.objects.get_or_create(
+            costumer=Patient.objects.filter(user=request.user).last(),
+            user_id=specialist_id,
+            clinic_id=clinic_id
+        )
+        return like
