@@ -4,6 +4,7 @@ from rest_framework.response import Response
 
 from api.basic.views.specialist import SmallPagesPagination
 from api.users.serializers.favorite import LikeSerializer
+from apps.users.model import Patient
 from apps.utils.models.like import Like
 
 
@@ -16,7 +17,7 @@ class FavoriteDoctorViewSet(generics.ListCreateAPIView):
     def get_queryset(self):
         # Faqat o'zi (request.user) ga tegishli patientni qaytaradi
         status = self.request.query_params.get('type')
-        return Like.objects.filter(costumer=self.request.user, user__isnull=True)
+        return Like.objects.filter(costumer=Patient.objects.filter(user=self.request.user), user__isnull=True)
 
     def delete(self, request, *args, **kwargs):
         like_id = request.data.get('id')  # id ni body ichidan olamiz
