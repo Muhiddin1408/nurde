@@ -1,12 +1,14 @@
 from rest_framework import serializers
 
 from api.basic.serializers.specialist import SpecialistSerializers
+from api.clinic.serializers.clinic import ClinicSerializers
 from apps.users.model import Patient
 from apps.utils.models.like import Like
 
 
 class LikeSerializer(serializers.ModelSerializer):
     doctor = serializers.SerializerMethodField()
+    clinic = serializers.SerializerMethodField()
 
     class Meta:
         model = Like
@@ -19,6 +21,10 @@ class LikeSerializer(serializers.ModelSerializer):
                 context={'request': self.context.get('request')}
             ).data
         return None
+
+    def get_clinic(self, obj):
+        if obj.clinic:
+            return ClinicSerializers(obj.clinic, context={'request': self.context.get('request')}).data
 
     def create(self, validated_data):
         request = self.context.get('request')

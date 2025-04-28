@@ -16,18 +16,27 @@ class FavoriteDoctorViewSet(generics.ListCreateAPIView):
     def get_queryset(self):
         # Faqat o'zi (request.user) ga tegishli patientni qaytaradi
         status = self.request.query_params.get('type')
-        return Like.objects.filter(costumer=Patient.objects.filter(user=self.request.user).last(), user__isnull=False)
+        if status == 'doctor':
+            return Like.objects.filter(costumer=Patient.objects.filter(user=self.request.user).last(), user__isnull=False)
+        elif status == 'clinic':
+            return Like.objects.filter(costumer=Patient.objects.filter(user=self.request.user).last(), clinic__isnull=False)
+        else:
+            return Like.objects.none()
 
     def post(self, request, *args, **kwargs):
         user_id = request.data.get('user')
-        if not user_id:
-            return Response({'detail': 'User ID is required'}, status=status.HTTP_400_BAD_REQUEST)
+        clinic = request.data.get('clinic')
 
         # Kim like qilmoqda
         costumer = Patient.objects.filter(user=request.user).last()
 
         # Avval bazada bormi tekshiramiz
-        like = Like.objects.filter(costumer=costumer, user_id=user_id).first()
+        if user_id:
+            like = Like.objects.filter(costumer=costumer, user_id=user_id).first()
+        elif clinic:
+            like = Like.objects.filter(costumer=costumer, clinic_id=clinic).first()
+        else:
+            like = Like.objects.filter(costumer=costumer, clinic_id=clinic).first()
 
         if like:
             like.delete()
