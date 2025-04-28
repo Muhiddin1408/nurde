@@ -16,7 +16,7 @@ class FavoriteDoctorViewSet(generics.ListCreateAPIView):
     def get_queryset(self):
         # Faqat o'zi (request.user) ga tegishli patientni qaytaradi
         status = self.request.query_params.get('type')
-        return Like.objects.filter(costumer=Patient.objects.filter(user=self.request.user).last(), user__isnull=True)
+        return Like.objects.filter(costumer=Patient.objects.filter(user=self.request.user).last(), user__isnull=False)
 
     def delete(self, request, *args, **kwargs):
         like_id = request.data.get('id')  # id ni body ichidan olamiz
