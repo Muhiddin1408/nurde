@@ -3,6 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from api.users.serializers.message import MessageSerializer
+from apps.users.model import Patient
 from apps.users.model.chat import Message, ChatRoom
 
 
@@ -13,7 +14,7 @@ class MessageViewSet(generics.ListCreateAPIView):
 
     def get_queryset(self):
         user = self.request.user
-        room = ChatRoom.objects.filter(parent=user)
+        room = ChatRoom.objects.filter(parent=Patient.objects.filter(user=user).last())
         if room.exists():
             return Message.objects.filter(room=room.last())
         else:

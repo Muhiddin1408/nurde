@@ -1,6 +1,7 @@
 
 from rest_framework import serializers
 
+from apps.users.model import Patient
 from apps.users.model.chat import ChatRoom, Message
 
 
@@ -23,9 +24,9 @@ class MessageSerializer(serializers.ModelSerializer):
 
         request = self.context['request']
 
-        room = ChatRoom.objects.filter(parent=request.user).last()
+        room = ChatRoom.objects.filter(parent=Patient.objects.filter(user=request.user).last()).last()
         if not room:
-            room = ChatRoom.objects.create(parent=request.user, name='')
+            room = ChatRoom.objects.create(parent=Patient.objects.filter(user=request.user).last(), name='')
 
         # yangi message yaratamiz
         message = Message.objects.create(
@@ -33,6 +34,6 @@ class MessageSerializer(serializers.ModelSerializer):
             admin=None,
             content=validated_data.get('content'),
             file=validated_data.get('file'),
-            status=validated_data.get('user')
+            status='user'
         )
         return message
