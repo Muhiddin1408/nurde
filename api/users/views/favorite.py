@@ -2,6 +2,7 @@ from rest_framework import viewsets, generics, permissions, status
 from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
 
+from api.basic.views.specialist import SmallPagesPagination
 from api.users.serializers.favorite import LikeSerializer
 from apps.utils.models.like import Like
 
@@ -10,6 +11,7 @@ class FavoriteDoctorViewSet(generics.ListCreateAPIView):
     queryset = Like.objects.all()
     serializer_class = LikeSerializer
     permission_classes = [permissions.IsAuthenticated]
+    pagination_class = SmallPagesPagination
 
     def get_queryset(self):
         # Faqat o'zi (request.user) ga tegishli patientni qaytaradi
