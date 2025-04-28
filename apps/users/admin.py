@@ -1,5 +1,6 @@
 from django.contrib import admin
 
+from apps.users.model.chat import ChatRoom, Message
 from apps.users.model.weekday import Weekday
 from apps.users.models import User
 from apps.users.model import Address, Patient, Ankita, Relative, Image
@@ -13,3 +14,5 @@ admin.site.register(Weekday)
 admin.site.register(Ankita)
 admin.site.register(Relative)
 admin.site.register(Image)
+admin.site.register(ChatRoom)
+admin.site.register(Message)
