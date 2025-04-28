@@ -18,23 +18,24 @@ class FavoriteDoctorViewSet(generics.ListCreateAPIView):
         status = self.request.query_params.get('type')
         return Like.objects.filter(costumer=Patient.objects.filter(user=self.request.user).last(), user__isnull=False)
 
-    def delete(self, request, *args, **kwargs):
-        like_id = request.data.get('id')  # id ni body ichidan olamiz
+    def post(self, request, *args, **kwargs):
+        user_id = request.data.get('user')
+        if not user_id:
+            return Response({'detail': 'User ID is required'}, status=status.HTTP_400_BAD_REQUEST)
 
-        if not like_id:
-            return Response(
-                {"error": "id kiritilmagan."},
-                status=status.HTTP_400_BAD_REQUEST
-            )
+        # Kim like qilmoqda
+        costumer = request.user
+        if hasattr(costumer, 'patient'):
+            costumer = Patient.objects.filter(user=costumer).last()
 
-        try:
-            like = self.get_queryset().get(id=like_id)
-        except Like.DoesNotExist:
-            raise NotFound("Bunday Like topilmadi.")
+        # Avval bazada bormi tekshiramiz
+        like = Like.objects.filter(costumer=costumer, user_id=user_id).first()
 
-        like.delete()
-
-        return Response(
-            {"message": "Like muvaffaqiyatli o'chirildi."},
-            status=status.HTTP_204_NO_CONTENT
-        )
+        if like:
+            like.delete()
+            return Response({'detail': 'Like removed'}, status=status.HTTP_204_NO_CONTENT)
+        else:
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
