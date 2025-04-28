@@ -24,9 +24,7 @@ class FavoriteDoctorViewSet(generics.ListCreateAPIView):
             return Response({'detail': 'User ID is required'}, status=status.HTTP_400_BAD_REQUEST)
 
         # Kim like qilmoqda
-        costumer = request.user
-        if hasattr(costumer, 'patient'):
-            costumer = Patient.objects.filter(user=costumer).last()
+        costumer = Patient.objects.filter(user=request.user).last()
 
         # Avval bazada bormi tekshiramiz
         like = Like.objects.filter(costumer=costumer, user_id=user_id).first()
