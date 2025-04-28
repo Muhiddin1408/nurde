@@ -9,7 +9,6 @@ from apps.utils.models.like import Like
 
 
 class FavoriteDoctorViewSet(generics.ListCreateAPIView):
-    queryset = Like.objects.all()
     serializer_class = LikeSerializer
     permission_classes = [permissions.IsAuthenticated]
     pagination_class = SmallPagesPagination
@@ -17,7 +16,7 @@ class FavoriteDoctorViewSet(generics.ListCreateAPIView):
     def get_queryset(self):
         # Faqat o'zi (request.user) ga tegishli patientni qaytaradi
         status = self.request.query_params.get('type')
-        return Like.objects.filter(costumer=Patient.objects.filter(user=self.request.user), user__isnull=True)
+        return Like.objects.filter(costumer=Patient.objects.filter(user=self.request.user).last(), user__isnull=True)
 
     def delete(self, request, *args, **kwargs):
         like_id = request.data.get('id')  # id ni body ichidan olamiz
