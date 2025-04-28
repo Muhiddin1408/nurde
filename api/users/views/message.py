@@ -1,8 +1,9 @@
-from rest_framework import generics
+from rest_framework import generics, serializers
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
 from api.users.serializers.message import MessageSerializer
-from apps.users.model.chat import Message
+from apps.users.model.chat import Message, ChatRoom
 
 
 class MessageViewSet(generics.ListCreateAPIView):
@@ -10,7 +11,10 @@ class MessageViewSet(generics.ListCreateAPIView):
     serializer_class = MessageSerializer
     permission_classes = [IsAuthenticated]
 
-    # def get_queryset(self):
-    #     user = self.request.user
-    #     room =
-
+    def get_queryset(self):
+        user = self.request.user
+        room = ChatRoom.objects.filter(parent=user)
+        if room.exists():
+            return Message.objects.filter(room=room.last())
+        else:
+            return Message.objects.none()
