@@ -12,4 +12,4 @@ class LikeSerializer(serializers.ModelSerializer):
         fields = ('id', 'doctor', 'created_at')
 
     def get_doctor(self, obj):
-        return SpecialistSerializers(obj.doctor, context={'request': self.context['request']}).data
+        return SpecialistSerializers(obj.user, context={'request': self.context['request']}).data
