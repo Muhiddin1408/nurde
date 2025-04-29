@@ -154,8 +154,8 @@ class OrderSerializers(serializers.ModelSerializer):
         phone_numbers = validated_data.pop('phone_numbers', [])
         price = 0
         for i in service_data:
-            service = Service.objects.get(id=i)
-            price += service.price
+
+            price += i.price
 
         request = self.context.get('request')
         if request and hasattr(request, 'user'):
@@ -169,7 +169,7 @@ class OrderSerializers(serializers.ModelSerializer):
 
         phone_instances = []
         for number in phone_numbers:
-            phone_instance = Phone.objects.create(phone=number)
+            phone_instance, created = Phone.objects.get_or_create(phone=number)
             phone_instances.append(phone_instance)
 
         order.phone.set(phone_instances)
