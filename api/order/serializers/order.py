@@ -173,8 +173,6 @@ class OrderSerializers(serializers.ModelSerializer):
             phone_instances.append(phone_instance)
 
         order.phone.set(phone_instances)
-
-        # Fayllarni saqlash
         if uploaded_files:
             order.image.set(uploaded_files)
         order.price = price
