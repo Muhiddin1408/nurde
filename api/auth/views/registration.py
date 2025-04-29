@@ -102,6 +102,8 @@ def sms_conf(request):
             refresh = RefreshToken.for_user(user)
             access_token = str(refresh.access_token)
             refresh_token = str(refresh)
+            user.is_active = True
+            user.save()
             result = {
                 'code': True,
                 'access': access_token,

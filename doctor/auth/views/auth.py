@@ -15,5 +15,6 @@ class SpecialistUpdate(generics.UpdateAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_object(self):
+        print(self.request.user)
         return Specialist.objects.filter(user=self.request.user).last()
 
