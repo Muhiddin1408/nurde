@@ -94,12 +94,18 @@ def sms_conf(request):
         sms_code = request.data['code']
         phone = request.data['username']
         user = User.objects.filter(username=phone).last()
+
         result = {
             'code': False,
         }
         if user and int(user.sms_code) == int(sms_code):
+            refresh = RefreshToken.for_user(user)
+            access_token = str(refresh.access_token)
+            refresh_token = str(refresh)
             result = {
                 'code': True,
+                'access': access_token,
+                'refresh': refresh_token,
             }
             return Response(result, status=status.HTTP_200_OK)
         return Response(result, status=status.HTTP_200_OK)
