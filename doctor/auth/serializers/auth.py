@@ -65,6 +65,7 @@ class SpecialistSerializer(serializers.ModelSerializer):
                                        first_name=first_name, middle_name=middle_name, lang=lang, birth_day=birthday)
 
         user.sms_code = sms_code
+        user.save()
         SendSmsApiWithEskiz(message="https://star-one.uz/ Tasdiqlash kodi " + str(sms_code),
                             phone=int(phone)).send()
 
