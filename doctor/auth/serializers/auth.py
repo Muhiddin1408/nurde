@@ -87,6 +87,7 @@ class SpecialistUpdateSerializer(serializers.ModelSerializer):
     middle_name = serializers.CharField(source='user.middle_name', required=False)
     lang = serializers.CharField(source='user.lang', required=False)
     birthday = serializers.DateField(source='user.birthday', required=False)
+    category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all(), many=True, required=False)
 
     class Meta:
         model = Specialist
@@ -127,6 +128,8 @@ class SpecialistUpdateSerializer(serializers.ModelSerializer):
         for attr, value in user_data.items():
             setattr(user, attr, value)
         user.save()
+        if 'category' in validated_data:
+            instance.category.set(validated_data['category'])
 
         return instance
 

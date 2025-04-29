@@ -99,15 +99,8 @@ def sms_conf(request):
             'code': False,
         }
         if user and int(user.sms_code) == int(sms_code):
-            refresh = RefreshToken.for_user(user)
-            access_token = str(refresh.access_token)
-            refresh_token = str(refresh)
-            user.is_active = True
-            user.save()
             result = {
-                'code': True,
-                'access': access_token,
-                'refresh': refresh_token,
+                'code': True
             }
             return Response(result, status=status.HTTP_200_OK)
         return Response(result, status=status.HTTP_200_OK)

@@ -15,6 +15,7 @@ class User(AbstractUser):
     lang = models.CharField(blank=True, null=True, max_length=255)
     is_active = models.BooleanField(default=False)
     birth_day = models.DateField(blank=True, null=True)
+    is_staff = models.BooleanField(default=False)
 
 
     def __str__(self):
