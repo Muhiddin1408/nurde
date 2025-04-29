@@ -17,7 +17,8 @@ from api.utils.eskiz import SendSmsApiWithEskiz
 from api.utils.gmail_sms import send_verification_email
 from apps.basic.models import Specialist
 from apps.users.models import User
-from doctor.auth.serializers.auth import SpecialistSerializer, SpecialistUpdateSerializer
+from apps.utils.models import Category
+from doctor.auth.serializers.auth import SpecialistSerializer, SpecialistUpdateSerializer, CategorySerializer
 
 
 class SpecialistRegister(generics.CreateAPIView):
@@ -109,4 +110,10 @@ class SpecialistUpdate(generics.UpdateAPIView):
     def get_object(self):
         print(self.request.user)
         return Specialist.objects.filter(user=self.request.user).last()
+
+
+class CategoryView(generics.ListAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+
 

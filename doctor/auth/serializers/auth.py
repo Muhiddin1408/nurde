@@ -133,3 +133,9 @@ class SpecialistUpdateSerializer(serializers.ModelSerializer):
 
         return instance
 
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ['id', 'name']
+
