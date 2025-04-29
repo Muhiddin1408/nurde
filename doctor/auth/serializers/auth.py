@@ -1,6 +1,7 @@
 import random
 
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from api.utils.eskiz import SendSmsApiWithEskiz
@@ -48,6 +49,10 @@ class SpecialistSerializer(serializers.ModelSerializer):
         lang = user_data.get('lang', '')
         birthday = user_data.get('birthday')
         sms_code = random.randint(1000, 9999)
+        if User.objects.filter(email=email).exists():
+            raise ValidationError({'email': 'Email is already registered.'})
+        if User.objects.filter(username=phone).exists():
+            raise ValidationError({'phone': 'Phone number is already registered.'})
 
         # Validating email and phone
         if not email:
@@ -69,19 +74,6 @@ class SpecialistSerializer(serializers.ModelSerializer):
         refresh_token = str(refresh)
         return specialist
 
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-
-        # Generate JWT tokens
-        refresh = RefreshToken.for_user(instance.user)
-        access_token = str(refresh.access_token)
-        refresh_token = str(refresh)
-
-        # Add tokens to the representation
-        representation['access_token'] = access_token
-        representation['refresh_token'] = refresh_token
-
-        return representation
 
 
 from rest_framework import serializers
