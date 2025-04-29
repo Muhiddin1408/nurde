@@ -50,9 +50,9 @@ class SpecialistSerializer(serializers.ModelSerializer):
         birthday = user_data.get('birthday')
         sms_code = random.randint(1000, 9999)
         if User.objects.filter(email=email).exists():
-            raise ValidationError({'email': 'Email is already registered.'})
+            raise ValidationError({'message': 'Email is already registered.'})
         if User.objects.filter(username=phone).exists():
-            raise ValidationError({'phone': 'Phone number is already registered.'})
+            raise ValidationError({'message': 'Phone number is already registered.'})
 
         # Validating email and phone
         if not email:
