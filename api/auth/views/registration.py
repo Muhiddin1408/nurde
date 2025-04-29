@@ -48,7 +48,6 @@ class RegisterView(APIView):
             if is_all_digits(phone):
                 SendSmsApiWithEskiz(message="https://star-one.uz/ Tasdiqlash kodi " + str(sms_code),
                             phone=int(phone)).send()
-
             else:
                 send_verification_email(phone, sms_code)
             return Response({'status': False},status=status.HTTP_200_OK)

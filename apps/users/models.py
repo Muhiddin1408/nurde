@@ -14,6 +14,8 @@ class User(AbstractUser):
     middle_name = models.CharField(blank=True, null=True, max_length=255)
     lang = models.CharField(blank=True, null=True, max_length=255)
     is_active = models.BooleanField(default=False)
+    birth_day = models.DateField(blank=True, null=True)
+
 
     def __str__(self):
         return self.username
