@@ -77,15 +77,26 @@ def password_conf(request):
 
         phone = request.data['username']
         password = request.data['password']
-
+        last_name = request.data['last_name']
+        first_name = request.data['first_name']
+        middle_name = request.data['middle_name', None]
+        gender = request.data['gender']
+        birth_day = request.data['date_of_birth', None]
+        passport = request.data['passport', None]
 
         user = User.objects.get(username=phone)
         user.is_active = True
         user.is_staff = True
+        user.last_name = last_name
+        user.first_name = first_name
+        user.middle_name = middle_name
+        user.gen = gender
+        user.birth_day = birth_day
         user.save()
 
+
         if not Specialist.objects.filter(user=user).exists():
-            Specialist.objects.create(user=user,  password=password)
+            staff = Specialist.objects.create(user=user,  password=password, pinfl=passport)
 
         token = RefreshToken.for_user(user)
         result = {
