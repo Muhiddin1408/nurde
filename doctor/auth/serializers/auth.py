@@ -117,19 +117,22 @@ class SpecialistUpdateSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         user_data = validated_data.pop('user', {})
+        category_data = validated_data.pop('category', None)
 
         # Specialist modelini yangilash
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
         instance.save()
 
+        # category ManyToMany relationini set qilish
+        if category_data is not None:
+            instance.category.set(category_data)
+
         # User modelini yangilash
         user = instance.user
         for attr, value in user_data.items():
             setattr(user, attr, value)
         user.save()
-        if 'category' in validated_data:
-            instance.category.set(validated_data['category'])
 
         return instance
 
