@@ -2,6 +2,8 @@ from datetime import datetime
 
 from django.core.exceptions import ObjectDoesNotExist
 import random
+
+from django.views.decorators.csrf import csrf_exempt
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import generics, permissions, status
 from rest_framework.decorators import api_view, permission_classes
@@ -65,7 +67,7 @@ class SpecialistRegister(generics.CreateAPIView):
             return Response({'status': True}, status=status.HTTP_200_OK)
     #
 
-
+@csrf_exempt
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def password_conf(request):
@@ -96,7 +98,7 @@ def password_conf(request):
 
 
         if not Specialist.objects.filter(user=user).exists():
-            staff = Specialist.objects.create(user=user,  password=password, pinfl=passport)
+            Specialist.objects.create(user=user,  password=password, pinfl=passport)
 
         token = RefreshToken.for_user(user)
         result = {
