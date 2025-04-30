@@ -76,8 +76,8 @@ class SpecialistSerializer(serializers.ModelSerializer):
         return specialist
 
 
-
 from rest_framework import serializers
+
 
 class SpecialistUpdateSerializer(serializers.ModelSerializer):
     phone = serializers.CharField(source='user.username', required=False)
@@ -86,7 +86,7 @@ class SpecialistUpdateSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(source='user.first_name', required=False)
     middle_name = serializers.CharField(source='user.middle_name', required=False)
     lang = serializers.CharField(source='user.lang', required=False)
-    birthday = serializers.DateField(source='user.birthday', required=False)
+    birth_day = serializers.DateField(source='user.birth_day', required=False)
     category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all(), many=True, required=False)
 
     class Meta:
@@ -111,7 +111,7 @@ class SpecialistUpdateSerializer(serializers.ModelSerializer):
             'first_name',
             'middle_name',
             'lang',
-            'birthday',
+            'birth_day',
         ]
         read_only_fields = ['id']
 
