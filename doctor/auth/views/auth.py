@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from django.core.exceptions import ObjectDoesNotExist
-from django.template.defaultfilters import random
+import random
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import generics, permissions, status
 from rest_framework.decorators import api_view, permission_classes
