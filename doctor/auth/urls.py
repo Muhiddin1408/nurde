@@ -6,7 +6,7 @@ from doctor.auth.views.profile import ProfileView
 
 urlpatterns = [
     path('register/', SpecialistRegister.as_view(), name='register'),
-    path('password_conf/', password_conf, name='password_conf_doctor'),
+    path('password_conf/', password_conf),
     path('update/', SpecialistUpdate.as_view(), name='update'),
     path('category/', CategoryView.as_view(), name='category'),
     path('login/', login, name='login_doctor'),

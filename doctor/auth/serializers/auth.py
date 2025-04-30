@@ -139,3 +139,15 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
         fields = ['id', 'name']
 
+
+class PasswordConfirmSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    password = serializers.CharField()
+    last_name = serializers.CharField()
+    first_name = serializers.CharField()
+    gender = serializers.CharField()
+    middle_name = serializers.CharField(required=False, allow_null=True, allow_blank=True)
+    date_of_birth = serializers.DateField(required=False, allow_null=True)
+    passport = serializers.CharField(required=False, allow_null=True, allow_blank=True)
+
+

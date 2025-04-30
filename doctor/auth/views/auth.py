@@ -65,26 +65,26 @@ class SpecialistRegister(generics.CreateAPIView):
             return Response({'status': False}, status=status.HTTP_200_OK)
         else:
             return Response({'status': True}, status=status.HTTP_200_OK)
-    #
 
-@csrf_exempt
+
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def password_conf(request):
     try:
-        required_fields = ['username', 'password']
-        for field in required_fields:
-            if field not in request.data:
-                raise ValidationError(f"{field} is required.")
+        required_fields = ['username', 'password', 'last_name', 'first_name', 'gender']
+        missing_fields = [field for field in required_fields if field not in request.data]
+        if missing_fields:
+            raise ValidationError(f"Fields {', '.join(missing_fields)} are required.")
 
         phone = request.data['username']
         password = request.data['password']
         last_name = request.data['last_name']
         first_name = request.data['first_name']
-        middle_name = request.data.get('middle_name', None)
         gender = request.data['gender']
-        birth_day = request.data.get('date_of_birth', None)
-        passport = request.data.get('passport', None)
+
+        middle_name = request.data.get('middle_name')
+        birth_day = request.data.get('date_of_birth')
+        passport = request.data.get('passport')
 
         user = User.objects.get(username=phone)
         user.is_active = True
@@ -96,24 +96,23 @@ def password_conf(request):
         user.birth_day = birth_day
         user.save()
 
-
-        if not Specialist.objects.filter(user=user).exists():
-            Specialist.objects.create(user=user,  password=password, pinfl=passport)
+        Specialist.objects.get_or_create(
+            user=user,
+            defaults={'password': password, 'pinfl': passport}
+        )
 
         token = RefreshToken.for_user(user)
-        result = {
+        return Response({
             'access': str(token.access_token),
             'refresh': str(token)
-        }
+        }, status=status.HTTP_200_OK)
 
-        return Response(result, status=status.HTTP_200_OK)
     except ObjectDoesNotExist:
         return Response({"detail": "User not found."}, status=status.HTTP_404_NOT_FOUND)
     except ValidationError as ve:
         return Response({"detail": str(ve)}, status=status.HTTP_400_BAD_REQUEST)
     except Exception as e:
         return Response({"detail": str(e)}, status=status.HTTP_400_BAD_REQUEST)
-
 
 class SpecialistUpdate(generics.UpdateAPIView):
     queryset = Specialist.objects.all()
