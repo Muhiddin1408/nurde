@@ -81,10 +81,10 @@ def password_conf(request):
         password = request.data['password']
         last_name = request.data['last_name']
         first_name = request.data['first_name']
-        middle_name = request.data['middle_name', None]
+        middle_name = request.data.get('middle_name', None)
         gender = request.data['gender']
-        birth_day = request.data['date_of_birth', None]
-        passport = request.data['passport', None]
+        birth_day = request.data.get('date_of_birth', None)
+        passport = request.data.get('passport', None)
 
         user = User.objects.get(username=phone)
         user.is_active = True
