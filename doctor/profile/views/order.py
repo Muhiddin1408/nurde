@@ -17,10 +17,9 @@ class OrderView(generics.ListAPIView):
 
     def get_queryset(self):
         status = self.request.GET.get('status')
-        order = Order.objects.filter(doctor__user=self.request.user, status=status)
-        if order:
-            return order
-        return None
+        if status:
+            return Order.objects.filter(doctor__user=self.request.user, status=status)
+        return Order.objects.none()
 
 class OrderDetailView(generics.RetrieveAPIView):
     queryset = Order.objects.all()
