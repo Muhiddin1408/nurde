@@ -19,7 +19,7 @@ class DashboardSerializer(serializers.ModelSerializer):
         model = Specialist
         fields = ('wait', )
 
-    def get_challenges(self, obj):
+    def get_wait(self, obj):
         order = Order.objects.filter(doctor=obj, status='wait')
         return OrderSerializers(order, many=True).data
 
