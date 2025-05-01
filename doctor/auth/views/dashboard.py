@@ -1,13 +1,13 @@
 from rest_framework import generics, permissions
 
 from api.basic.views.specialist import SmallPagesPagination
-from api.order.serializers.order import OrderSerializers
+from api.order.serializers.order import OrderSerializers, MyOrderSerializers
 from apps.order.models import Order
 
 
 class DashboardView(generics.ListAPIView):
     queryset = Order.objects.all()
-    serializer_class = OrderSerializers
+    serializer_class = MyOrderSerializers
     permission_classes = [permissions.IsAuthenticated]
     pagination_class = SmallPagesPagination
 
