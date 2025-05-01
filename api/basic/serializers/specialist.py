@@ -107,7 +107,9 @@ class SpecialistSerializers(serializers.ModelSerializer):
 
     def get_price(self, obj):
         service = Service.objects.filter(user=obj.id).order_by('price').first()
-        return service.price
+        if service:
+            return service.price
+        return 0
 
     def get_in_work(self, obj):
         in_work = InWork.objects.filter(specialist=obj)
