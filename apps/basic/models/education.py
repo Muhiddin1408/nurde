@@ -13,3 +13,9 @@ class Education(models.Model):
     education = models.CharField(max_length=255)
     finish = models.IntegerField()
     specialist = models.ForeignKey(Specialist, on_delete=models.CASCADE)
+
+
+class FileEducation(models.Model):
+    file = models.FileField(upload_to='education')
+    education = models.ForeignKey(Education, on_delete=models.CASCADE, related_name='file_education', blank=True, null=True)
+

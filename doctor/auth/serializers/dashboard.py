@@ -21,5 +21,5 @@ class DashboardSerializer(serializers.ModelSerializer):
 
     def get_wait(self, obj):
         order = Order.objects.filter(doctor=obj, status='wait')
-        return OrderSerializers(order, many=True).data
+        return OrderSerializers(order, many=True, context={'request': self.context['request']}).data
 
