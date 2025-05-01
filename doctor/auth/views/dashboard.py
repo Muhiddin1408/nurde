@@ -5,13 +5,13 @@ from apps.clinic.models import Clinic
 from doctor.auth.serializers.dashboard import DashboardSerializer
 
 
-class DashboardView(generics.ListAPIView):
-    queryset = Clinic.objects.all()
+class DashboardView(generics.RetrieveAPIView):
+    queryset = Specialist.objects.all()
     serializer_class = DashboardSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-    def get_queryset(self):
-        clinic = Specialist.objects.filter(user=self.request.user).last().staff
+    def get_object(self):
+        clinic = Specialist.objects.filter(user=self.request.user).last()
         if clinic:
-            return clinic.staff.all()
+            return clinic
         return None

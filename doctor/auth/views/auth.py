@@ -135,7 +135,8 @@ def login(request):
         phone = request.data.get('username')
         password = request.data.get('password')
         user = User.objects.filter(username=phone, is_staff=True).first()
-        if user and user.check_password(password):
+        doctor = Specialist.objects.filter(user=user, password=password).first()
+        if doctor:
             user.save()
             token = RefreshToken.for_user(user)
             result = {

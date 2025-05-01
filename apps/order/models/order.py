@@ -19,6 +19,7 @@ class OrderFile(models.Model):
 
 class Order(models.Model):
     STATUS_CHOICES = (
+        ('wait', 'wait'),
         ('active', 'active'),
         ('inactive', 'inactive'),
         ('cancellation', 'cancellation'),
@@ -28,7 +29,7 @@ class Order(models.Model):
     address = models.ForeignKey(Address, on_delete=models.CASCADE)
     payment_status = models.BooleanField(default=False)
     payment_type = models.CharField(max_length=20, blank=True, null=True)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='active')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='wait')
     datetime = models.DateTimeField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     image = models.ManyToManyField(OrderFile, blank=True, null=True)
