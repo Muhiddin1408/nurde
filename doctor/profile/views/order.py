@@ -67,7 +67,7 @@ def close(request):
         return Response({'detail': 'order is required'}, status=status.HTTP_400_BAD_REQUEST)
 
     order = get_object_or_404(Order, pk=order_id, doctor__user=request.user)
-    create = Diagnosis.objects.create(order=order, comment=comment)
+    Diagnosis.objects.create(order=order, comment=comment, diagnosis=comment)
 
     order.status = 'inactive'
     order.save()
