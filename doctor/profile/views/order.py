@@ -37,9 +37,11 @@ def confirm(request):
     data = request.data
     order_id = data.get('order')
     action_type = data.get('status')
+    print(order_id)
+    print(action_type)
 
     if not order_id or not action_type:
-        return Response({'detail': 'order and type are required'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'detail': 'order and status are required'}, status=status.HTTP_400_BAD_REQUEST)
 
     order = get_object_or_404(Order, pk=order_id, doctor__user=request.user)
 

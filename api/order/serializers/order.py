@@ -136,7 +136,6 @@ class OrderSerializers(serializers.ModelSerializer):
             'address',
             'payment_status',
             'payment_type',
-            'status',
             'datetime',
             'created_at',
             'image',
