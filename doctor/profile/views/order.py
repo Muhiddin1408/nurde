@@ -5,7 +5,7 @@ from rest_framework.response import Response
 
 from api.basic.views.specialist import SmallPagesPagination
 from api.order.serializers.order import MyOrderSerializers
-from apps.order.models import Order
+from apps.order.models import Order, Diagnosis
 from apps.service.models.booked import Booked
 
 
@@ -55,6 +55,25 @@ def confirm(request):
 
     order.save()
     return Response({'detail': 'Order status updated successfully'}, status=status.HTTP_200_OK)
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def close(request):
+    data = request.data
+    order_id = data.get('order')
+    comment = data.get('comment')
+
+    if not order_id:
+        return Response({'detail': 'order is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+    order = get_object_or_404(Order, pk=order_id, doctor__user=request.user)
+    create = Diagnosis.objects.create(order=order, comment=comment)
+
+    order.status = 'inactive'
+    order.save()
+
+    return Response({'detail': 'Order completed successfully'}, status=status.HTTP_200_OK)
+
 
 
 
