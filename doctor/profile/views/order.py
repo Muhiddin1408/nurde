@@ -36,7 +36,7 @@ class OrderDetailView(generics.RetrieveAPIView):
 def confirm(request):
     data = request.data
     order_id = data.get('order')
-    action_type = data.get('type')
+    action_type = data.get('status')
 
     if not order_id or not action_type:
         return Response({'detail': 'order and type are required'}, status=status.HTTP_400_BAD_REQUEST)
