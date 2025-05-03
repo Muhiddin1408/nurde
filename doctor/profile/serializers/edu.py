@@ -23,5 +23,7 @@ class EducationSerializer(serializers.ModelSerializer):
         validated_data['specialist'] = specialist
         education = super().create(validated_data)
         for file_item in file_data:
-            FileEducation.objects.create(education=education, **file_item)
+            file = FileEducation.objects.get(id=file_item)
+            file.education = education
+            file.save()
         return education
