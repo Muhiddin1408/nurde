@@ -17,7 +17,7 @@ class EducationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Education
-        fields = ['id', 'type', 'name', 'education', 'finish', 'file', 'image']
+        fields = ['id', 'type', 'name', 'education', 'finish', 'file', 'image', 'start_date']
 
     def get_image(self, obj):
         return FileEducationSerializer(FileEducation.objects.filter(education=obj), many=True, context=self.context).data
