@@ -20,7 +20,6 @@ class WorkSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         file_data = validated_data.pop('file', [])
-
         specialist = self.context['request'].user
         validated_data['specialist'] = Specialist.objects.get(user=specialist)
         education = super().create(validated_data)
