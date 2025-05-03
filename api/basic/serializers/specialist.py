@@ -144,7 +144,7 @@ class SpecialistByIdSerializers(serializers.ModelSerializer):
         fields = (
             'id', 'last_name', 'first_name', 'middle_name', 'service', 'price',
             'experience', 'category', 'type', 'type_service', 'photo', 'work_time', 'comment',
-            'ranking', 'in_work', 'is_favorite', 'education', 'advanced', 'info'
+            'ranking', 'in_work', 'is_favorite', 'education', 'advanced', 'info', 'description'
         )
 
 

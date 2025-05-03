@@ -34,6 +34,7 @@ class Specialist(models.Model):
     gen = models.CharField(max_length=100, blank=True)
     city = models.CharField(max_length=100, blank=True)
     password = models.CharField(max_length=100, blank=True)
+    description = models.TextField(blank=True)
 
 
     class Meta:

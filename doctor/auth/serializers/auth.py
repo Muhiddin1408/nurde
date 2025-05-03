@@ -103,7 +103,7 @@ class SpecialistUpdateSerializer(serializers.ModelSerializer):
             'pinfl',
             'gen',
             'city',
-
+            'description',
             'phone',
             'email',
             'last_name',
