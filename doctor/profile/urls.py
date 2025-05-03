@@ -6,6 +6,7 @@ from doctor.profile.views.edu import EducationListCreateView, EducationRetrieveU
     FileEducationListCreateView
 from doctor.profile.views.order import OrderView, OrderDetailView, confirm, close
 from doctor.profile.views.ranking import RankingView, CommentView
+from doctor.profile.views.service import ServiceViewSet, ServiceDetail
 from doctor.profile.views.work import WorkListCreateView, WorkRetrieveUpdateDestroyView, FileWorkListCreateView
 
 urlpatterns = [
@@ -23,4 +24,6 @@ urlpatterns = [
     path('chat/', MessageViewSet.as_view(), name='chat_doctor'),
     path('ranking/', RankingView.as_view(), name='ranking'),
     path('comment/', CommentView.as_view()),
+    path('service/', ServiceViewSet.as_view(), name='service'),
+    path('update/service/<int:pk>/', ServiceDetail.as_view(), name='update-service'),
 ]
