@@ -15,10 +15,12 @@ class EducationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Education
-        fields = ['id', 'type', 'name', 'education', 'finish', 'specialist', 'file']
+        fields = ['id', 'type', 'name', 'education', 'finish', 'file']
 
     def create(self, validated_data):
         file_data = validated_data.pop('file', [])
+        specialist = self.context['request'].user
+        validated_data['specialist'] = specialist
         education = super().create(validated_data)
         for file_item in file_data:
             FileEducation.objects.create(education=education, **file_item)
