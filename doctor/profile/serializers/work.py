@@ -17,7 +17,7 @@ class WorkSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Work
-        fields = ['id', 'type', 'name', 'education', 'finish',  'file', 'image']
+        fields = ['id', 'type', 'name', 'education', 'finish',  'file', 'image', 'category']
 
     def get_image(self, obj):
         return FileWorkSerializer(WorkImage.objects.filter(education=obj), many=True, context=self.context).data
