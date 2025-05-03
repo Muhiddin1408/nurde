@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from apps.basic.models import Specialist
 from apps.basic.models.education import Education, FileEducation
 
 
@@ -20,7 +21,7 @@ class EducationSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         file_data = validated_data.pop('file', [])
         specialist = self.context['request'].user
-        validated_data['specialist'] = specialist
+        validated_data['specialist'] = Specialist.objects.get(user=specialist)
         education = super().create(validated_data)
         for file_item in file_data:
             file = FileEducation.objects.get(id=file_item)
