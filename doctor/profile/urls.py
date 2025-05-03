@@ -1,11 +1,17 @@
 from django.urls import path
 
-from doctor.profile.views.edu import EducationListCreateView, EducationRetrieveUpdateDestroyView
+from doctor.profile.views.edu import EducationListCreateView, EducationRetrieveUpdateDestroyView, \
+    FileEducationListCreateView
 from doctor.profile.views.order import OrderView, OrderDetailView, confirm, close
+from doctor.profile.views.work import WorkListCreateView, WorkRetrieveUpdateDestroyView, FileWorkListCreateView
 
 urlpatterns = [
     path('educations/', EducationListCreateView.as_view(), name='education-list-create'),
     path('educations/<int:pk>/', EducationRetrieveUpdateDestroyView.as_view(), name='education-detail'),
+    path('edu/file/', FileEducationListCreateView.as_view(), name='education-file-list-create'),
+    path('works/', WorkListCreateView.as_view(), name='work-list-create'),
+    path('work/<int:pk>/', WorkRetrieveUpdateDestroyView.as_view(), name='work-detail'),
+    path('work/file/', FileWorkListCreateView.as_view(), name='work-file-list-create'),
     path('order/', OrderView.as_view(), name='order'),
     path('orders/<int:pk>/', OrderDetailView.as_view(), name='order-detail'),
     path('confirm/', confirm),
