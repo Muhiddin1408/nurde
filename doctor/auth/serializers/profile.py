@@ -11,6 +11,7 @@ class ProfileSerializer(serializers.Serializer):
     username = serializers.CharField(source='user.username')
     email = serializers.CharField(source='user.email')
     pinfl = serializers.CharField()
+    description = serializers.CharField()
 
     class Meta:
         model = Specialist
