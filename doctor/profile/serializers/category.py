@@ -8,6 +8,7 @@ from doctor.auth.serializers.auth import CategorySerializer
 class CategorySerializers(serializers.ModelSerializer):
     type = serializers.CharField()
     category = serializers.SerializerMethodField()
+    experience = serializers.IntegerField()
 
     class Meta:
         model = Specialist
