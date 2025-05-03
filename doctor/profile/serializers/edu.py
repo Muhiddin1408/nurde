@@ -13,10 +13,14 @@ class FileEducationSerializer(serializers.ModelSerializer):
 
 class EducationSerializer(serializers.ModelSerializer):
     file = serializers.ListField(write_only=True)
+    image = serializers.SerializerMethodField()
 
     class Meta:
         model = Education
-        fields = ['id', 'type', 'name', 'education', 'finish', 'file']
+        fields = ['id', 'type', 'name', 'education', 'finish', 'file', 'image']
+
+    def get_image(self, obj):
+        return FileEducationSerializer(FileEducation.objects.filter(education=obj), many=True).data
 
     def create(self, validated_data):
         file_data = validated_data.pop('file', [])
