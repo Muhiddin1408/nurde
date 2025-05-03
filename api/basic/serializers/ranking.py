@@ -18,9 +18,9 @@ class RankingSerializer(serializers.ModelSerializer):
         fields = ('count', 'ranking', 'ranking_5', 'ranking_4', 'ranking_3', 'ranking_2', 'ranking_1')
 
     def get_ranking(self, obj):
-        comment = CommentReadMore.objects.filter(read_more=obj).annotate(ranking=Sum('ranking')) or 0
+        total = CommentReadMore.objects.filter(read_more=obj).aggregate(total=Sum('ranking'))['total'] or 0
         count = CommentReadMore.objects.filter(read_more=obj).count() or 1
-        return comment / count
+        return round(total / count, 2)
 
     def get_ranking_5(self, obj):
         comment = CommentReadMore.objects.filter(read_more=obj, ranking=5).count()
