@@ -24,3 +24,15 @@ class CommentReadMore(models.Model):
         verbose_name_plural = 'Комментарий'
         verbose_name = 'Комментарий'
 
+
+class CommentReadMoreLike(models.Model):
+    comment = models.ForeignKey(CommentReadMore, on_delete=models.CASCADE)
+    user = models.ForeignKey(Patient, on_delete=models.CASCADE)
+
+
+class CommentReadMoreComment(models.Model):
+    parent = models.ForeignKey(CommentReadMore, on_delete=models.CASCADE)
+    comment = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
