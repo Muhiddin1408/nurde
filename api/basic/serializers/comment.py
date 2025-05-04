@@ -35,7 +35,8 @@ class MyCommentSerializer(serializers.ModelSerializer):
     def get_image(self, obj):
         request = self.context.get('request')
         if obj.read_more:
-            return request.build_absolute_uri(obj.read_more.image.url)
+            if obj.read_more.photo:
+                return request.build_absolute_uri(obj.read_more.photo.url)
         return None
 
     def get_category(self, obj):
