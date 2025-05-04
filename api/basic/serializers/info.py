@@ -47,8 +47,10 @@ class CommentReadMoreSerializer(serializers.Serializer):
         return obj.user.user.last_name + " " + obj.user.user.first_name
 
     def get_costumer_image(self, obj):
+        request = self.context.get('request')
         if obj.user.image:
-            return obj.user.image.url
+            return request.build_absolute_uri(obj.user.image.url)
+            # return obj.user.image.url
         return None
 
 
