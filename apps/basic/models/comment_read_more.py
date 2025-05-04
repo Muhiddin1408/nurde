@@ -2,6 +2,7 @@ from django.db import models
 
 from apps.basic.models import Specialist
 from apps.basic.models.read_more import ReadMore
+from apps.order.models import Order
 from apps.users.model import Patient
 from apps.users.models import User
 
@@ -14,6 +15,7 @@ class CommentReadMore(models.Model):
     experts_response = models.CharField(max_length=255, blank=True, null=True)
     read_more = models.ForeignKey(Specialist, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
         return self.comment + " "
