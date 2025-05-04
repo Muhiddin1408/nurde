@@ -25,7 +25,7 @@ class MyCommentSerializer(serializers.ModelSerializer):
         fields = ('id', 'ranking', 'comment', 'doctor', 'service')
 
     def get_doctor(self, obj):
-        return obj.read_more.user.lastname + " " + obj.read_more.user.firstname
+        return obj.read_more.user.last_name + " " + obj.read_more.user.first_name
 
     def get_service(self, obj):
         if obj.order:
