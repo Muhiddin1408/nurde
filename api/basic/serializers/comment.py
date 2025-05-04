@@ -42,7 +42,7 @@ class WaitCommentSerializers(serializers.ModelSerializer):
 
     def get_doctor(self, obj):
         if obj.doctor:
-            return SpecialistByIdSerializers(obj.doctor).data
+            return SpecialistByIdSerializers(obj.doctor, context={'request': self.context['request']}).data
         return None
 
 
