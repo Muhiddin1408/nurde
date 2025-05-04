@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from apps.basic.models import Specialist, CommentReadMore
 from apps.basic.models.education import Education
+from apps.order.models import Order
 from apps.users.model import Patient
 
 
@@ -65,13 +66,28 @@ class CommentReadMoreCreateSerializer(serializers.ModelSerializer):
             'experts_response',
             'read_more',
             'created_at',
+            'order',
         ]
         read_only_fields = ['id', 'created_at']
 
     def create(self, validated_data):
+        order_id = validated_data.pop('order')  # bu faqat ID
+        try:
+            order = Order.objects.get(id=order_id)
+        except Order.DoesNotExist:
+            raise serializers.ValidationError({'order': 'Order not found'})
+
+        # read_more ni Order orqali aniqlaymiz
+        validated_data['read_more'] = order.doctor  # Order modelda `doctor` bor deb hisoblaymiz
+        validated_data['order'] = order  # order obyektini qayta qo‘shamiz
+
+        # user ni Patient orqali aniqlaymiz
         request = self.context.get('request')
         if request and hasattr(request, 'user'):
             patient = Patient.objects.filter(user=request.user).last()
+            if not patient:
+                raise serializers.ValidationError({'user': 'Patient not found'})
             validated_data['user'] = patient
+
         return super().create(validated_data)
 
