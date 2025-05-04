@@ -24,6 +24,8 @@ class CommentViewSet(generics.ListAPIView):
 class WaitCommentViewSet(generics.ListAPIView):
     queryset = Order.objects.filter(status='waiting')
     serializer_class = WaitCommentSerializers
+    permission_classes = [IsAuthenticated]
+    pagination_class = SmallPagesPagination
 
     def get_queryset(self):
         user = self.request.user
