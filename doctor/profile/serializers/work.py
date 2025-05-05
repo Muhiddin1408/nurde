@@ -15,7 +15,7 @@ class WorkSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Work
-        fields = ['id', 'type', 'name', 'education', 'finish', 'category', 'start']
+        fields = ['id', 'type', 'name', 'education', 'finish' 'start']
 
 
     def create(self, validated_data):
