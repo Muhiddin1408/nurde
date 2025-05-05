@@ -78,7 +78,7 @@ class CommentReadMoreCreateSerializer(serializers.ModelSerializer):
 
         # read_more ni Order orqali aniqlaymiz
         validated_data['read_more'] = order.doctor  # Order modelda `doctor` bor deb hisoblaymiz
-        validated_data['order'] = order  # order obyektini qayta qo‘shamiz
+        validated_data['order'] = order.id  # order obyektini qayta qo‘shamiz
 
         # user ni Patient orqali aniqlaymiz
         request = self.context.get('request')
