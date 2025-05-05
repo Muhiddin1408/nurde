@@ -36,19 +36,16 @@ class MyScheduleSerializer(serializers.ModelSerializer):
         return super().create(validated_data)
 
 
-class BulkWorkTimeSerializer(serializers.ListSerializer):
+class WorkTimeBulkSerializer(serializers.ListSerializer):
     def create(self, validated_data):
         request = self.context.get('request')
-        if not request or not hasattr(request, 'user'):
-            raise serializers.ValidationError({'user': 'Invalid request context'})
-
         try:
             specialist = Specialist.objects.get(user=request.user)
         except Specialist.DoesNotExist:
             raise serializers.ValidationError({'user': 'Specialist not found'})
 
-        worktimes = [WorkTime(user=specialist, **item) for item in validated_data]
-        return WorkTime.objects.bulk_create(worktimes)
+        instances = [WorkTime(user=specialist, **item) for item in validated_data]
+        return WorkTime.objects.bulk_create(instances)
 
 
 class WorkTimeSerializer(serializers.ModelSerializer):
