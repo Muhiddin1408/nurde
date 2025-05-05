@@ -4,7 +4,8 @@ from rest_framework.permissions import IsAuthenticated
 from apps.basic.models import Specialist
 from apps.service.models.service import WorkTime
 from apps.users.model import Weekday
-from doctor.profile.serializers.schedule import MyScheduleSerializer, WeekdaySerializer, WorkTimeSerializer
+from doctor.profile.serializers.schedule import MyScheduleSerializer, WeekdaySerializer, WorkTimeSerializer, \
+    WorkTimeBulkWrapperSerializer
 
 
 class WeekdayView(generics.ListAPIView):
@@ -14,7 +15,7 @@ class WeekdayView(generics.ListAPIView):
 
 class WorkTimeCreateView(generics.CreateAPIView):
     queryset = WorkTime.objects.all()
-    serializer_class = WorkTimeSerializer
+    serializer_class = WorkTimeBulkWrapperSerializer
     permission_classes = [permissions.IsAuthenticated]
 
 

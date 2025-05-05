@@ -57,3 +57,13 @@ class WorkTimeSerializer(serializers.ModelSerializer):
         fields = ['weekday', 'date', 'finish']
         list_serializer_class = BulkWorkTimeSerializer
 
+
+class WorkTimeBulkWrapperSerializer(serializers.Serializer):
+    data = WorkTimeSerializer(many=True)
+
+    def create(self, validated_data):
+        return self.fields['data'].create(validated_data['data'])
+
+    def to_representation(self, instance):
+        return WorkTimeSerializer(instance, many=True).data
+
