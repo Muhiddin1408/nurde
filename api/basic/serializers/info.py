@@ -51,12 +51,11 @@ class CommentReadMoreSerializer(serializers.Serializer):
         request = self.context.get('request')
         if obj.user.image:
             return request.build_absolute_uri(obj.user.image.url)
-            # return obj.user.image.url
         return None
 
 
 class CommentReadMoreCreateSerializer(serializers.ModelSerializer):
-    order = serializers.PrimaryKeyRelatedField(queryset=Order.objects.all())  # 🔧 qo‘shildi
+    order = serializers.PrimaryKeyRelatedField(queryset=Order.objects.all())
 
     class Meta:
         model = CommentReadMore
@@ -72,10 +71,9 @@ class CommentReadMoreCreateSerializer(serializers.ModelSerializer):
         read_only_fields = ['id', 'created_at']
 
     def create(self, validated_data):
-        order = validated_data['order']  # Endi bu Order obyektining o‘zi bo‘ladi
+        order = validated_data['order']
 
-        validated_data['read_more'] = order.doctor  # doctor ForeignKey bo‘lishi kerak
-        # order obyektini o‘z holida qoldiramiz
+        validated_data['read_more'] = order.doctor
 
         request = self.context.get('request')
         if request and hasattr(request, 'user'):
