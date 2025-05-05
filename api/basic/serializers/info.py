@@ -76,11 +76,9 @@ class CommentReadMoreCreateSerializer(serializers.ModelSerializer):
         except Order.DoesNotExist:
             raise serializers.ValidationError({'order': 'Order not found'})
 
-        # read_more ni Order orqali aniqlaymiz
         validated_data['read_more'] = order.doctor  # Order modelda `doctor` bor deb hisoblaymiz
-        validated_data['order'] = order.id  # order obyektini qayta qo‘shamiz
+        validated_data['order'] = order  # ForeignKey bo‘lsa to‘g‘ri
 
-        # user ni Patient orqali aniqlaymiz
         request = self.context.get('request')
         if request and hasattr(request, 'user'):
             patient = Patient.objects.filter(user=request.user).last()
