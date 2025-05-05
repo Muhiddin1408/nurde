@@ -26,5 +26,5 @@ urlpatterns = [
     path('ranking/', RankingView.as_view(), name='ranking'),
     path('comment/', CommentView.as_view()),
     path('service/', ServiceViewSet.as_view(), name='service'),
-    path('update/service/<int:pk>/', ServiceDetail.as_view(), name='update-service'),
+    path('service/<int:pk>/', ServiceDetail.as_view(), name='update-service'),
 ]
