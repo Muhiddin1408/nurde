@@ -52,7 +52,7 @@ class WorkTimeSerializer(serializers.ModelSerializer):
     class Meta:
         model = WorkTime
         fields = ['weekday', 'date', 'finish']
-        list_serializer_class = BulkWorkTimeSerializer
+        list_serializer_class = WorkTimeBulkSerializer
 
 
 class WorkTimeBulkWrapperSerializer(serializers.Serializer):
