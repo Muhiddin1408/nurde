@@ -8,7 +8,7 @@ class Education(models.Model):
         ('education', 'Education'),
         ('advanced', 'Advanced')
     )
-    type = models.CharField(max_length=125)
+    type = models.IntegerField(blank=False, null=False)
     name = models.CharField(max_length=255)
     education = models.CharField(max_length=255)
     start = models.IntegerField(null=True, blank=True)
