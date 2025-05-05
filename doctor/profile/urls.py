@@ -6,7 +6,7 @@ from doctor.profile.views.edu import EducationListCreateView, EducationRetrieveU
     FileEducationListCreateView
 from doctor.profile.views.order import OrderView, OrderDetailView, confirm, close
 from doctor.profile.views.ranking import RankingView, CommentView
-from doctor.profile.views.service import ServiceViewSet, ServiceDetail
+from doctor.profile.views.service import ServiceViewSet, ServiceDetail, MyCategoryViewSet
 from doctor.profile.views.work import WorkListCreateView, WorkRetrieveUpdateDestroyView, FileWorkListCreateView
 
 urlpatterns = [
@@ -21,6 +21,7 @@ urlpatterns = [
     path('confirm/', confirm),
     path('order/close/', close),
     path('category/', CategoryListView.as_view(), name='category-list'),
+    path('my/category/', MyCategoryViewSet.as_view(), name='my-category-list'),
     path('chat/', MessageViewSet.as_view(), name='chat_doctor'),
     path('ranking/', RankingView.as_view(), name='ranking'),
     path('comment/', CommentView.as_view()),

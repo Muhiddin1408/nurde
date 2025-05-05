@@ -22,8 +22,4 @@ class WorkSerializer(serializers.ModelSerializer):
         specialist = self.context['request'].user
         validated_data['specialist'] = Specialist.objects.get(user=specialist)
         education = super().create(validated_data)
-        # for file_item in file_data:
-        #     file = WorkImage.objects.get(id=file_item)
-        #     file.education = education
-        #     file.save()
         return education
