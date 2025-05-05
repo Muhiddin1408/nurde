@@ -18,7 +18,7 @@ class ServiceViewSet(generics.ListCreateAPIView):
 
 
 
-class ServiceDetail(generics.RetrieveUpdateAPIView):
+class ServiceDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Service.objects.all()
     serializer_class = ServiceUpdateSerializer
     permission_classes = [permissions.IsAuthenticated]
