@@ -12,7 +12,7 @@ class Education(models.Model):
     name = models.CharField(max_length=255)
     education = models.CharField(max_length=255)
     start = models.IntegerField(null=True, blank=True)
-    finish = models.IntegerField()
+    finish = models.IntegerField(blank=True, null=True)
     specialist = models.ForeignKey(Specialist, on_delete=models.CASCADE)
 
 
