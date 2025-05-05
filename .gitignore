@@ -9,7 +9,6 @@ media
 .pytest_cache
 Pipfile
 venv
-db.sqlite3
 
 
 celerybeat-schedule.bak
