@@ -2,6 +2,13 @@ from rest_framework import serializers
 
 from apps.basic.models import Specialist
 from apps.service.models.service import WorkTime
+from apps.users.model import Weekday
+
+
+class WeekdaySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Weekday
+        fields = '__all__'
 
 
 class MyScheduleSerializer(serializers.ModelSerializer):
