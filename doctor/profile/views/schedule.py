@@ -7,7 +7,7 @@ from apps.service.models.service import WorkTime
 from doctor.profile.serializers.schedule import MyScheduleSerializer
 
 
-class MyScheduleView(generics.ListAPIView):
+class MyScheduleView(generics.ListCreateAPIView):
     queryset = WorkTime.objects.all()
     serializer_class = MyScheduleSerializer
     permission_classes = [IsAuthenticated]
