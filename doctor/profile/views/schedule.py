@@ -4,11 +4,12 @@ from rest_framework.permissions import IsAuthenticated
 from api.basic.serializers.specialist import WorkTimeSerializer
 from apps.basic.models import Specialist
 from apps.service.models.service import WorkTime
+from apps.users.model import Weekday
 from doctor.profile.serializers.schedule import MyScheduleSerializer, WeekdaySerializer
 
 
 class WeekdayView(generics.ListAPIView):
-    queryset = WorkTime.objects.all()
+    queryset = Weekday.objects.all()
     serializer_class = WeekdaySerializer
 
 
