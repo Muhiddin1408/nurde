@@ -9,7 +9,7 @@ class Work(models.Model):
     type = models.CharField(max_length=255)
     name = models.CharField(max_length=255)
     education = models.CharField(max_length=255)
-    finish = models.IntegerField()
+    finish = models.IntegerField(blank=True, null=True)
     start = models.IntegerField(blank=True, null=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
