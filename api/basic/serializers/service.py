@@ -13,14 +13,14 @@ class ServiceSerializers(serializers.Serializer):
 
 
 class ServiceSerializer(serializers.ModelSerializer):
-    category = serializers.SerializerMethodField(read_only=True)  # faqat list uchun
+    category_name = serializers.SerializerMethodField(read_only=True)  # faqat list uchun
 
     class Meta:
         model = Service
-        fields = ['id', 'category', 'price', 'preparation', 'time', 'description']
-        read_only_fields = ['id']
+        fields = ['id', 'category', 'price', 'preparation', 'time', 'description', 'category_name']
+        read_only_fields = ['id', 'category_name']
 
-    def get_category(self, obj):
+    def get_category_name(self, obj):
         return obj.category.name if obj.category else None
 
     def create(self, validated_data):
