@@ -56,6 +56,8 @@ class CommentReadMoreSerializer(serializers.Serializer):
 
 
 class CommentReadMoreCreateSerializer(serializers.ModelSerializer):
+    order = serializers.PrimaryKeyRelatedField(queryset=Order.objects.all())  # 🔧 qo‘shildi
+
     class Meta:
         model = CommentReadMore
         fields = [
@@ -70,14 +72,10 @@ class CommentReadMoreCreateSerializer(serializers.ModelSerializer):
         read_only_fields = ['id', 'created_at']
 
     def create(self, validated_data):
-        order_id = validated_data.pop('order')  # bu faqat ID
-        try:
-            order = Order.objects.get(id=order_id)
-        except Order.DoesNotExist:
-            raise serializers.ValidationError({'order': 'Order not found'})
+        order = validated_data['order']  # Endi bu Order obyektining o‘zi bo‘ladi
 
-        validated_data['read_more'] = order.doctor  # Order modelda `doctor` bor deb hisoblaymiz
-        validated_data['order'] = order  # ForeignKey bo‘lsa to‘g‘ri
+        validated_data['read_more'] = order.doctor  # doctor ForeignKey bo‘lishi kerak
+        # order obyektini o‘z holida qoldiramiz
 
         request = self.context.get('request')
         if request and hasattr(request, 'user'):
