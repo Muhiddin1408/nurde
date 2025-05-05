@@ -17,7 +17,7 @@ class ServiceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Service
-        fields = ['id', 'category', 'price', 'preparation', 'time', 'description', 'category_name']
+        fields = ['id', 'category', 'price', 'preparation', 'description', 'category_name']
         read_only_fields = ['id', 'category_name']
 
     def get_category_name(self, obj):
@@ -42,7 +42,7 @@ class ServiceUpdateSerializer(serializers.ModelSerializer):
         model = Service
         fields = [
             'id', 'category', 'price',
-            'preparation', 'time', 'description',
+            'preparation', 'description',
             'created_at', 'updated_at'
         ]
         read_only_fields = ['created_at', 'updated_at']
