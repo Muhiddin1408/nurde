@@ -9,6 +9,7 @@ class WorkTime(models.Model):
     user = models.ForeignKey(Specialist, on_delete=models.CASCADE)
     weekday = models.ForeignKey(Weekday, on_delete=models.CASCADE)
     date = models.TimeField(blank=True, null=True)
+    finish = models.TimeField(blank=True, null=True)
 
 
 class Service(models.Model):

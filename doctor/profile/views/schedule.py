@@ -1,11 +1,10 @@
-from rest_framework import generics
+from rest_framework import generics, permissions
 from rest_framework.permissions import IsAuthenticated
 
-from api.basic.serializers.specialist import WorkTimeSerializer
 from apps.basic.models import Specialist
 from apps.service.models.service import WorkTime
 from apps.users.model import Weekday
-from doctor.profile.serializers.schedule import MyScheduleSerializer, WeekdaySerializer
+from doctor.profile.serializers.schedule import MyScheduleSerializer, WeekdaySerializer, WorkTimeSerializer
 
 
 class WeekdayView(generics.ListAPIView):
@@ -13,7 +12,13 @@ class WeekdayView(generics.ListAPIView):
     serializer_class = WeekdaySerializer
 
 
-class MyScheduleView(generics.ListCreateAPIView):
+class WorkTimeCreateView(generics.CreateAPIView):
+    queryset = WorkTime.objects.all()
+    serializer_class = WorkTimeSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+class MyScheduleView(generics.ListAPIView):
     queryset = WorkTime.objects.all()
     serializer_class = MyScheduleSerializer
     permission_classes = [IsAuthenticated]
