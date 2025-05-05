@@ -29,6 +29,6 @@ urlpatterns = [
     path('service/', ServiceViewSet.as_view(), name='service'),
     path('service/<int:pk>/', ServiceDetail.as_view(), name='update-service'),
     path('my/schedule/', MyScheduleView.as_view(), name='my-schedule'),
-    # path('create/schedule/', WorkTimeCreateView.as_view(), name='create-schedule'),
+    path('create/schedule/', WorkTimeCreateView.as_view(), name='create-schedule'),
     path('weekday/', WeekdayView.as_view(), name='weekday'),
 ]
