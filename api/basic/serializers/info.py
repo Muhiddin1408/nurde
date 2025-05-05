@@ -64,7 +64,6 @@ class CommentReadMoreCreateSerializer(serializers.ModelSerializer):
             'comment',
             'service_rendered',
             'experts_response',
-            'read_more',
             'created_at',
             'order',
         ]
