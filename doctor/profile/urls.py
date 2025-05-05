@@ -6,7 +6,7 @@ from doctor.profile.views.edu import EducationListCreateView, EducationRetrieveU
     FileEducationListCreateView
 from doctor.profile.views.order import OrderView, OrderDetailView, confirm, close
 from doctor.profile.views.ranking import RankingView, CommentView
-from doctor.profile.views.schedule import MyScheduleView, WeekdayView
+from doctor.profile.views.schedule import MyScheduleView, WeekdayView, WorkTimeCreateView
 from doctor.profile.views.service import ServiceViewSet, ServiceDetail, MyCategoryViewSet
 from doctor.profile.views.work import WorkListCreateView, WorkRetrieveUpdateDestroyView, FileWorkListCreateView
 
@@ -29,5 +29,6 @@ urlpatterns = [
     path('service/', ServiceViewSet.as_view(), name='service'),
     path('service/<int:pk>/', ServiceDetail.as_view(), name='update-service'),
     path('my/schedule/', MyScheduleView.as_view(), name='my-schedule'),
+    path('create/schedule/', WorkTimeCreateView.as_view(), name='create-schedule'),
     path('weekday/', WeekdayView.as_view(), name='weekday'),
 ]
