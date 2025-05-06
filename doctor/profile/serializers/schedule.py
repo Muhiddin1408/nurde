@@ -79,7 +79,7 @@ class WorkTimeBulkWrapperSerializer(serializers.Serializer):
             )
             created_worktimes.append(worktime)
 
-        return created_worktimes
+        return WorkTimeSerializer(created_worktimes, many=True).data
 
     def to_representation(self, instance):
         return WorkTimeSerializer(instance, many=True).data
