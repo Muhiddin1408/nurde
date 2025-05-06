@@ -65,12 +65,11 @@ class WorkTimeBulkWrapperSerializer(serializers.Serializer):
 
     def create(self, validated_data):
         request = self.context.get('request')
+        WorkTime.objects.filter(user=request.user).delete()
         try:
             specialist = Specialist.objects.get(user=request.user)
         except Specialist.DoesNotExist:
             raise serializers.ValidationError({'user': 'Specialist not found'})
-
-        # Weekday ID larni mapping qilish orqali .get() ni har safar chaqirmaslik
         created_worktimes = [
             WorkTime(
                 user=specialist,
