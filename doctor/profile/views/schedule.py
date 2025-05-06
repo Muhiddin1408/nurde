@@ -14,7 +14,7 @@ class WeekdayView(generics.ListAPIView):
     serializer_class = WeekdaySerializer
 
 
-class WorkTimeCreateView(generics.CreateAPIView):
+class WorkTimeCreateView(generics.ListCreateAPIView):
     queryset = WorkTime.objects.all()
     serializer_class = WorkTimeBulkWrapperSerializer
     permission_classes = [permissions.IsAuthenticated]
