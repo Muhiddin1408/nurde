@@ -24,10 +24,10 @@ from doctor.auth.serializers.auth import SpecialistSerializer, SpecialistUpdateS
 from django.core.mail import EmailMessage
 
 
-def send_sms(mail, text):
-    email = EmailMessage('Veri', text, to=[mail])
-    email.send()
-send_sms('muhiddinturonov1416@gmail.com', "Sizning tasdiqlash codingiz " + str(1234))
+# def send_sms(mail, text):
+#     email = EmailMessage('Veri', text, to=[mail])
+#     email.send()
+# send_sms('muhiddinturonov1416@gmail.com', "Sizning tasdiqlash codingiz " + str(1234))
 
 
 class SpecialistRegister(generics.CreateAPIView):
@@ -52,7 +52,7 @@ class SpecialistRegister(generics.CreateAPIView):
             user = User.objects.get(username='d' + phone)
             user.sms_code = sms_code
             user.save()
-            send_sms('muhiddinturonov1416@gmail.com', "Sizning tasdiqlash codingiz " + str(sms_code))
+            # send_sms('muhiddinturonov1416@gmail.com', "Sizning tasdiqlash codingiz " + str(sms_code))
             if is_all_digits(phone):
                 SendSmsApiWithEskiz(message="https://star-one.uz/ Tasdiqlash kodi " + str(sms_code),
                                     phone=int(phone)).send()
