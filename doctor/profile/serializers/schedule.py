@@ -52,17 +52,26 @@ class WorkTimeSerializer(serializers.ModelSerializer):
     class Meta:
         model = WorkTime
         fields = ['weekday', 'date', 'finish']
-        list_serializer_class = WorkTimeBulkSerializer
+        # list_serializer_class = WorkTimeBulkSerializer
+
+    # def create(self, validated_data):
 
 
 class WorkTimeBulkWrapperSerializer(serializers.Serializer):
     data = WorkTimeSerializer(many=True)
 
     def create(self, validated_data):
-        # Correct way to delegate to the list serializer's create method
-        list_serializer = self.fields['data']
-        for i in list_serializer:
-            WorkTime.objects.create(**i)
+        request = self.context.get('request')
+        try:
+            specialist = Specialist.objects.get(user=request.user)
+        except Specialist.DoesNotExist:
+            raise serializers.ValidationError({'user': 'Specialist not found'})
+
+        # validated_data['data'] bu ro'yxat
+        worktimes = [
+            WorkTime(user=specialist, **item) for item in validated_data['data']
+        ]
+        return WorkTime.objects.bulk_create(worktimes)
 
     def to_representation(self, instance):
         return WorkTimeSerializer(instance, many=True).data
