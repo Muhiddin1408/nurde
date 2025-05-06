@@ -17,7 +17,7 @@ class MyScheduleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = WorkTime
-        fields = ['id', 'weekday', 'weekday_name', 'date']
+        fields = ['id', 'weekday', 'weekday_name', 'date', 'finish']
         read_only_fields = ['id', 'weekday_name']
 
     def get_weekday_name(self, obj):
