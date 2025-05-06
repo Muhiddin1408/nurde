@@ -1,4 +1,5 @@
-from rest_framework import serializers
+from rest_framework import serializers, status
+from rest_framework.response import Response
 
 from apps.basic.models import Specialist
 from apps.service.models.service import WorkTime
@@ -68,15 +69,15 @@ class WorkTimeBulkWrapperSerializer(serializers.Serializer):
             raise serializers.ValidationError({'user': 'Specialist not found'})
 
         # validated_data['data'] bu ro'yxat
-        worktimes = [
-            WorkTime(
+        for item in validated_data['data']:
+            WorkTime.objects.create(
                 user=specialist,
                 weekday=Weekday.objects.get(id=item['weekday']),
                 date=item.get('date'),
                 finish=item.get('finish')
-            ) for item in validated_data['data']
-        ]
-        return WorkTime.objects.bulk_create(worktimes)
+            )
+
+        return Response(status=status.HTTP_201_CREATED)
 
     def to_representation(self, instance):
         return WorkTimeSerializer(instance, many=True).data
