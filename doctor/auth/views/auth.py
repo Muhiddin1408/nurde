@@ -157,3 +157,23 @@ def login(request):
         return Response(res)
 
 
+@api_view(['POST'])
+@permission_classes([AllowAny, ])
+def sms_conf(request):
+    try:
+        sms_code = request.data['code']
+        phone = request.data['username']
+        user = User.objects.filter(username='d' + phone).last()
+
+        result = {
+            'code': False,
+        }
+        if user and int(user.sms_code) == int(sms_code):
+            result = {
+                'code': True
+            }
+            return Response(result, status=status.HTTP_200_OK)
+        return Response(result, status=status.HTTP_200_OK)
+
+    except:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
