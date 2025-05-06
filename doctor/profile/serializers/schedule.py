@@ -69,7 +69,12 @@ class WorkTimeBulkWrapperSerializer(serializers.Serializer):
 
         # validated_data['data'] bu ro'yxat
         worktimes = [
-            WorkTime(user=specialist, **item) for item in validated_data['data']
+            WorkTime(
+                user=specialist,
+                weekday=Weekday.objects.get(id=item['weekday']),
+                date=item.get('date'),
+                finish=item.get('finish')
+            ) for item in validated_data['data']
         ]
         return WorkTime.objects.bulk_create(worktimes)
 
