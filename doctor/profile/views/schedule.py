@@ -1,5 +1,6 @@
-from rest_framework import generics, permissions
+from rest_framework import generics, permissions, status
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
 from apps.basic.models import Specialist
 from apps.service.models.service import WorkTime
@@ -17,6 +18,15 @@ class WorkTimeCreateView(generics.CreateAPIView):
     queryset = WorkTime.objects.all()
     serializer_class = WorkTimeBulkWrapperSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        created_worktimes = serializer.save()
+        return Response({
+            "success": True,
+            "data": WorkTimeSerializer(created_worktimes, many=True, context=self.get_serializer_context()).data
+        }, status=status.HTTP_201_CREATED)
 
 
 class MyScheduleView(generics.ListAPIView):
