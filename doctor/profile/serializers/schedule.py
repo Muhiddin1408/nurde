@@ -60,7 +60,7 @@ class WorkTimeSerializer(serializers.ModelSerializer):
 
 
 class WorkTimeBulkWrapperSerializer(serializers.Serializer):
-    data = serializers.ListField()
+    data = WorkTimeSerializer(many=True)
 
     def create(self, validated_data):
         request = self.context.get('request')
@@ -69,18 +69,22 @@ class WorkTimeBulkWrapperSerializer(serializers.Serializer):
         except Specialist.DoesNotExist:
             raise serializers.ValidationError({'user': 'Specialist not found'})
 
-        created_worktimes = []
-
-        for item in validated_data['data']:
-            worktime = WorkTime.objects.create(
+        # Weekday ID larni mapping qilish orqali .get() ni har safar chaqirmaslik
+        created_worktimes = [
+            WorkTime(
                 user=specialist,
-                weekday=Weekday.objects.get(id=item['weekday']),
+                weekday=item['weekday'],  # DRF allaqachon Weekday instance qilib beradi
                 date=item.get('date'),
                 finish=item.get('finish')
             )
-            created_worktimes.append(worktime)
+            for item in validated_data['data']
+        ]
 
-        return WorkTimeSerializer(created_worktimes, many=True, context=self.context).data
+        # bulk_create – tezroq
+        WorkTime.objects.bulk_create(created_worktimes)
+
+        # bulk_create qaytarmaydi id'lar bilan to‘ldirilgan obyektlar, shuning uchun qayta olib kelamiz
+        return WorkTime.objects.filter(user=specialist).order_by('-id')[:len(created_worktimes)]
 
     def to_representation(self, instance):
         return WorkTimeSerializer(instance, many=True).data
