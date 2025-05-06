@@ -58,7 +58,7 @@ class WorkTimeSerializer(serializers.ModelSerializer):
 
 
 class WorkTimeBulkWrapperSerializer(serializers.Serializer):
-    data = serializers.DictField()
+    data = serializers.ListField()
 
     def create(self, validated_data):
         request = self.context.get('request')
