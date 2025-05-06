@@ -36,13 +36,13 @@ class RegisterView(APIView):
     )
     def post(self, request):
         phone = request.data.get('username')
-        user = User.objects.filter(username=phone).last()
+        user = User.objects.filter(username='u' + phone).last()
         if user is None:
             serializer = RegisterSerializer(data=request.data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
             sms_code = random.randint(1000, 9999)
-            user = User.objects.get(username=phone)
+            user = User.objects.get(username='u' + phone)
             user.sms_code = sms_code
             user.save()
             if is_all_digits(phone):
@@ -53,7 +53,7 @@ class RegisterView(APIView):
             return Response({'status': False},status=status.HTTP_200_OK)
         elif not user.is_active:
             sms_code = random.randint(1000, 9999)
-            user = User.objects.get(username=phone)
+            user = User.objects.get(username='u' + phone)
             user.sms_code = sms_code
             user.sms_code_time = datetime.now() + timedelta(minutes=2)
             user.save()
@@ -93,7 +93,7 @@ def sms_conf(request):
     try:
         sms_code = request.data['code']
         phone = request.data['username']
-        user = User.objects.filter(username=phone).last()
+        user = User.objects.filter(username='u' + phone).last()
 
         result = {
             'code': False,
@@ -129,7 +129,7 @@ def password_conf(request):
             return Response({"detail": "date_of_birth must be in DD.MM.YYYY format."},
                             status=status.HTTP_400_BAD_REQUEST)
 
-        user = User.objects.get(username=phone)
+        user = User.objects.get(username='u' + phone)
 
         user.set_password(password)
         user.passport = passport

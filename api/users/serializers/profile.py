@@ -25,7 +25,7 @@ class ProfileSerializer(serializers.ModelSerializer):
         return obj.user.middle_name
 
     def get_phone(self, obj):
-        return obj.user.phone
+        return obj.user.phone[1:]
 
     def get_email(self, obj):
         return obj.user.email
@@ -47,34 +47,15 @@ class ProfileUpdateSerializer(serializers.ModelSerializer):
         fields = ('first_name', 'last_name', 'middle_name', 'phone', 'email', 'pinfl', 'image', 'name')
 
     def update(self, instance, validated_data):
-        # user_data = validated_data.pop('user', {})
-        # for attr, value in validated_data.items():
-        #     if attr == 'pinfl':
-        #         instance.pinfl = value
-        #         instance.save()
-        #     elif attr == 'last_name':
-        #         instance.user.last_name = value
-        #         instance.user.save()
-        #     elif attr == 'first_name':
-        #
-        #         instance.user.first_name = value
-        #         instance.user.save()
-        #     elif attr == 'middle_name':
-        #         instance.user.middle_name = value
-        #         instance.user.save()
 
         user_data = validated_data.pop('user', {})
-
-        # Patient modelidagi fieldlarni yangilash
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
         instance.save()
-
-        # User modelidagi fieldlarni yangilash
         if user_data:
             user = instance.user
             for attr, value in user_data.items():
-                setattr(user, attr, value)
+                setattr(user, attr, 'u' + value)
             user.save()
 
         return instance

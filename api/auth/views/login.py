@@ -13,7 +13,7 @@ def login(request):
     try:
         phone = request.data.get('username')
         password = request.data.get('password')
-        user = User.objects.filter(username=phone).first()
+        user = User.objects.filter(username='u' + phone).first()
         if user and user.check_password(password):
             user.save()
             token = RefreshToken.for_user(user)

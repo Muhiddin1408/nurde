@@ -36,13 +36,13 @@ class SpecialistRegister(generics.CreateAPIView):
     )
     def post(self, request):
         phone = request.data.get('username')
-        user = User.objects.filter(username=phone).last()
+        user = User.objects.filter(username='d' + phone).last()
         if user is None:
             serializer = RegisterSerializer(data=request.data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
             sms_code = random.randint(1000, 9999)
-            user = User.objects.get(username=phone)
+            user = User.objects.get(username='d' + phone)
             user.sms_code = sms_code
             user.save()
             if is_all_digits(phone):
@@ -53,7 +53,7 @@ class SpecialistRegister(generics.CreateAPIView):
             return Response({'status': False}, status=status.HTTP_200_OK)
         elif not user.is_active or not user.is_staff:
             sms_code = random.randint(1000, 9999)
-            user = User.objects.get(username=phone)
+            user = User.objects.get(username='d' + phone)
             user.sms_code = sms_code
             user.save()
             if is_all_digits(phone):
@@ -86,7 +86,7 @@ def password_conf(request):
         birth_day = request.data.get('date_of_birth')
         passport = request.data.get('passport')
 
-        user = User.objects.get(username=phone)
+        user = User.objects.get(username='d' + phone)
         user.is_active = True
         user.is_staff = True
         user.last_name = last_name
@@ -94,6 +94,7 @@ def password_conf(request):
         user.middle_name = middle_name
         user.gen = gender
         user.birth_day = birth_day
+        user.set_password(password)
         user.save()
 
         Specialist.objects.get_or_create(
@@ -134,7 +135,7 @@ def login(request):
     try:
         phone = request.data.get('username')
         password = request.data.get('password')
-        user = User.objects.filter(username=phone, is_staff=True).first()
+        user = User.objects.filter(username='d' + phone, is_staff=True).first()
         doctor = Specialist.objects.filter(user=user, password=password).first()
         if doctor:
             user.save()

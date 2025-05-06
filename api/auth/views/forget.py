@@ -16,12 +16,12 @@ from apps.users.models import User
 def forget(request):
     try:
         username = request.data['username']
-        user = User.objects.filter(username=username).last()
+        user = User.objects.filter(username='u' + username).last()
         print(user)
         if user:
             print(user)
             sms_code = random.randint(1000, 9999)
-            user = User.objects.get(username=username)
+            user = User.objects.get(username='u' + username)
             user.sms_code = sms_code
             user.save()
             SendSmsApiWithEskiz(message="https://star-one.uz/ Tasdiqlash kodi " + str(sms_code),
@@ -38,7 +38,7 @@ def sms_forget(request):
     try:
         sms_code = request.data['code']
         phone = request.data['username']
-        user = User.objects.filter(username=phone).last()
+        user = User.objects.filter(username='u' + phone).last()
         result = {
             'code': False,
         }
@@ -57,7 +57,7 @@ def password_forget(request):
     try:
         phone = request.data['username']
         password = request.data['password']
-        user = User.objects.get(username=phone)
+        user = User.objects.get(username='u' + phone)
 
         result = {
             'access': None,

@@ -14,7 +14,6 @@ class FavoriteDoctorViewSet(generics.ListCreateAPIView):
     pagination_class = SmallPagesPagination
 
     def get_queryset(self):
-        # Faqat o'zi (request.user) ga tegishli patientni qaytaradi
         status = self.request.query_params.get('type')
         if status == 'doctor':
             return Like.objects.filter(costumer=Patient.objects.filter(user=self.request.user).last(), user__isnull=False)

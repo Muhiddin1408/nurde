@@ -8,10 +8,14 @@ class ProfileSerializer(serializers.Serializer):
     last_name = serializers.CharField(source='user.last_name')
     first_name = serializers.CharField(source='user.first_name')
     middle_name = serializers.CharField(source='user.middle_name')
-    username = serializers.CharField(source='user.username')
+    # username = serializers.CharField(source='user.username')
     email = serializers.CharField(source='user.email')
     pinfl = serializers.CharField()
     description = serializers.CharField()
+    username = serializers.SerializerMethodField()
+
+    def get_username(self, obj):
+        return obj.user.username[1:] if obj.user.username else ''
 
     class Meta:
         model = Specialist
