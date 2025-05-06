@@ -34,7 +34,7 @@ class RegisterSerializer(NestedCreateMobileUserSerializer):
         return user
 
 
-class RegisterDoctorSerializer(NestedCreateMobileUserSerializer):
+class RegisterDoctorSerializer(NestedCreateDoctorMobileUserSerializer):
 
     @transaction.atomic
     def save(self):

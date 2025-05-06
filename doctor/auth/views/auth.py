@@ -13,7 +13,7 @@ from rest_framework.response import Response
 from rest_framework.throttling import ScopedRateThrottle
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from api.auth.serializers.register import RegisterSerializer
+from api.auth.serializers.register import RegisterSerializer, RegisterDoctorSerializer
 from api.auth.views.registration import is_all_digits
 from api.utils.eskiz import SendSmsApiWithEskiz
 from api.utils.gmail_sms import send_verification_email
@@ -31,14 +31,14 @@ class SpecialistRegister(generics.CreateAPIView):
 
     @swagger_auto_schema(
         tags=['authentication'],
-        request_body=RegisterSerializer,
-        responses={201: RegisterSerializer}
+        request_body=RegisterDoctorSerializer,
+        responses={201: RegisterDoctorSerializer}
     )
     def post(self, request):
         phone = request.data.get('username')
         user = User.objects.filter(username='d' + phone).last()
         if user is None:
-            serializer = RegisterSerializer(data=request.data)
+            serializer = RegisterDoctorSerializer(data=request.data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
             sms_code = random.randint(1000, 9999)
