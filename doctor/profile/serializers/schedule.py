@@ -68,16 +68,18 @@ class WorkTimeBulkWrapperSerializer(serializers.Serializer):
         except Specialist.DoesNotExist:
             raise serializers.ValidationError({'user': 'Specialist not found'})
 
-        # validated_data['data'] bu ro'yxat
+        created_worktimes = []
+
         for item in validated_data['data']:
-            WorkTime.objects.create(
+            worktime = WorkTime.objects.create(
                 user=specialist,
                 weekday=Weekday.objects.get(id=item['weekday']),
                 date=item.get('date'),
                 finish=item.get('finish')
             )
+            created_worktimes.append(worktime)
 
-        return Response(status=status.HTTP_201_CREATED)
+        return created_worktimes
 
     def to_representation(self, instance):
         return WorkTimeSerializer(instance, many=True).data
