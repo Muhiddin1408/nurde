@@ -65,7 +65,7 @@ class WorkTimeBulkWrapperSerializer(serializers.Serializer):
 
     def create(self, validated_data):
         request = self.context.get('request')
-        WorkTime.objects.filter(user=request.user).delete()
+        WorkTime.objects.filter(user__user=request.user).delete()
         try:
             specialist = Specialist.objects.get(user=request.user)
         except Specialist.DoesNotExist:
