@@ -51,6 +51,7 @@ class WorkTimeBulkSerializer(serializers.ListSerializer):
 
 class WorkTimeSerializer(serializers.ModelSerializer):
     weekday = serializers.PrimaryKeyRelatedField(queryset=Weekday.objects.all())
+
     class Meta:
         model = WorkTime
         fields = ['weekday', 'date', 'finish']
@@ -84,8 +85,8 @@ class WorkTimeBulkWrapperSerializer(serializers.Serializer):
         WorkTime.objects.bulk_create(created_worktimes)
 
         # bulk_create qaytarmaydi id'lar bilan to‘ldirilgan obyektlar, shuning uchun qayta olib kelamiz
-        return WorkTime.objects.filter(user=specialist).order_by('-id')[:len(created_worktimes)]
+        return created_worktimes
 
     def to_representation(self, instance):
-        return WorkTimeSerializer(instance, many=True).data
+        return WorkTimeSerializer(instance, many=True, context=self.context).data
 
