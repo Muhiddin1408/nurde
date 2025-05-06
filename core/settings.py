@@ -238,3 +238,6 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'muhiddinturonov1416@gmail.com'
 EMAIL_HOST_PASSWORD = 'zzhw qreg xckn msbb'
 EMAIL_PORT = 587
+
+GOOGLE_ID_TOKEN_ISS = os.environ.get('GOOGLE_ID_TOKEN_ISS', 'https://accounts.google.com')
+GOOGLE_CLIENT_ID = os.environ.get('GOOGLE_CLIENT_ID')
