@@ -16,17 +16,15 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from api.auth.serializers.register import RegisterSerializer, RegisterDoctorSerializer
 from api.auth.views.registration import is_all_digits
 from api.utils.eskiz import SendSmsApiWithEskiz
-from api.utils.gmail_sms import send_verification_email
+from api.utils.gmail_sms import send_sms
 from apps.basic.models import Specialist
 from apps.users.models import User
 from apps.utils.models import Category
 from doctor.auth.serializers.auth import SpecialistSerializer, SpecialistUpdateSerializer, CategorySerializer
-from django.core.mail import EmailMessage
 
 
-# def send_sms(mail, text):
-#     email = EmailMessage('Veri', text, to=[mail])
-#     email.send()
+
+
 # send_sms('muhiddinturonov1416@gmail.com', "Sizning tasdiqlash codingiz " + str(1234))
 
 
@@ -43,7 +41,11 @@ class SpecialistRegister(generics.CreateAPIView):
     )
     def post(self, request):
         phone = request.data.get('username')
-        user = User.objects.filter(username='d' + phone).last()
+
+        if phone.isdigit():
+            user = User.objects.filter(username='d' + phone).last()
+        else:
+            user = User.objects.filter(username='d' + phone).last()
         if user is None:
             serializer = RegisterDoctorSerializer(data=request.data)
             serializer.is_valid(raise_exception=True)
@@ -52,24 +54,29 @@ class SpecialistRegister(generics.CreateAPIView):
             user = User.objects.get(username='d' + phone)
             user.sms_code = sms_code
             user.save()
-            # send_sms('muhiddinturonov1416@gmail.com', "Sizning tasdiqlash codingiz " + str(sms_code))
-            if is_all_digits(phone):
-                SendSmsApiWithEskiz(message="https://star-one.uz/ Tasdiqlash kodi " + str(sms_code),
+            if phone.isdigit():
+                if is_all_digits(phone):
+                    SendSmsApiWithEskiz(message="https://star-one.uz/ Tasdiqlash kodi " + str(sms_code),
                                     phone=int(phone)).send()
+                else:
+                    send_verification_email(phone, sms_code)
             else:
-                send_verification_email(phone, sms_code)
+                send_sms(phone, "Sizning tasdiqlash codingiz " + str(sms_code))
+
             return Response({'status': False}, status=status.HTTP_200_OK)
         elif not user.is_active or not user.is_staff:
             sms_code = random.randint(1000, 9999)
             user = User.objects.get(username='d' + phone)
             user.sms_code = sms_code
             user.save()
-            if is_all_digits(phone):
-                SendSmsApiWithEskiz(message="https://star-one.uz/ Tasdiqlash kodi " + str(sms_code),
-                                    phone=int(phone)).send()
-
-            # else:
-            #     send_verification_email(phone, sms_code)
+            if phone.isdigit():
+                if is_all_digits(phone):
+                    SendSmsApiWithEskiz(message="https://star-one.uz/ Tasdiqlash kodi " + str(sms_code),
+                                        phone=int(phone)).send()
+                # else:
+                # send_verification_email(phone, sms_code)
+            else:
+                send_sms(phone, "Sizning tasdiqlash codingiz " + str(sms_code))
             return Response({'status': False}, status=status.HTTP_200_OK)
         else:
             return Response({'status': True}, status=status.HTTP_200_OK)

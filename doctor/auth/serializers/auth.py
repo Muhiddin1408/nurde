@@ -130,7 +130,10 @@ class SpecialistUpdateSerializer(serializers.ModelSerializer):
         # User modelini yangilash
         user = instance.user
         for attr, value in user_data.items():
-            setattr(user, attr, 'd' + value)
+            if attr == 'username':
+                setattr(user, attr, 'd' + value)
+            else:
+                setattr(user, attr, value)
         user.save()
 
         return instance
