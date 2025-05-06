@@ -49,12 +49,10 @@ class WorkTimeBulkSerializer(serializers.ListSerializer):
 
 
 class WorkTimeSerializer(serializers.ModelSerializer):
-    weekday = serializers.IntegerField(source='weekday')
-
     class Meta:
         model = WorkTime
         fields = ['weekday', 'date', 'finish']
-        list_serializer_class = WorkTimeBulkSerializer
+        # list_serializer_class = WorkTimeBulkSerializer
 
 
 class WorkTimeBulkWrapperSerializer(serializers.Serializer):
