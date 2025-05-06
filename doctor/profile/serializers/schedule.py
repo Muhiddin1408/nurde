@@ -59,7 +59,13 @@ class WorkTimeBulkWrapperSerializer(serializers.Serializer):
     data = WorkTimeSerializer(many=True)
 
     def create(self, validated_data):
-        return self.fields['data'].create(validated_data['data'])
+        # Correct way to delegate to the list serializer's create method
+        list_serializer = self.fields['data']
+        return list_serializer.child.Meta.list_serializer_class(
+            child=list_serializer.child,
+            data=validated_data['data'],
+            context=self.context,
+        ).create(validated_data['data'])
 
     def to_representation(self, instance):
         return WorkTimeSerializer(instance, many=True).data
