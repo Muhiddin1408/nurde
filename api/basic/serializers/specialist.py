@@ -30,6 +30,7 @@ class CategorySerializers(serializers.Serializer):
     class Meta:
         model = Category
         fields = ('id', 'name', 'icon')
+        ref_name = "SpecialistCategorySerializer"
 
     def get_icon(self, obj):
         print(obj)

@@ -17,6 +17,7 @@ class CategorySerializers(serializers.ModelSerializer):
     class Meta:
         model = Specialist
         fields = ('type', 'category', 'experience', 'work_count', 'edu_count')
+        ref_name = "DoctorProfileCategorySerializer"
 
     def get_category(self, obj):
         return CategorySerializer(obj.category, many=True).data
