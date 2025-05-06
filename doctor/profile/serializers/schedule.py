@@ -50,6 +50,7 @@ class WorkTimeBulkSerializer(serializers.ListSerializer):
 
 
 class WorkTimeSerializer(serializers.ModelSerializer):
+    weekday = serializers.PrimaryKeyRelatedField(queryset=Weekday.objects.all())
     class Meta:
         model = WorkTime
         fields = ['weekday', 'date', 'finish']
