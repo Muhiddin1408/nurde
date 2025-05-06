@@ -14,14 +14,33 @@ class NestedCreateMobileUserSerializer(serializers.Serializer):
         return value
 
 
+class NestedCreateDoctorMobileUserSerializer(serializers.Serializer):
+    username = serializers.CharField(max_length=50, required=False)
+
+    def validate_username(self, value):
+        if User.objects.filter(username='d' + value).exists():
+            raise serializers.ValidationError("Username already exist")
+        return value
+
+
 class RegisterSerializer(NestedCreateMobileUserSerializer):
 
     @transaction.atomic
     def save(self):
         validated_data = self.validated_data
-        print(self.validated_data)
         user = User.objects.create_user(
             username='u' + validated_data.get('username')
+        )
+        return user
+
+
+class RegisterDoctorSerializer(NestedCreateMobileUserSerializer):
+
+    @transaction.atomic
+    def save(self):
+        validated_data = self.validated_data
+        user = User.objects.create_user(
+            username='d' + validated_data.get('username')
         )
         return user
 
