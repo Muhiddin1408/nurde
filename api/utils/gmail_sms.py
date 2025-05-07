@@ -15,9 +15,8 @@ def get_tokens_for_user(user):
     access = refresh.access_token
     return str(refresh), str(access)
 
-def register_social_user(email, name='', provider='email'):
+def register_social_user(email, name='',last = '', provider='email'):
     user = User.objects.filter(email=email).first()
-
 
     if user:
         return user
@@ -26,7 +25,7 @@ def register_social_user(email, name='', provider='email'):
             'email': email,
             'username': 'u' + email,
             'first_name': name,
-            'auth_provider': provider,
+            'last_name': last,
             'is_active': True
         }
         user = User.objects.create(**user)

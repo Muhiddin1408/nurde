@@ -247,13 +247,13 @@ class LoginWithSocialAccountViewSet(viewsets.GenericViewSet):
             auth_token = request.data['auth_token']
             status, user_data = google.Google.verify_auth_token(auth_token)
             if status:
-                if not user_data['aud'].startswith(GOOGLE_CLIENT_ID):
-                    return Response({'message': _('Access denied')}, 400)
+                print(user_data)
+                # if not user_data['aud'].startswith(GOOGLE_CLIENT_ID):
+                #     return Response({'message': _('Access denied')}, 400)
 
-                user = register_social_user(user_data['email'], user_data.get('name'), 'google')
+                user = register_social_user(user_data['email'], user_data.get('given_name'), user_data.get('family_name'), 'google')
 
                 refresh, access = get_tokens_for_user(user)
-                # user_data = UserSerializer(user).data
                 res = {
                     'refresh': refresh,
                     'access': access,
