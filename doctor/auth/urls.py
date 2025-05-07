@@ -23,4 +23,4 @@ urlpatterns = [
     path('forget/', forget, name='forget'),
     path('sms_forget/', sms_forget, name='sms_forget'),
     path('password_forget/', password_forget, name='password_forget'),
-]
+] + router.urls
