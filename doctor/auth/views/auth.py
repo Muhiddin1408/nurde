@@ -1,12 +1,15 @@
+import sys
 from datetime import datetime
 
 from django.core.exceptions import ObjectDoesNotExist
 import random
 
 from django.views.decorators.csrf import csrf_exempt
+from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework import generics, permissions, status
-from rest_framework.decorators import api_view, permission_classes
+from packaging.utils import _
+from rest_framework import generics, permissions, status, viewsets
+from rest_framework.decorators import api_view, permission_classes, action
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
@@ -15,8 +18,9 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 from api.auth.serializers.register import RegisterSerializer, RegisterDoctorSerializer
 from api.auth.views.registration import is_all_digits
+from api.utils import google
 from api.utils.eskiz import SendSmsApiWithEskiz
-from api.utils.gmail_sms import send_sms
+from api.utils.gmail_sms import send_sms, get_tokens_for_user, register_social_user, register_social_doctor
 from apps.basic.models import Specialist
 from apps.users.models import User
 from apps.utils.models import Category
@@ -58,8 +62,8 @@ class SpecialistRegister(generics.CreateAPIView):
                 if is_all_digits(phone):
                     SendSmsApiWithEskiz(message="https://star-one.uz/ Tasdiqlash kodi " + str(sms_code),
                                     phone=int(phone)).send()
-                else:
-                    send_verification_email(phone, sms_code)
+                # else:
+                #     send_verification_email(phone, sms_code)
             else:
                 send_sms(phone, "Sizning tasdiqlash codingiz " + str(sms_code))
 
@@ -192,3 +196,49 @@ def sms_conf(request):
 
     except:
         return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+class LoginWithSocialDoctorViewSet(viewsets.GenericViewSet):
+    permission_classes = [AllowAny]
+    serializer_class = None
+    @swagger_auto_schema(
+        methods=['post'],
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            required=['auth_token'],
+            properties={
+                'auth_token': openapi.Schema(type=openapi.TYPE_STRING)
+            },
+        ),
+        operation_description='Enter token',
+        responses={200: 'ok'}
+    )
+    @action(methods=['post'], detail=False, url_name='auth')
+    def with_google(self, request, *args, **kwargs):
+        try:
+            auth_token = request.data['auth_token']
+            status, user_data = google.Google.verify_auth_token(auth_token)
+            if status:
+                # if not user_data['aud'].startswith(GOOGLE_CLIENT_ID):
+                #     return Response({'message': _('Access denied')}, 400)
+                if User.objects.get(username='d' + user_data['email']).is_active:
+                    user = User.objects.get(username='d' + user_data['email'])
+                else:
+                    User.objects.get(username='d' + user_data['email']).delete()
+                    user = register_social_doctor(user_data['email'], user_data.get('given_name'), user_data.get('family_name'), 'google')
+
+                refresh, access = get_tokens_for_user(user)
+                res = {
+                    'refresh': refresh,
+                    'access': access,
+                    # 'user': user_data
+                }
+
+                return Response(res, 200)
+            else:
+                return Response(user_data, 400)
+        except Exception as e:
+            trace_back = sys.exc_info()[2]
+            line = trace_back.tb_lineno
+            res = {'message': _(str(e) + ' - line -' + str(line))}
+            return Response(res, status=400)

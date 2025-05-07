@@ -1,9 +1,14 @@
 from django.urls import path
+from rest_framework.routers import SimpleRouter
 
-from doctor.auth.views.auth import SpecialistRegister, SpecialistUpdate, password_conf, CategoryView, login, sms_conf
+from doctor.auth.views.auth import SpecialistRegister, SpecialistUpdate, password_conf, CategoryView, login, sms_conf, \
+    LoginWithSocialDoctorViewSet
 from doctor.auth.views.dashboard import DashboardView
 from doctor.auth.views.forget import forget, sms_forget, password_forget
 from doctor.auth.views.profile import ProfileView
+
+router = SimpleRouter()
+router.register('google', LoginWithSocialDoctorViewSet, 'doctor-google')
 
 urlpatterns = [
     path('register/', SpecialistRegister.as_view(), name='register'),
