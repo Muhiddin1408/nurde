@@ -17,8 +17,13 @@ class OrderView(generics.ListAPIView):
 
     def get_queryset(self):
         status = self.request.GET.get('status')
+        date = self.request.GET.get('date')
         if status:
+            if date:
+                return Order.objects.filter(doctor__user=self.request.user, status=status, datetime__date=date)
             return Order.objects.filter(doctor__user=self.request.user, status=status)
+        if date:
+            return Order.objects.filter(doctor__user=self.request.user, datetime__date=date)
         return Order.objects.none()
 
 class OrderDetailView(generics.RetrieveAPIView):
