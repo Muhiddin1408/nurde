@@ -1,6 +1,62 @@
-<h1>App Support – MyApp</h1>
-<p>If you're experiencing issues or need help, please contact us:</p>
-<ul>
-  <li>Email: <a href="mailto:support@myapp.com">support@myapp.com</a></li>
-  <li>FAQ: <a href="https://myapp.com/faq">myapp.com/faq</a></li>
-</ul>
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <title>Qo'llab-quvvatlash</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 40px;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            color: #333;
+        }
+        form {
+            max-width: 500px;
+            margin-top: 20px;
+        }
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <h1>Qo'llab-quvvatlash markazi</h1>
+    <p>Muammo yoki savolingiz bormi? Quyidagi shakl orqali biz bilan bog‘laning:</p>
+
+    <form action="saidakhmatovsanjar@gmail.com" method="post" enctype="text/plain">
+        <label for="name">Ismingiz:</label>
+        <input type="text" id="name" name="Ism" required>
+
+        <label for="email">Email manzilingiz:</label>
+        <input type="email" id="email" name="Email" required>
+
+        <label for="message">Xabaringiz:</label>
+        <textarea id="message" name="Xabar" rows="6" required></textarea>
+
+        <button type="submit">Yuborish</button>
+    </form>
+</body>
+</html>
