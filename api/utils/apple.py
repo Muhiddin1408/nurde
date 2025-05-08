@@ -41,6 +41,7 @@ class AppleOAuth2:
             # infoUrl = 'https://appleid.apple.com/auth/authorize?client_id=' + client_id + '&nonce=' + access_token + '&response_type=code&state=state&scope=name%20email&response_mode=form_post&redirect_uri=https://travel.gazon-tashkent.uz/api/v1/auth/apple-account/'
             # resOp = requests.get(infoUrl)
             id_token = response_dict.get('id_token', None)
+            print()
             if id_token:
                 print('kkkk')
                 response_data = {}

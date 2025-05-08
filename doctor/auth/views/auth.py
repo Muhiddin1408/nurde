@@ -213,10 +213,13 @@ class LoginWithSocialDoctorViewSet(viewsets.GenericViewSet):
         operation_description='Enter token',
         responses={200: 'ok'}
     )
+
     @action(methods=['post'], detail=False, url_name='auth')
     def with_google(self, request, *args, **kwargs):
         try:
+
             auth_token = request.data['auth_token']
+            print(auth_token)
             status, user_data = google.Google.verify_auth_token(auth_token)
             if status:
                 # if not user_data['aud'].startswith(GOOGLE_CLIENT_ID):
@@ -248,6 +251,7 @@ class LoginWithSocialDoctorViewSet(viewsets.GenericViewSet):
         try:
 
             auth_token = request.data['auth_token']
+            print(auth_token)
             status, user_data = apple.AppleOAuth2().do_auth(auth_token)
             if status:
 
