@@ -138,14 +138,13 @@ class SpecialistByIdSerializers(serializers.ModelSerializer):
     is_favorite = serializers.SerializerMethodField()
     info = serializers.CharField()
     education = serializers.SerializerMethodField()
-    advanced = serializers.SerializerMethodField()
 
     class Meta:
         model = Specialist
         fields = (
             'id', 'last_name', 'first_name', 'middle_name', 'service', 'price',
             'experience', 'category', 'type', 'type_service', 'photo', 'work_time', 'comment',
-            'ranking', 'in_work', 'is_favorite', 'education', 'advanced', 'info', 'description'
+            'ranking', 'in_work', 'is_favorite', 'education', 'info', 'description'
         )
 
 
@@ -213,12 +212,9 @@ class SpecialistByIdSerializers(serializers.ModelSerializer):
         return is_favorite
 
     def get_education(self, obj):
-        education = Education.objects.filter(specialist=obj, type='education')
+        education = Education.objects.filter(specialist=obj)
         return EducationSerializer(education, many=True).data
 
-    def get_advanced(self, obj):
-        advanced = Education.objects.filter(specialist=obj, type='advanced')
-        return EducationSerializer(advanced, many=True).data
 
 
 

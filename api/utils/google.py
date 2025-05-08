@@ -9,9 +9,8 @@ class Google:
     @staticmethod
     def verify_auth_token(auth_token):
         try:
-            print(id_token.verify_oauth2_token(auth_token, requests.Request()), '\n---google')
             id_info = id_token.verify_token(auth_token, requests.Request())
-            print(id_info, '\n---google 222')
+
             if GOOGLE_ID_TOKEN_ISS in id_info['iss']:
                 return True, id_info
 

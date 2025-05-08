@@ -246,8 +246,8 @@ class LoginWithSocialAccountViewSet(viewsets.GenericViewSet):
             auth_token = request.data['auth_token']
             status, user_data = google.Google.verify_auth_token(auth_token)
             if status:
-                # if not user_data['aud'].startswith(GOOGLE_CLIENT_ID):
-                #     return Response({'message': _('Access denied')}, 400)
+                if not user_data['aud'].startswith(GOOGLE_CLIENT_ID):
+                    return Response({'message': _('Access denied')}, 400)
                 if User.objects.get(username='u' + user_data['email']).is_active:
                     user = User.objects.get(username='u' + user_data['email'])
                 else:
