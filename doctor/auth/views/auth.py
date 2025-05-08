@@ -251,7 +251,6 @@ class LoginWithSocialDoctorViewSet(viewsets.GenericViewSet):
         try:
 
             auth_token = request.data['auth_token']
-            print(auth_token)
             status, user_data = apple.AppleOAuth2().do_auth(auth_token)
             if status:
 

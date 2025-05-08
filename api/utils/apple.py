@@ -23,6 +23,7 @@ class AppleOAuth2:
         try:
 
             client_id, client_secret = self.get_key_and_secret()
+            print(client_id, client_secret)
 
             headers = {'content-type': "application/x-www-form-urlencoded"}
 
@@ -37,11 +38,12 @@ class AppleOAuth2:
             res = requests.post('https://appleid.apple.com/auth/token', data=data, headers=headers)
 
             response_dict = res.json()
+            print(response_dict)
 
             # infoUrl = 'https://appleid.apple.com/auth/authorize?client_id=' + client_id + '&nonce=' + access_token + '&response_type=code&state=state&scope=name%20email&response_mode=form_post&redirect_uri=https://travel.gazon-tashkent.uz/api/v1/auth/apple-account/'
             # resOp = requests.get(infoUrl)
             id_token = response_dict.get('id_token', None)
-            print()
+            print(id_token)
             if id_token:
                 print('kkkk')
                 response_data = {}
@@ -65,12 +67,17 @@ class AppleOAuth2:
         client_id = os.environ.get('USER_SOCIAL_AUTH_APPLE_CLIENT_ID')
 
         private_key = open(os.environ.get('SOCIAL_AUTH_APPLE_PRIVATE_KEY_USER'), 'rb').read()
+        print(kid)
+        print(team_id)
+        print(client_id)
+        print(private_key)
 
 
 
         headers = {
             'kid': kid
         }
+        print(headers)
 
         payload = {
             'iss': team_id,
