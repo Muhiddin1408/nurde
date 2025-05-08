@@ -57,8 +57,9 @@ class ProfileUpdateSerializer(serializers.ModelSerializer):
         instance.save()
         if user_data:
             user = instance.user
-            for attr, value in user_data.items():
+            if attr == 'username':
                 setattr(user, attr, 'u' + value)
-            user.save()
+            else:
+                setattr(user, attr, value)
 
         return instance

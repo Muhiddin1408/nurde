@@ -18,7 +18,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 from api.auth.serializers.register import RegisterSerializer, RegisterDoctorSerializer
 from api.auth.views.registration import is_all_digits
-from api.utils import google
+from api.utils import google, apple
 from api.utils.eskiz import SendSmsApiWithEskiz
 from api.utils.gmail_sms import send_sms, get_tokens_for_user, register_social_user, register_social_doctor
 from apps.basic.models import Specialist
@@ -237,6 +237,37 @@ class LoginWithSocialDoctorViewSet(viewsets.GenericViewSet):
                 return Response(res, 200)
             else:
                 return Response(user_data, 400)
+        except Exception as e:
+            trace_back = sys.exc_info()[2]
+            line = trace_back.tb_lineno
+            res = {'message': _(str(e) + ' - line -' + str(line))}
+            return Response(res, status=400)
+
+    @action(methods=['post'], detail=False, url_name='auth')
+    def with_apple(self, request, *args, **kwargs):
+        try:
+
+            auth_token = request.data['auth_token']
+            status, user_data = apple.AppleOAuth2().do_auth(auth_token)
+            if status:
+
+                if User.objects.get(username='u' + user_data['email']).is_active:
+                    user = User.objects.get(username='u' + user_data['email'])
+                else:
+                    User.objects.get(username='u' + user_data['email']).delete()
+                    user = register_social_user(user_data['email'], user_data.get('given_name'),
+                                                user_data.get('family_name'), 'google')
+
+                refresh, access = get_tokens_for_user(user)
+                res = {
+                    'refresh': refresh,
+                    'access': access,
+                }
+
+                return Response(res, 200)
+            else:
+                return Response(user_data, 400)
+
         except Exception as e:
             trace_back = sys.exc_info()[2]
             line = trace_back.tb_lineno
