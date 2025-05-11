@@ -36,6 +36,9 @@ class Specialist(models.Model):
     password = models.CharField(max_length=100, blank=True)
     description = models.TextField(blank=True)
 
+    def __str__(self):
+        return self.user.last_name + "  " + self.user.first_name + " " + self.user.username
+
 
     class Meta:
         verbose_name = 'Специалисты'
