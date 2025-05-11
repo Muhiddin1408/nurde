@@ -39,7 +39,7 @@ class ProfileUpdateSerializer(serializers.ModelSerializer):
     last_name = serializers.CharField(source='user.last_name', required=False)
     first_name = serializers.CharField(source='user.first_name', required=False)
     middle_name = serializers.CharField(source='user.middle_name', required=False)
-    username = serializers.CharField(source='user.username', required=False)
+    username = serializers.SerializerMethodField()
     email = serializers.EmailField(source='user.email', required=False)
 
     class Meta:
@@ -47,19 +47,22 @@ class ProfileUpdateSerializer(serializers.ModelSerializer):
         fields = ('first_name', 'last_name', 'middle_name', 'username', 'email', 'pinfl', 'image', 'name')
 
     def get_username(self, obj):
-        return obj.user.username[1:]
+        if obj.user and obj.user.username:
+            return obj.user.username[1:]
+        return ''
 
     def update(self, instance, validated_data):
-
         user_data = validated_data.pop('user', {})
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
         instance.save()
         if user_data:
             user = instance.user
-            if attr == 'username':
-                setattr(user, attr, 'u' + value)
-            else:
-                setattr(user, attr, value)
+            for attr, value in user_data.items():
+                if attr == 'username':
+                    setattr(user, attr, 'u' + value)
+                else:
+                    setattr(user, attr, value)
+            user.save()
 
         return instance

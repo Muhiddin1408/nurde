@@ -12,7 +12,7 @@ class ProfileUpdateView(generics.RetrieveUpdateAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_object(self):
-        print(self.request.user.last_name)
+        # print(self.request.user.last_name)
         # Faqat o'zi (request.user) ga tegishli patientni qaytaradi
         return Patient.objects.get(user=self.request.user)
 
