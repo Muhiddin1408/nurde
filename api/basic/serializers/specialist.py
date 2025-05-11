@@ -8,10 +8,12 @@ from api.basic.serializers.service import ServiceSerializer
 from apps.basic.models import Specialist, CommentReadMore
 from apps.basic.models.education import Education
 from apps.basic.models.in_work import InWork
+from apps.basic.models.work import Work
 from apps.service.models.booked import Booked
 from apps.service.models.service import WorkTime, Service
 from apps.utils.models import Category
 from apps.utils.models.like import Like
+from doctor.profile.serializers.work import WorkSerializer
 
 
 class WorkTimeSerializer(serializers.ModelSerializer):
@@ -201,8 +203,8 @@ class SpecialistByIdSerializers(serializers.ModelSerializer):
         return ServiceSerializer(service, many=True).data
 
     def get_in_work(self, obj):
-        in_work = InWork.objects.filter(specialist=obj)
-        return InWorkSerializer(in_work, many=True).data
+        in_work = Work.objects.filter(specialist=obj)
+        return WorkSerializer(in_work, many=True).data
 
     def get_is_favorite(self, obj):
         user = self.context['request']
