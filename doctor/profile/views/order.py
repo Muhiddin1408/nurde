@@ -5,7 +5,8 @@ from rest_framework.response import Response
 
 from api.basic.views.specialist import SmallPagesPagination
 from api.order.serializers.order import MyOrderSerializers
-from apps.order.models import Order, Diagnosis
+from apps.clinic.models import Symptom
+from apps.order.models import Order, Diagnosis, Recommendations
 from apps.service.models.booked import Booked
 
 
@@ -61,9 +62,49 @@ def confirm(request):
     order.save()
     return Response({'detail': 'Order status updated successfully'}, status=status.HTTP_200_OK)
 
+
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticated])
-def close(request):
+def create(request):
+    data = request.data
+    order_id = data.get('order')
+    result = data.get('result')
+    recommendations = data.get('recommendation')
+    diagnosis = data.get('diagnosis', [])
+
+    if not order_id:
+        return Response({'detail': 'order is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+    order = get_object_or_404(Order, pk=order_id, doctor__user=request.user)
+
+    # Create Recommendations
+    recommendations = Recommendations.objects.create(
+        order=order,
+        recommendation=recommendations,
+        result=result
+    )
+
+    # Add diagnosis to Recommendations
+    if diagnosis:
+        try:
+            diagnosis_ids = list(map(int, diagnosis))
+            symptoms = Symptom.objects.filter(pk__in=diagnosis_ids, type='diagnoses')
+            recommendations.diagnosis.set(symptoms)
+        except ValueError:
+            return Response({'detail': 'Diagnosis must be a list of integers'}, status=status.HTTP_400_BAD_REQUEST)
+        symptoms = Symptom.objects.filter(pk__in=diagnosis)
+        recommendations.diagnosis.set(symptoms)
+        symptoms = Symptom.objects.filter(pk__in=diagnosis)
+        recommendations.diagnosis.set(symptoms)
+
+    recommendations.save()
+
+    return Response({'detail': 'Recommendation created successfully'}, status=status.HTTP_201_CREATED)
+
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def comment(request):
     data = request.data
     order_id = data.get('order')
     comment = data.get('comment')
@@ -74,8 +115,8 @@ def close(request):
     order = get_object_or_404(Order, pk=order_id, doctor__user=request.user)
     Diagnosis.objects.create(order=order, comment=comment, diagnosis=comment)
 
-    order.status = 'inactive'
-    order.save()
+    # order.status = 'inactive'
+    # order.save()
 
     return Response({'detail': 'Order completed successfully'}, status=status.HTTP_200_OK)
 

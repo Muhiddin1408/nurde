@@ -1,7 +1,7 @@
 from django.db import models
 
 from apps.basic.models import Specialist
-from apps.clinic.models import Clinic
+from apps.clinic.models import Clinic, Symptom
 from apps.service.models.service import Service
 from apps.users.model import Patient, Address, Ankita
 from apps.utils.models import Category
@@ -49,6 +49,9 @@ class Diagnosis(models.Model):
 
 
 class Recommendations(models.Model):
-    diagnosis = models.ForeignKey(Diagnosis, on_delete=models.CASCADE)
+    diagnosis = models.ManyToManyField(Symptom, blank=True, null=True)
     recommendation = models.TextField()
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, blank=True, null=True)
+    result = models.TextField(blank=True, null=True)
+
 
