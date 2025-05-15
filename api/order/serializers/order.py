@@ -56,11 +56,12 @@ class MyOrderSerializers(serializers.ModelSerializer):
     service = serializers.SerializerMethodField()
     image = serializers.SerializerMethodField()
     diagnosis = serializers.SerializerMethodField()
+    result = serializers.SerializerMethodField()
 
     class Meta:
         model = Order
         fields = ('id', 'specialist', 'payment_status', 'address', 'datetime', 'created_at', 'price',
-                'type', 'ankita', 'service', 'payment_type', 'image', 'diagnosis')
+                'type', 'ankita', 'service', 'payment_type', 'image', 'diagnosis', 'result')
 
     def get_specialist(self, obj):
         request = self.context.get('request')
@@ -95,6 +96,11 @@ class MyOrderSerializers(serializers.ModelSerializer):
             return DiagnosisSerializers(diagnosis, many=True, context={'request': self.context['request']}).data
         return None
 
+    def get_result(self, obj):
+        result = Recommendations.objects.filter(order=obj)
+        if result.exists():
+            return RecommendationsSerializer(result, many=True, context={'request': self.context['request']}).data
+        return None
 
 
 
@@ -226,6 +232,12 @@ class DiagnosisSerializers(serializers.ModelSerializer):
 
 
 class RecommendationsSerializer(serializers.ModelSerializer):
+    diagnosis = serializers.SerializerMethodField()
+
     class Meta:
         model = Recommendations
-        fields = ('id', 'recommendation')
+        fields = ('id', 'recommendation', 'result', 'diagnosis')
+
+    def get_diagnosis(self, obj):
+        return [{"id": symptom.id, "name": symptom.name} for symptom in obj.diagnosis.all()]
+

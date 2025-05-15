@@ -99,6 +99,9 @@ def create(request):
 
     recommendations.save()
 
+    order.status = 'inactive'
+    order.save()
+
     return Response({'detail': 'Recommendation created successfully'}, status=status.HTTP_201_CREATED)
 
 
