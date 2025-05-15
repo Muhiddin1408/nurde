@@ -4,7 +4,7 @@ from doctor.profile.views.category import CategoryListView
 from doctor.profile.views.chat import MessageViewSet
 from doctor.profile.views.edu import EducationListCreateView, EducationRetrieveUpdateDestroyView, \
     FileEducationListCreateView
-from doctor.profile.views.order import OrderView, OrderDetailView, confirm, close
+from doctor.profile.views.order import OrderView, OrderDetailView, confirm, create, comment
 from doctor.profile.views.ranking import RankingView, CommentView
 from doctor.profile.views.schedule import MyScheduleView, WeekdayView, WorkTimeCreateView
 from doctor.profile.views.service import ServiceViewSet, ServiceDetail, MyCategoryViewSet
@@ -20,7 +20,8 @@ urlpatterns = [
     path('order/', OrderView.as_view(), name='order'),
     path('orders/<int:pk>/', OrderDetailView.as_view(), name='order-detail'),
     path('confirm/', confirm),
-    path('order/close/', close),
+    path('order/inactive/', create),
+    path('order/comment/', comment),
     path('category/', CategoryListView.as_view(), name='category-list'),
     path('my/category/', MyCategoryViewSet.as_view(), name='my-category-list'),
     path('chat/', MessageViewSet.as_view(), name='chat_doctor'),
