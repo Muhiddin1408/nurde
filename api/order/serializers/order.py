@@ -93,7 +93,7 @@ class MyOrderSerializers(serializers.ModelSerializer):
     def get_diagnosis(self, obj):
         diagnosis = Diagnosis.objects.filter(order=obj)
         if diagnosis.exists():
-            return DiagnosisSerializers(diagnosis, many=True, context={'request': self.context['request']}).data
+            return DiagnosisSerializer(diagnosis, many=True, context={'request': self.context['request']}).data
         return None
 
     def get_result(self, obj):
@@ -192,6 +192,11 @@ class OrderFileSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class DiagnosisSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Diagnosis
+        fields = ('id', 'comment')
 class DiagnosisSerializers(serializers.ModelSerializer):
     costumer = serializers.SerializerMethodField()
     age = serializers.SerializerMethodField()
