@@ -53,10 +53,8 @@ class CommentServiceDetailView(ListAPIView):
 @permission_classes([IsAuthenticated])
 def create_comment(request):
     data = request.data.copy()
-    print(data, "ssssssssssssssssssssss")
     data['author'] = Patient.objects.filter(user=request.user).last().id
     data['date'] = timezone.now()
-    print(data)
     serializer = CommentCreateSerializer(data=data)
     if serializer.is_valid():
         serializer.save()
