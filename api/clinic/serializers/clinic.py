@@ -72,7 +72,7 @@ class ClinicDetailSerializers(serializers.ModelSerializer):
         fields = ('id', 'ranking', 'comment', 'costumer', 'costumer_image', 'created_at')
 
     def get_costumer(self, obj):
-        return obj.author.last_name + " " + obj.author.first_name
+        return obj.author.user.last_name + " " + obj.author.user.first_name
 
     def get_costumer_image(self, obj):
         image = Patient.objects.filter(user=obj.author).first()
