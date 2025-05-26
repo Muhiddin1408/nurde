@@ -57,7 +57,7 @@ class SpecialistCategoryViewSet(viewsets.ReadOnlyModelViewSet):
     def comment(self, request, pk=None):
         query = Specialist.objects.get(id=pk)
         comment = CommentReadMore.objects.filter(read_more=query)
-        return Response(CommentReadMoreSerializer(comment, many=True).data)
+        return Response(CommentReadMoreSerializer(comment, many=True, context={"request": request}).data)
 
 
 class Comment(generics.CreateAPIView):
