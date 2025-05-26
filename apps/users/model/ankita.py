@@ -27,6 +27,7 @@ class Ankita(models.Model):
     height = models.IntegerField()
     relative_text = models.CharField(max_length=100, blank=True, null=True)
     weight = models.IntegerField()
+    waist = models.IntegerField(blank=True, null=True)
     phone = models.CharField(max_length=100, blank=True, null=True)
     # image = models.ForeignKey(ImageAnkita, on_delete=models.CASCADE, blank=True, null=True)
 
