@@ -76,8 +76,9 @@ class ClinicDetailSerializers(serializers.ModelSerializer):
 
     def get_costumer_image(self, obj):
         image = obj.author
+        request = self.context.get('request')
         if image:
-            return image.image.url
+            return request.build_absolute_uri(image.image.url)
         return None
 
 
