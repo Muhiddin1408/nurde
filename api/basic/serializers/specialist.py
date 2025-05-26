@@ -1,6 +1,6 @@
 from django.db.models import Sum
 from rest_framework import serializers
-from datetime import datetime, time as time_obj, timedelta
+from datetime import datetime, timedelta
 from datetime import time as dt_time
 from api.basic.serializers.in_work import InWorkSerializer
 from api.basic.serializers.info import EducationSerializer
@@ -111,7 +111,7 @@ class SpecialistSerializers(serializers.ModelSerializer):
     def get_price(self, obj):
         service = Service.objects.filter(user=obj.id).order_by('price').first()
         if service:
-            return service.price
+            return {"price": service.price, "name": service.category.name}
         return 0
 
     def get_in_work(self, obj):
@@ -216,9 +216,3 @@ class SpecialistByIdSerializers(serializers.ModelSerializer):
     def get_education(self, obj):
         education = Education.objects.filter(specialist=obj)
         return EducationSerializer(education, many=True).data
-
-
-
-
-
-
