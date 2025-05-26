@@ -82,9 +82,6 @@ class ClinicDetailSerializers(serializers.ModelSerializer):
         return None
 
 
-
-
-
 class ClinicServiceSerializers(serializers.ModelSerializer):
     category = serializers.SerializerMethodField()
 
