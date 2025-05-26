@@ -15,8 +15,6 @@ class OrderFile(models.Model):
     file = models.FileField(upload_to='orders/')
 
 
-
-
 class Order(models.Model):
     STATUS_CHOICES = (
         ('wait', 'wait'),
@@ -39,6 +37,7 @@ class Order(models.Model):
     price = models.IntegerField(blank=True, null=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, blank=True, null=True)
     clinic = models.ForeignKey(Clinic, blank=True, null=True, on_delete=models.CASCADE)
+    recomment = models.BooleanField(default=False)
 
 
 class Diagnosis(models.Model):
