@@ -50,7 +50,7 @@ class CommentReadMoreSerializer(serializers.Serializer):
     def get_costumer_image(self, obj):
         request = self.context.get('request')
         if obj.user.image:
-            return request.build_absolute_ur(obj.user.image.url)
+            return request.build_absolute_uri(obj.user.image.url)
         return None
 
 
