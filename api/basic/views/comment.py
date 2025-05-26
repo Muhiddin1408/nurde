@@ -36,7 +36,7 @@ class WaitCommentViewSet(generics.ListAPIView):
 
         # Orderlar: Shu userga tegishli, lekin hali comment yozilmaganlar
         orders_without_comment = Order.objects.filter(
-            doctor__user=user  # Order.user -> Patient, Patient.user -> user
+            user__user=user  # Order.user -> Patient, Patient.user -> user
         ).annotate(
             has_comment=Exists(comments)
         ).filter(
