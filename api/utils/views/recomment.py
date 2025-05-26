@@ -12,7 +12,7 @@ def comment(request):
     order = Order.objects.filter(status='inactive', recomment=False).last()
     if not order:
         return Response({'detail': ' '}, status=status.HTTP_404_NOT_FOUND)
-    order.comment = True
+    order.recomment = True
     order.save()
     serializer = MyOrderSerializers(order, context={'request': request})
     return Response(serializer.data, status=status.HTTP_200_OK)
