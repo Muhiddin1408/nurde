@@ -1,6 +1,11 @@
-from rest_framework.generics import RetrieveAPIView, ListAPIView
+from django.utils import timezone
+from rest_framework import generics, status
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.generics import RetrieveAPIView, ListAPIView, CreateAPIView
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
-from api.basic.serializers.comment import CommentSerializer
+from api.basic.serializers.comment import CommentSerializer, CommentCreateSerializer
 from api.basic.serializers.specialist import SpecialistSerializers
 from api.basic.views.specialist import SmallPagesPagination
 from api.clinic.serializers.clinic import ClinicSerializers, ClinicServiceSerializers, SpecialistServiceSerializers, \
@@ -8,6 +13,7 @@ from api.clinic.serializers.clinic import ClinicSerializers, ClinicServiceSerial
 from apps.basic.models import Specialist
 from apps.clinic.models import Clinic, Service
 from apps.clinic.models.comment import Comment
+from apps.users.model import Patient
 
 
 class CommentView(ListAPIView):
@@ -41,3 +47,18 @@ class CommentServiceDetailView(ListAPIView):
     def get_queryset(self):
         clinic_id = self.kwargs.get('clinic_id')
         return Comment.objects.filter(clinic__id=clinic_id)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def create_comment(request):
+    data = request.data.copy()
+    data['author'] = Patient.objects.filter(user=request.user).last()
+    data['date'] = timezone.now()
+
+    serializer = CommentCreateSerializer(data=data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+

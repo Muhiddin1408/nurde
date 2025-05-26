@@ -3,6 +3,7 @@ from rest_framework import serializers
 from api.basic.serializers.service import ServiceSerializer
 from api.basic.serializers.specialist import SpecialistByIdSerializers, CategorySerializer
 from apps.basic.models import CommentReadMore, CommentReadMoreLike, CommentReadMoreComment
+from apps.clinic.models import Comment
 from apps.order.models import Order
 
 
@@ -14,6 +15,13 @@ class CommentSerializer(serializers.ModelSerializer):
 
     def get_user(self, obj):
         return obj.user.lastname + " " + obj.user.firstname
+
+
+class CommentCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = ['id', 'comment', 'date', 'author', 'clinic', 'ranking', 'created_at']
+        read_only_fields = ['author', 'created_at']
 
 
 class MyCommentSerializer(serializers.ModelSerializer):
