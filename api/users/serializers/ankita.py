@@ -20,6 +20,7 @@ class AnkitaSerializer(serializers.ModelSerializer):
             'height',
             'weight',
             'phone',
+            'relative_text'
         ]
         read_only_fields = ['id']
 
