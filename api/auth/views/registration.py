@@ -277,14 +277,19 @@ class LoginWithSocialAccountViewSet(viewsets.GenericViewSet):
             auth_token = request.data['auth_token']
             status, user_data = apple.AppleOAuth2().do_auth(auth_token)
             print(status, user_data)
+            print(user_data)
             if status:
-
-                if User.objects.get(username='u' + f"{user_data['email']}").is_active:
-                    user = User.objects.get(username='u' + f"{user_data['email']}")
+                username = 'u' + user_data
+                print(username)
+                user = User.objects.filter(username=username).exists()
+                if user:
+                    if user.is_active:
+                        user = User.objects.get(username=username)
+                    else:
+                        User.objects.get(username=username).delete()
+                        user = register_social_user(user_data, 'google')
                 else:
-                    User.objects.get(username='u' + f"{user_data['email']}").delete()
-                    user = register_social_user(user_data['email'], user_data.get('given_name'),
-                                                user_data.get('family_name'), 'google')
+                    user = register_social_user(user_data,  'google')
 
                 refresh, access = get_tokens_for_user(user)
                 res = {
