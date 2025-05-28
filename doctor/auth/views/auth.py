@@ -263,7 +263,7 @@ class LoginWithSocialDoctorViewSet(viewsets.GenericViewSet):
                         User.objects.get(username=username).delete()
                         user = register_social_doctor(user_data, " ", " ", 'google')
                 else:
-                    user = register_social_doctor(user_data, 'google')
+                    user = register_social_doctor(user_data, "", " ", 'google')
 
                 refresh, access = get_tokens_for_user(user)
                 Specialist.objects.create(user=user)
