@@ -38,7 +38,6 @@ class ServiceSerializer(serializers.ModelSerializer):
         return super().create(validated_data)
 
     def update(self, instance, validated_data):
-        # Har doim status = "process"
         validated_data['status'] = 'process'
         return super().update(instance, validated_data)
 
@@ -55,5 +54,6 @@ class ServiceUpdateSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         validated_data.pop('user', None)
+        validated_data['status'] = 'process'
         return super().update(instance, validated_data)
 
