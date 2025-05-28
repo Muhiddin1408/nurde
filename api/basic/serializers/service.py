@@ -48,7 +48,7 @@ class ServiceUpdateSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'category', 'price',
             'preparation', 'description',
-            'created_at', 'updated_at'
+            'created_at', 'updated_at', 'status'
         ]
         read_only_fields = ['created_at', 'updated_at']
 
