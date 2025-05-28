@@ -183,7 +183,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'staticfiles'),
 ]
-
+PAYME_SECRET_KEY = '6830068ddfc9ac0473674de8'
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 

@@ -248,17 +248,16 @@ class LoginWithSocialAccountViewSet(viewsets.GenericViewSet):
             if status:
                 if not user_data['aud'].startswith(GOOGLE_CLIENT_ID):
                     return Response({'message': _('Access denied')}, 400)
-                if User.objects.get(username='u' + user_data['email']).is_active:
-                    user = User.objects.get(username='u' + user_data['email'])
+                if User.objects.get(username='u' + f"{user_data['email']}").is_active:
+                    user = User.objects.get(username='u' + f"{user_data['email']}")
                 else:
-                    User.objects.get(username='u' + user_data['email']).delete()
+                    User.objects.get(username='u' + f"{user_data['email']}").delete()
                     user = register_social_user(user_data['email'], user_data.get('given_name'), user_data.get('family_name'), 'google')
 
                 refresh, access = get_tokens_for_user(user)
                 res = {
                     'refresh': refresh,
                     'access': access,
-                    # 'user': user_data
                 }
 
                 return Response(res, 200)
@@ -276,6 +275,7 @@ class LoginWithSocialAccountViewSet(viewsets.GenericViewSet):
 
             auth_token = request.data['auth_token']
             status, user_data = apple.AppleOAuth2().do_auth(auth_token)
+            print(status, user_data)
             if status:
 
                 if User.objects.get(username='u' + user_data['email']).is_active:

@@ -4,7 +4,7 @@ import os
 from datetime import timedelta
 from django.utils import timezone
 from social_core.utils import handle_http_errors
-
+import logging
 
 class AppleOAuth2:
     """apple authentication backend"""
@@ -23,7 +23,6 @@ class AppleOAuth2:
         try:
 
             client_id, client_secret = self.get_key_and_secret()
-            print(client_id, client_secret)
 
             headers = {'content-type': "application/x-www-form-urlencoded"}
 
@@ -39,6 +38,7 @@ class AppleOAuth2:
 
             response_dict = res.json()
             print(response_dict)
+            logging.debug(f"Apple token response: {response_dict}")
 
             # infoUrl = 'https://appleid.apple.com/auth/authorize?client_id=' + client_id + '&nonce=' + access_token + '&response_type=code&state=state&scope=name%20email&response_mode=form_post&redirect_uri=https://travel.gazon-tashkent.uz/api/v1/auth/apple-account/'
             # resOp = requests.get(infoUrl)
@@ -67,8 +67,8 @@ class AppleOAuth2:
         client_id = os.environ.get('USER_SOCIAL_AUTH_APPLE_CLIENT_ID')
 
         private_key = open(os.environ.get('SOCIAL_AUTH_APPLE_PRIVATE_KEY_USER'), 'rb').read()
-        print(kid)
-        print(team_id)
+        print(kid, 'kid')
+        print(team_id, 'team')
         print(client_id)
         print(private_key)
 
@@ -93,5 +93,6 @@ class AppleOAuth2:
             algorithm='ES256',
             headers=headers
         )  # .decode("utf-8")
+        print(client_secret, client_id, "lllllllllllllllllllllllllllllllllllllll")
 
         return client_id, client_secret

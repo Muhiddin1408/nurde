@@ -254,10 +254,10 @@ class LoginWithSocialDoctorViewSet(viewsets.GenericViewSet):
             status, user_data = apple.AppleOAuth2().do_auth(auth_token)
             if status:
 
-                if User.objects.get(username='u' + user_data['email']).is_active:
-                    user = User.objects.get(username='u' + user_data['email'])
+                if User.objects.get(username='u' + f"{user_data['email']}").is_active:
+                    user = User.objects.get(username='u' + f"{user_data['email']}")
                 else:
-                    User.objects.get(username='u' + user_data['email']).delete()
+                    User.objects.get(username='u' + f"{user_data['email']}").delete()
                     user = register_social_user(user_data['email'], user_data.get('given_name'),
                                                 user_data.get('family_name'), 'google')
 
