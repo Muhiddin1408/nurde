@@ -230,6 +230,7 @@ class LoginWithSocialDoctorViewSet(viewsets.GenericViewSet):
                     user = register_social_doctor(user_data['email'], user_data.get('given_name'), user_data.get('family_name'), 'google')
 
                 refresh, access = get_tokens_for_user(user)
+                Specialist.objects.create(user=user)
                 res = {
                     'refresh': refresh,
                     'access': access,
@@ -265,6 +266,7 @@ class LoginWithSocialDoctorViewSet(viewsets.GenericViewSet):
                     user = register_social_doctor(user_data, 'google')
 
                 refresh, access = get_tokens_for_user(user)
+                Specialist.objects.create(user=user)
                 res = {
                     'refresh': refresh,
                     'access': access,
