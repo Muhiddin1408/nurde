@@ -28,4 +28,7 @@ class Service(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     status = models.CharField(max_length=10, default='active', choices=STATUS_CHOICES)
 
+    def __str__(self):
+        return str(self.preparation) + ' ' + str(self.description) + ' ' + str(self.category.name) + ' ' + str(self.price)
+
 
