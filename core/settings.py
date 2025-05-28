@@ -244,3 +244,4 @@ EMAIL_PORT = 587
 GOOGLE_ID_TOKEN_ISS = os.environ.get('GOOGLE_ID_TOKEN_ISS', 'https://accounts.google.com')
 GOOGLE_CLIENT_ID = os.environ.get('GOOGLE_CLIENT_ID')
 os.environ["SOCIAL_AUTH_APPLE_PRIVATE_KEY_USER"] = os.path.join(BASE_DIR, 'AuthKey_M3KQ2UTN8T.p8')
+os.environ["DOCTOR_SOCIAL_AUTH_APPLE_PRIVATE_KEY_USER"] = os.path.join(BASE_DIR, 'AuthKey_8LFQ49BWHD.p8')
