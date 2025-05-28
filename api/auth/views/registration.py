@@ -287,7 +287,7 @@ class LoginWithSocialAccountViewSet(viewsets.GenericViewSet):
                         user = User.objects.get(username=username)
                     else:
                         User.objects.get(username=username).delete()
-                        user = register_social_user(user_data, 'google')
+                        user = register_social_user(user_data," "," ",  'google')
                 else:
                     user = register_social_user(user_data,  'google')
 
