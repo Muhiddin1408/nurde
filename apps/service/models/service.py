@@ -13,6 +13,11 @@ class WorkTime(models.Model):
 
 
 class Service(models.Model):
+    STATUS_CHOICES = (
+        ('active', 'active'),
+        ('process', 'process'),
+        ('reject', 'reject')
+    )
     user = models.ForeignKey(Specialist, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     price = models.IntegerField()
@@ -21,5 +26,6 @@ class Service(models.Model):
     description = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    status = models.CharField(max_length=10, default='active', choices=STATUS_CHOICES)
 
 

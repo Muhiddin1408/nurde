@@ -109,7 +109,7 @@ class SpecialistSerializers(serializers.ModelSerializer):
         return comment
 
     def get_price(self, obj):
-        service = Service.objects.filter(user=obj.id).order_by('price').first()
+        service = Service.objects.filter(user=obj.id, status='active').order_by('price').first()
         if service:
             return ServiceSerializer(service).data
         return None
@@ -193,13 +193,13 @@ class SpecialistByIdSerializers(serializers.ModelSerializer):
         return comment
 
     def get_price(self, obj):
-        service = Service.objects.filter(user=obj.id).order_by('price').first()
+        service = Service.objects.filter(user=obj.id, status='active').order_by('price').first()
         if service:
             return ServiceSerializer(service).data
         return None
 
     def get_service(self, obj):
-        service = Service.objects.filter(user=obj.id)
+        service = Service.objects.filter(user=obj.id, status='active')
         return ServiceSerializer(service, many=True).data
 
     def get_in_work(self, obj):

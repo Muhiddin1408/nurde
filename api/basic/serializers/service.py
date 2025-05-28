@@ -17,7 +17,7 @@ class ServiceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Service
-        fields = ['id', 'category', 'price', 'preparation', 'description', 'category_name']
+        fields = ['id', 'category', 'price', 'preparation', 'description', 'category_name', 'status']
         read_only_fields = ['id', 'category_name']
 
     def get_category_name(self, obj):
@@ -33,8 +33,14 @@ class ServiceSerializer(serializers.ModelSerializer):
             validated_data['user'] = specialist
         else:
             raise serializers.ValidationError({'user': 'Invalid request context'})
+        validated_data['status'] = 'process'
 
         return super().create(validated_data)
+
+    def update(self, instance, validated_data):
+        # Har doim status = "process"
+        validated_data['status'] = 'process'
+        return super().update(instance, validated_data)
 
 
 class ServiceUpdateSerializer(serializers.ModelSerializer):
