@@ -221,8 +221,6 @@ class LoginWithSocialDoctorViewSet(viewsets.GenericViewSet):
             print(auth_token)
             status, user_data = google.Google.verify_auth_token(auth_token)
             if status:
-                # if not user_data['aud'].startswith(GOOGLE_CLIENT_ID):
-                #     return Response({'message': _('Access denied')}, 400)
                 if User.objects.get(username='d' + user_data['email']).is_active:
                     user = User.objects.get(username='d' + user_data['email'])
                 else:
@@ -230,7 +228,10 @@ class LoginWithSocialDoctorViewSet(viewsets.GenericViewSet):
                     user = register_social_doctor(user_data['email'], user_data.get('given_name'), user_data.get('family_name'), 'google')
 
                 refresh, access = get_tokens_for_user(user)
-                Specialist.objects.create(user=user)
+                if Specialist.objects.get(user=user):
+                    pass
+                else:
+                    Specialist.objects.create(user=user)
                 res = {
                     'refresh': refresh,
                     'access': access,
@@ -266,7 +267,11 @@ class LoginWithSocialDoctorViewSet(viewsets.GenericViewSet):
                     user = register_social_doctor(user_data, "", " ", 'google')
 
                 refresh, access = get_tokens_for_user(user)
-                Specialist.objects.create(user=user)
+                if Specialist.objects.get(user=user):
+                    pass
+                else:
+                    Specialist.objects.create(user=user)
+
                 res = {
                     'refresh': refresh,
                     'access': access,
