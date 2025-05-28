@@ -248,7 +248,7 @@ class LoginWithSocialAccountViewSet(viewsets.GenericViewSet):
             if status:
                 username = "u" + user_data['email']
                 print(username)
-                user = User.objects.filter(username=username).exists()
+                user = User.objects.filter(username=username).last()
                 if user:
                     if user.is_active:
                         user = User.objects.get(username=username)
