@@ -18,15 +18,14 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 from api.auth.serializers.register import RegisterSerializer, RegisterDoctorSerializer
 from api.auth.views.registration import is_all_digits
-from api.utils import google, apple
+from api.utils import google
 from api.utils.eskiz import SendSmsApiWithEskiz
 from api.utils.gmail_sms import send_sms, get_tokens_for_user, register_social_user, register_social_doctor
 from apps.basic.models import Specialist
 from apps.users.models import User
 from apps.utils.models import Category
 from doctor.auth.serializers.auth import SpecialistSerializer, SpecialistUpdateSerializer, CategorySerializer
-
-
+from doctor.auth.views import apple
 
 
 # send_sms('muhiddinturonov1416@gmail.com', "Sizning tasdiqlash codingiz " + str(1234))
