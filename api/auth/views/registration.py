@@ -61,7 +61,9 @@ class RegisterView(APIView):
                 # else:
                     # send_verification_email(phone, sms_code)
             else:
-                send_sms(phone, "Sizning tasdiqlash codingiz " + str(sms_code))
+                send_sms(phone, f'Код подтверждения для приложения OVI '
+                                f'Ваш код подтверждения для входа в приложение OVI: {sms_code}'
+                                'Если у вас возникнут вопросы или потребуется помощь, пожалуйста, сообщите.')
             return Response({'status': False},status=status.HTTP_200_OK)
         elif not user.is_active:
             sms_code = random.randint(1000, 9999)

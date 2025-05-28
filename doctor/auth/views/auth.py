@@ -79,7 +79,9 @@ class SpecialistRegister(generics.CreateAPIView):
                 # else:
                 # send_verification_email(phone, sms_code)
             else:
-                send_sms(phone, "Sizning tasdiqlash codingiz " + str(sms_code))
+                send_sms(phone, f'Код подтверждения для приложения OVI WORK '
+                                f'Ваш код подтверждения для входа в приложение OVI WORK: {sms_code}'
+                                'Если у вас возникнут вопросы или потребуется помощь, пожалуйста, сообщите.')
             return Response({'status': False}, status=status.HTTP_200_OK)
         else:
             return Response({'status': True}, status=status.HTTP_200_OK)
