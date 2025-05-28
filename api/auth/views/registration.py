@@ -247,10 +247,11 @@ class LoginWithSocialAccountViewSet(viewsets.GenericViewSet):
             status, user_data = google.Google.verify_auth_token(auth_token)
             if status:
                 username = "u" + user_data['email']
-                user = User.objects.get(username=username).exists()
+                print(username)
+                user = User.objects.filter(username=username).exists()
                 if user:
                     if user.is_active:
-                        user = User.objects.get(username='u' + user_data['email'])
+                        user = User.objects.get(username=username)
                     else:
                         User.objects.get(username='u' + user_data['email']).delete()
                         user = register_social_user(user_data['email'], user_data.get('given_name'),
