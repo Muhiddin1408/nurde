@@ -8,7 +8,7 @@ class ProfileSerializer(serializers.Serializer):
     last_name = serializers.CharField(source='user.last_name')
     first_name = serializers.CharField(source='user.first_name')
     middle_name = serializers.CharField(source='user.middle_name')
-    # username = serializers.CharField(source='user.username')
+    phone_number = serializers.CharField(source='user.phone_number')
     email = serializers.CharField(source='user.email')
     pinfl = serializers.CharField()
     description = serializers.CharField()

@@ -16,6 +16,7 @@ class User(AbstractUser):
     is_active = models.BooleanField(default=False)
     birth_day = models.DateField(blank=True, null=True)
     is_staff = models.BooleanField(default=False)
+    phone_number = models.CharField(blank=True, null=True, max_length=255)
 
 
     def __str__(self):

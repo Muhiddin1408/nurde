@@ -39,12 +39,14 @@ class ProfileUpdateSerializer(serializers.ModelSerializer):
     last_name = serializers.CharField(source='user.last_name', required=False)
     first_name = serializers.CharField(source='user.first_name', required=False)
     middle_name = serializers.CharField(source='user.middle_name', required=False)
+    phone_number = serializers.CharField(source='user.phone_number', required=False)
     username = serializers.SerializerMethodField()
     email = serializers.EmailField(source='user.email', required=False)
 
     class Meta:
         model = Patient
-        fields = ('first_name', 'last_name', 'middle_name', 'username', 'email', 'pinfl', 'image', 'name')
+        fields = ('first_name', 'last_name', 'middle_name', 'username', 'email', 'pinfl', 'image', 'name',
+                  'phone_number')
 
     def get_username(self, obj):
         if obj.user and obj.user.username:
