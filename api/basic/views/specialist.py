@@ -41,13 +41,13 @@ class SpecialistCategoryViewSet(viewsets.ReadOnlyModelViewSet):
             queryset = queryset.filter(category__id__in=category_ids)
 
         if type_:
-            if type_ == 1:
+            if type_ == '1':
                 queryset = queryset.filter(type='doctor')
-            elif type_ == 2:
+            elif type_ == '2':
                 queryset = queryset.filter(type='nurses')
-
-        if sort_by == 'ranking':
-            queryset = queryset.order_by('-ranking')
+        #
+        # if sort_by == 'ranking':
+        #     queryset = queryset.order_by('-ranking')
 
         return queryset
 
