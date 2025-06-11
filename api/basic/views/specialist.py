@@ -31,15 +31,25 @@ class SpecialistCategoryViewSet(viewsets.ReadOnlyModelViewSet):
     pagination_class = SmallPagesPagination
 
     def get_queryset(self):
-        category_ids = self.request.query_params.get('category')
+        category_ids = self.request.query_params.getlist('category')  # to'g'ridan to'g'ri list oladi
         sort_by = self.request.query_params.get('sort')
-        if category_ids:
-            queryset = Specialist.objects.filter(category__id__in=category_ids)
-            if sort_by == 'ranking':
-                queryset = Specialist.objects.filter(category__id__in=category_ids)
+        type_ = self.request.query_params.get('type')
 
-            return queryset
-        return Specialist.objects.all()
+        queryset = Specialist.objects.all()
+
+        if category_ids:
+            queryset = queryset.filter(category__id__in=category_ids)
+
+        if type_:
+            if type_ == 1:
+                queryset = queryset.filter(type='doctor')
+            elif type_ == 2:
+                queryset = queryset.filter(type='nurses')
+
+        if sort_by == 'ranking':
+            queryset = queryset.order_by('-ranking')
+
+        return queryset
 
     @action(detail=True, methods=['GET'])
     def info(self, request, pk=None):
