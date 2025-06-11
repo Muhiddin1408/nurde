@@ -9,4 +9,5 @@ urlpatterns = [
     path('order/', include('api.order.urls'), name='order'),
     path('utils/', include('api.utils.urls'), name='utils'),
     path('users/', include('api.users.urls'), name='users'),
+
 ]
