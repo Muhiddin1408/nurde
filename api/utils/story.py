@@ -10,6 +10,7 @@ class StoryListView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        stories = Story.objects.all()
+        status = self.request.query_params.get('type')
+        stories = Story.objects.filter(status=status)
         serializer = StorySerializer(stories, many=True, context={'request': request})
         return Response(serializer.data)
