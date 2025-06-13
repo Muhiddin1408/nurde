@@ -17,7 +17,7 @@ class WorkerSerializer(serializers.Serializer):
     # work_time = serializers.SerializerMethodField()
     comment = serializers.SerializerMethodField()
     ranking = serializers.SerializerMethodField()
-    price = serializers.SerializerMethodField()
+    # price = serializers.SerializerMethodField()
     # in_work = serializers.SerializerMethodField()
     # is_favorite = serializers.SerializerMethodField()
     experience = serializers.SerializerMethodField()
@@ -28,7 +28,7 @@ class WorkerSerializer(serializers.Serializer):
     class Meta:
         model = Worker
         fields = (
-            'id', 'last_name', 'first_name', 'middle_name', 'price',
+            'id', 'last_name', 'first_name', 'middle_name',
             'experience', 'category', 'type', 'type_service', 'photo', 'comment',
             'ranking',
         )
