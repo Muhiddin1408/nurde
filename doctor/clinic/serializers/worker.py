@@ -14,20 +14,35 @@ class WorkerSerializer(serializers.Serializer):
     first_name = serializers.SerializerMethodField()
     middle_name = serializers.SerializerMethodField()
     category = serializers.SerializerMethodField()
-    work_time = serializers.SerializerMethodField()
+    # work_time = serializers.SerializerMethodField()
     comment = serializers.SerializerMethodField()
     ranking = serializers.SerializerMethodField()
     price = serializers.SerializerMethodField()
-    in_work = serializers.SerializerMethodField()
-    is_favorite = serializers.SerializerMethodField()
+    # in_work = serializers.SerializerMethodField()
+    # is_favorite = serializers.SerializerMethodField()
+    experience = serializers.SerializerMethodField()
+    type = serializers.SerializerMethodField()
+    type_service = serializers.SerializerMethodField()
+    photo = serializers.SerializerMethodField()
 
     class Meta:
         model = Worker
         fields = (
             'id', 'last_name', 'first_name', 'middle_name', 'price',
-            'experience', 'category', 'type', 'type_service', 'photo', 'work_time', 'comment',
-            'ranking', 'in_work', 'is_favorite'
+            'experience', 'category', 'type', 'type_service', 'photo', 'comment',
+            'ranking',
         )
+
+    def get_experience(self, obj):
+        return obj.specialist.experience
+
+    def get_type_service(self, obj):
+        return obj.specialist.type_service
+
+    def get_photo(self, obj):
+        return obj.specialist.photo
+    def get_type(self, obj):
+        return obj.specialist.type
 
     def get_id(self, obj):
         return obj.specialist.id
