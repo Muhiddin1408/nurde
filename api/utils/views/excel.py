@@ -14,7 +14,7 @@ from apps.utils.models import Category
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def symbtom(request):
-    file_path = os.path.join(settings.BASE_DIR, 'static', 'aaa.xlsx')  # Fayl nomini moslashtiring
+    file_path = os.path.join(settings.BASE_DIR, 'static', 'aaaaa.xlsx')  # Fayl nomini moslashtiring
     if not os.path.exists(file_path):
         return Response({"error": "Fayl topilmadi: mmm.xlsx"}, status=400)
 
