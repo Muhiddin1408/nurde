@@ -14,7 +14,7 @@ class WorkerView(APIView):
         status_param = request.query_params.get('status')
         user = request.user.specialist
 
-        admin = AdminClinic.objects.filter(user=user, status=True).last()
+        admin = AdminClinic.objects.filter(specialist=user, status=True).last()
 
         if admin:
             clinic = admin.clinic
