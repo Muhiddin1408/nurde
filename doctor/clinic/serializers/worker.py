@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 
+from django.db.models import Sum
 from rest_framework import serializers
 
 from api.basic.serializers.specialist import CategorySerializer
@@ -63,12 +64,12 @@ class WorkerSerializer(serializers.Serializer):
     #     return data
 
     def get_ranking(self, obj):
-        total_ranking = CommentReadMore.objects.filter(read_more=obj).aggregate(Sum('ranking'))['ranking__sum'] or 0
-        len = CommentReadMore.objects.filter(read_more=obj).count() or 1
+        total_ranking = CommentReadMore.objects.filter(read_more=obj.specialist).aggregate(Sum('ranking'))['ranking__sum'] or 0
+        len = CommentReadMore.objects.filter(read_more=obj.specialist).count() or 1
         return total_ranking/len
 
     def get_comment(self, obj):
-        comment = CommentReadMore.objects.filter(read_more=obj.id).count()
+        comment = CommentReadMore.objects.filter(read_more=obj.specialist.id).count()
         return comment
 
     # def get_price(self, obj):
