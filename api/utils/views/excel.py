@@ -1,3 +1,4 @@
+from django.conf import settings
 
 from apps.clinic.models import Symptom
 
@@ -12,7 +13,7 @@ from rest_framework.response import Response
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def symbtom(request):
-    file_path = 'mmm.xlsx'  # Fayl nomini moslashtiring
+    file_path = os.path.join(settings.BASE_DIR, 'media', 'mmm.xlsx')  # Fayl nomini moslashtiring
     if not os.path.exists(file_path):
         return Response({"error": "Fayl topilmadi: mmm.xlsx"}, status=400)
 
