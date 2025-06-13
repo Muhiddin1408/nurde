@@ -8,19 +8,20 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+from apps.utils.models import Category
 
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def symbtom(request):
-    file_path = os.path.join(settings.BASE_DIR, 'static', 'mmm.xlsx')  # Fayl nomini moslashtiring
+    file_path = os.path.join(settings.BASE_DIR, 'static', 'aaa.xlsx')  # Fayl nomini moslashtiring
     if not os.path.exists(file_path):
         return Response({"error": "Fayl topilmadi: mmm.xlsx"}, status=400)
 
     df = pd.read_excel(file_path)
 
     for index, row in df.iterrows():
-        name = f'{row[1]} | {row[0]}'  # Ustun indekslarini tekshiring
-        Symptom.objects.create(name=name, type='diagnoses')
+        name = f'{row[1]}'  # Ustun indekslarini tekshiring
+        Category.objects.create(name=name,)
 
     return Response({"message": "Ma'lumotlar muvaffaqiyatli saqlandi"})
