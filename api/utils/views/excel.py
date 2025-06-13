@@ -20,7 +20,7 @@ def symbtom(request):
     df = pd.read_excel(file_path)
 
     for index, row in df.iterrows():
-        name = f'{row[1]} | {row[2]}'  # Ustun indekslarini tekshiring
+        name = f'{row[1]} | {row[0]}'  # Ustun indekslarini tekshiring
         Symptom.objects.create(name=name, type='diagnoses')
 
     return Response({"message": "Ma'lumotlar muvaffaqiyatli saqlandi"})
