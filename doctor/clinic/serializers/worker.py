@@ -29,6 +29,9 @@ class WorkerSerializer(serializers.Serializer):
             'ranking', 'in_work', 'is_favorite'
         )
 
+    def get_id(self, obj):
+        return obj.specialist.id
+
     def get_last_name(self, obj):
         print(obj)
         return obj.specialist.user.last_name
