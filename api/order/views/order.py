@@ -1,4 +1,4 @@
-from payme import Payme
+from payment import Payme
 from rest_framework import viewsets, permissions, status, generics
 from rest_framework.generics import ListAPIView
 from rest_framework.response import Response

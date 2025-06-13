@@ -1,7 +1,7 @@
 from typing import Optional
 
-from payme.classes.http import HttpClient
-from payme.types.response import cards as response
+from payment.classes.http import HttpClient
+from payment.types.response import cards as response
 
 
 ALLOWED_METHODS = {

@@ -8,10 +8,10 @@ from django.utils.module_loading import import_string
 from rest_framework import views
 from rest_framework.response import Response
 
-from payme import exceptions
+from payment import exceptions
 from apps.utils.models.payme import PaymeTransactions
-from payme.types import response
-from payme.util import time_to_payme, time_to_service
+from payment.types import response
+from payment.util import time_to_payme, time_to_service
 
 logger = logging.getLogger(__name__)
 AccountModel = import_string(settings.PAYME_ACCOUNT_MODEL)

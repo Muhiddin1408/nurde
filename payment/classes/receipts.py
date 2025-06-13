@@ -1,9 +1,9 @@
 from typing import Union, Optional
 from urllib.parse import parse_qs
 
-from payme.classes.cards import Cards
-from payme.classes.http import HttpClient
-from payme.types.response import receipts as response
+from payment.classes.cards import Cards
+from payment.classes.http import HttpClient
+from payment.types.response import receipts as response
 
 
 ALLOWED_METHODS = {

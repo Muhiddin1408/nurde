@@ -1,10 +1,10 @@
 
 from typing import Union
 
-from payme.const import Networks
-from payme.classes.cards import Cards
-from payme.classes.receipts import Receipts
-from payme.classes.initializer import Initializer
+from payment.const import Networks
+from payment.classes.cards import Cards
+from payment.classes.receipts import Receipts
+from payment.classes.initializer import Initializer
 
 
 class Payme:

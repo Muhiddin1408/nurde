@@ -1,4 +1,4 @@
-from payme.views.view import PaymeWebHookAPIView
+from payment.views.view import PaymeWebHookAPIView
 
 
 class PaymeCallBackAPIView(PaymeWebHookAPIView):

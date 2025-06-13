@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'parler',
     'corsheaders',
-    'payme'
+    'payment'
 ]
 
 APPEND_SLASH = True

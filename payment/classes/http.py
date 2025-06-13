@@ -1,6 +1,6 @@
 import requests
 
-from payme.exceptions import general as exc
+from payment.exceptions import general as exc
 
 
 networking_errors = (
