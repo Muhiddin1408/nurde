@@ -14,3 +14,12 @@ class StoryListView(APIView):
         stories = Story.objects.filter(status=status)
         serializer = StorySerializer(stories, many=True, context={'request': request})
         return Response(serializer.data)
+
+
+class StoryViewSet(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def create(self, request):
+        story = request.data['story']
+        StoryView.objects.create(story=story, user=request.user)
+

@@ -5,7 +5,7 @@ from doctor.auth.views.auth import SpecialistRegister, SpecialistUpdate, passwor
     LoginWithSocialDoctorViewSet
 from doctor.auth.views.dashboard import DashboardView
 from doctor.auth.views.forget import forget, sms_forget, password_forget
-from doctor.auth.views.profile import ProfileView
+from doctor.auth.views.profile import ProfileView, CreateAdminClinicView
 
 router = SimpleRouter()
 router.register('google', LoginWithSocialDoctorViewSet, 'doctor-google')
@@ -23,4 +23,5 @@ urlpatterns = [
     path('forget/', forget, name='forget'),
     path('sms_forget/', sms_forget, name='sms_forget'),
     path('password_forget/', password_forget, name='password_forget'),
+    path('admin/create/', CreateAdminClinicView.as_view(), name='create_admin'),
 ] + router.urls

@@ -12,6 +12,7 @@ class Specialist(models.Model):
     TYPE_CHOICES = (
         ('nurses', "nurses"),
         ('doctor', "doctor"),
+        ('clinic', "clinic"),
     )
     TYPE_SERVICE = (
         ('online', "online"),
@@ -43,3 +44,22 @@ class Specialist(models.Model):
     class Meta:
         verbose_name = 'Специалисты'
         verbose_name_plural = 'Специалисты'
+
+
+class AdminClinic(models.Model):
+    TYPE_CHOICES = (
+        ('admin', "admin"),
+        ('director', "director"),
+        ('manager', "manager"),
+        ('sub_director', "sub_director"),
+    )
+    specialist = models.OneToOneField(Specialist, on_delete=models.CASCADE)
+    clinic = models.ForeignKey(Clinic, on_delete=models.CASCADE)
+    status = models.BooleanField(default=False)
+    type = models.CharField(max_length=100, blank=True, null=True, choices=TYPE_CHOICES)
+
+
+class Worker(models.Model):
+    specialist = models.ForeignKey(Specialist, on_delete=models.CASCADE)
+    clinic = models.ForeignKey(Clinic, on_delete=models.CASCADE)
+    status = models.BooleanField(default=False)

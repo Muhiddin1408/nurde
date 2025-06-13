@@ -1,3 +1,4 @@
+from payme import Payme
 from rest_framework import viewsets, permissions, status, generics
 from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
@@ -35,6 +36,28 @@ class OrderViewSet(generics.CreateAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderSerializers
     permission_classes = [permissions.IsAuthenticated]
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        # Order saqlanadi
+        order = serializer.save(user=request.user)
+
+        # Payme bilan to'lov havolasini yaratish
+        payme = Payme(payme_id="6830068ddfc9ac0473674de8")  # <-- o'zingizning `payme_id` ni kiriting
+        pay_link = payme.initializer.generate_pay_link(
+            id=order.id,
+            amount=order.amount,  # modelda `amount` bo‘lishi kerak
+            return_url="https://example.com/return-url"
+        )
+
+        # Javobni qaytarish (order va payme link bilan)
+        return Response({
+            'order_id': order.id,
+            'amount': order.amount,
+            'pay_link': pay_link
+        }, status=status.HTTP_201_CREATED)
 
 
 class ImageViewSet(ListAPIView):

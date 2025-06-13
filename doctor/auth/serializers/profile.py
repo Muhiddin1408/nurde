@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.basic.models import Specialist
+from apps.basic.models import Specialist, AdminClinic
 
 
 class ProfileSerializer(serializers.Serializer):
@@ -20,3 +20,11 @@ class ProfileSerializer(serializers.Serializer):
     class Meta:
         model = Specialist
         fields = '__all__'
+
+
+class AdminClinicSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = AdminClinic
+        fields = '__all__'
+
+

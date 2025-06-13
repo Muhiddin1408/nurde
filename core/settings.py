@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'parler',
     'corsheaders',
+    'payme'
 ]
 
 APPEND_SLASH = True
@@ -245,3 +246,10 @@ GOOGLE_ID_TOKEN_ISS = os.environ.get('GOOGLE_ID_TOKEN_ISS', 'https://accounts.go
 GOOGLE_CLIENT_ID = os.environ.get('GOOGLE_CLIENT_ID')
 os.environ["SOCIAL_AUTH_APPLE_PRIVATE_KEY_USER"] = os.path.join(BASE_DIR, 'AuthKey_M3KQ2UTN8T.p8')
 os.environ["DOCTOR_SOCIAL_AUTH_APPLE_PRIVATE_KEY_USER"] = os.path.join(BASE_DIR, 'AuthKey_8LFQ49BWHD.p8')
+
+PAYME_ID = "your-payme-id"
+PAYME_KEY = "your-payme-key"
+PAYME_ACCOUNT_FIELD = "order_id"
+PAYME_AMOUNT_FIELD = "total_amount"
+PAYME_ACCOUNT_MODEL = "orders.models.Orders"
+PAYME_ONE_TIME_PAYMENT = True
