@@ -45,7 +45,7 @@ class WorkerSerializer(serializers.Serializer):
         return obj.specialist.type
 
     def get_id(self, obj):
-        return obj.specialist.pk
+        return obj.first().specialist.pk
 
     def get_last_name(self, obj):
         print(obj)
