@@ -19,10 +19,11 @@ class WorkerView(APIView):
         if admin:
             clinic = admin.clinic
             if status_param == 'active':
-                worker = Worker.objects.filter(clinic=clinic)
+                worker = Worker.objects.filter(clinic=clinic, status=True)
                 serializer = WorkerSerializer(worker, context={"request": request})
                 return Response(serializer.data)
-
-
-
+            else:
+                worker = Worker.objects.filter(clinic=clinic, status=False)
+                serializer = WorkerSerializer(worker, context={"request": request})
+                return Response(serializer.data)
         return Response({"error": "Admin topilmadi yoki status noto‘g‘ri"}, status=404)
