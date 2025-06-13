@@ -57,6 +57,8 @@ class AdminClinic(models.Model):
     clinic = models.ForeignKey(Clinic, on_delete=models.CASCADE)
     status = models.BooleanField(default=False)
     type = models.CharField(max_length=100, blank=True, null=True, choices=TYPE_CHOICES)
+    phone = models.IntegerField(blank=True, null=True)
+    email = models.EmailField(blank=True, null=True)
 
 
 class Worker(models.Model):

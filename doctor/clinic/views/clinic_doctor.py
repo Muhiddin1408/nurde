@@ -1,8 +1,9 @@
+from rest_framework.exceptions import ValidationError
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
-from django.core.exceptions import ObjectDoesNotExist# Assume a serializer exists
+from django.core.exceptions import ObjectDoesNotExist
 
 from apps.basic.models import AdminClinic
 from apps.clinic.models import Clinic
@@ -18,6 +19,8 @@ class AdminClinicDoctorView(APIView):
             # Validate required fields
             clinic_id = data.get('clinic_id')
             role_type = data.get('type')
+            phone = data.get('phone')
+            email = data.get('email')
 
             if not clinic_id or not role_type:
                 return Response(
@@ -41,6 +44,32 @@ class AdminClinicDoctorView(APIView):
                     status=status.HTTP_400_BAD_REQUEST
                 )
 
+            # Validate phone (if provided)
+            if phone is not None:
+                try:
+                    phone = int(phone)  # Ensure it's a valid integer
+                    if phone < 0:
+                        return Response(
+                            {'error': 'Phone number cannot be negative'},
+                            status=status.HTTP_400_BAD_REQUEST
+                        )
+                except (ValueError, TypeError):
+                    return Response(
+                        {'error': 'Invalid phone number format'},
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
+
+            # Validate email (if provided)
+            if email is not None:
+                from django.core.validators import validate_email
+                try:
+                    validate_email(email)
+                except ValidationError:
+                    return Response(
+                        {'error': 'Invalid email format'},
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
+
             # Verify user has a specialist profile
             try:
                 specialist = request.user.specialist
@@ -50,7 +79,7 @@ class AdminClinicDoctorView(APIView):
                     status=status.HTTP_403_FORBIDDEN
                 )
 
-            # Check for existing AdminClinic entry (optional, depending on requirements)
+            # Check for existing AdminClinic entry
             if AdminClinic.objects.filter(specialist=specialist, clinic=clinic).exists():
                 return Response(
                     {'error': 'Specialist is already associated with this clinic'},
@@ -62,10 +91,12 @@ class AdminClinicDoctorView(APIView):
                 specialist=specialist,
                 clinic=clinic,
                 type=role_type,
-                status=True  # Set status explicitly if needed
+                status=True,  # Set explicitly, adjust based on requirements
+                phone=phone,
+                email=email
             )
 
-            # Serialize response (optional, for better client feedback)
+            # Serialize response
             serializer = AdminClinicSerializer(admin_clinic)
             return Response(
                 {'msg': 'Admin clinic doctor added', 'data': serializer.data},
