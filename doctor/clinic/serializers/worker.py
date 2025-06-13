@@ -40,7 +40,9 @@ class WorkerSerializer(serializers.Serializer):
         return obj.specialist.type_service
 
     def get_photo(self, obj):
-        return obj.specialist.photo
+        if obj.specialist.photo:
+            return obj.specialist.photo.url
+        return None
     def get_type(self, obj):
         return obj.specialist.type
 
