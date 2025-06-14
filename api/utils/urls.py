@@ -12,5 +12,5 @@ urlpatterns = [
     path('payme/', payme_api, name='payme_api'),
     path('stories/', StoryListView.as_view(), name='story_list'),
     path('symbtom/', symbtom, name='symbtomsss'),
-    path('ankita/order/', AnkitaHistoryViewSet.as_view(), name='order-ankita')
+    path('ankita/order/<int:pk>/', AnkitaHistoryViewSet.as_view(), name='order-ankita')
 ]
