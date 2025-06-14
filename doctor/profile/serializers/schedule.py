@@ -151,7 +151,7 @@ class WorkTimeClinicSerializer(serializers.Serializer):
         WorkTime.objects.filter(user__user=request.user).delete()
         try:
             clinic = request.user.specialist.adminclinic.clinic
-            WorkTime.objects.filter(user_id=validated_data['specialist'], clinic=clinic)
+            WorkTime.objects.filter(user_id=validated_data['specialist'], clinic=clinic).delete()
         except Specialist.DoesNotExist:
             raise serializers.ValidationError({'user': 'Specialist not found'})
         created_worktimes = [
