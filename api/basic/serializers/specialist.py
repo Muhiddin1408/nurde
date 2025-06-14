@@ -5,7 +5,7 @@ from datetime import time as dt_time
 from api.basic.serializers.in_work import InWorkSerializer
 from api.basic.serializers.info import EducationSerializer
 from api.basic.serializers.service import ServiceSerializer
-from apps.basic.models import Specialist, CommentReadMore
+from apps.basic.models import Specialist, CommentReadMore, Worker
 from apps.basic.models.education import Education
 from apps.basic.models.in_work import InWork
 from apps.basic.models.work import Work
@@ -126,6 +126,10 @@ class SpecialistSerializers(serializers.ModelSerializer):
         return is_favorite
 
 
+class WorkerByIDSerializers(serializers.ModelSerializer):
+    pass
+
+
 class SpecialistByIdSerializers(serializers.ModelSerializer):
     last_name = serializers.SerializerMethodField()
     first_name = serializers.SerializerMethodField()
@@ -140,13 +144,14 @@ class SpecialistByIdSerializers(serializers.ModelSerializer):
     is_favorite = serializers.SerializerMethodField()
     info = serializers.CharField()
     education = serializers.SerializerMethodField()
+    clinic = serializers.SerializerMethodField()
 
     class Meta:
         model = Specialist
         fields = (
             'id', 'last_name', 'first_name', 'middle_name', 'service', 'price',
             'experience', 'category', 'type', 'type_service', 'photo', 'work_time', 'comment',
-            'ranking', 'in_work', 'is_favorite', 'education', 'info', 'description'
+            'ranking', 'in_work', 'is_favorite', 'education', 'info', 'description', 'clinic'
         )
 
 
@@ -216,3 +221,7 @@ class SpecialistByIdSerializers(serializers.ModelSerializer):
     def get_education(self, obj):
         education = Education.objects.filter(specialist=obj)
         return EducationSerializer(education, many=True).data
+
+    def get_clinic(self, obj):
+        work = Worker.objects.filter(specialist=obj)
+        return WorkerByIDSerializers(work, context={""})

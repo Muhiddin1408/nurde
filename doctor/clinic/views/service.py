@@ -18,6 +18,8 @@ class ServiceViewSet(viewsets.ModelViewSet):
         return Service.objects.none()
 
     def perform_create(self, serializer):
-        # avtomatik clinic ni biriktirib qo‘yish
         clinic = self.request.user.specialist.adminclinic.clinic
-        serializer.save(clinic=clinic)
+        serializer.save(clinic=clinic, status='process')
+
+    def perform_update(self, serializer):
+        serializer.save(status='process')

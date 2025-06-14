@@ -9,7 +9,11 @@ class ServiceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Service
         fields = '__all__'
-        read_only_fields = ['clinic']
+        read_only_fields = ['clinic', 'status']
 
     def get_category_name(self, obj):
         return obj.category.name if obj.category else None
+
+    def update(self, instance, validated_data):
+        validated_data['status'] = 'process'
+        return super().update(instance, validated_data)

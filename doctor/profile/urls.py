@@ -9,6 +9,7 @@ from doctor.profile.views.ranking import RankingView, CommentView
 from doctor.profile.views.schedule import MyScheduleView, WeekdayView, WorkTimeCreateView
 from doctor.profile.views.service import ServiceViewSet, ServiceDetail, MyCategoryViewSet
 from doctor.profile.views.work import WorkListCreateView, WorkRetrieveUpdateDestroyView, FileWorkListCreateView
+from doctor.profile.views.worker import WorkerDoctorCreat, WorkerViewSet
 
 urlpatterns = [
     path('educations/', EducationListCreateView.as_view(), name='education-list-create'),
@@ -32,4 +33,6 @@ urlpatterns = [
     path('my/schedule/', MyScheduleView.as_view(), name='my-schedule'),
     path('create/schedule/', WorkTimeCreateView.as_view(), name='create-schedule'),
     path('weekday/', WeekdayView.as_view(), name='weekday'),
+    path('create/work/', WorkerDoctorCreat.as_view()),
+    path('work/', WorkerViewSet.as_view()),
 ]

@@ -5,7 +5,11 @@ from apps.utils.models.category import Category
 
 
 class Service(models.Model):
-
+    STATUS_CHOICES = (
+        ('active', 'active'),
+        ('process', 'process'),
+        ('reject', 'reject')
+    )
     clinic = models.ForeignKey(Clinic, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='services', blank=True, null=True)
     price = models.IntegerField(blank=True, null=True)
@@ -15,6 +19,7 @@ class Service(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, blank=True, null=True)
     name = models.CharField(max_length=100, blank=True, null=True)
+    status = models.CharField(max_length=100, default='process', choices=STATUS_CHOICES, blank=True, null=True)
 
     class Meta:
         verbose_name = 'Услуги'
