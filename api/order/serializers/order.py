@@ -6,6 +6,7 @@ from rest_framework import serializers
 from api.auth.serializers.address import AddressSerializer
 from api.basic.serializers.service import ServiceSerializer
 from api.basic.serializers.specialist import SpecialistSerializers
+from api.clinic.serializers.clinic import ClinicSerializers
 from api.users.serializers.ankita import AnkitaSerializer
 from apps.basic.models import Specialist
 from apps.order.models import Order, OrderFile, Phone, Diagnosis, Recommendations
@@ -20,13 +21,11 @@ class MyOrderListSerializers(serializers.ModelSerializer):
     address = serializers.SerializerMethodField()
     ankita_name = serializers.SerializerMethodField()
     clinic = serializers.SerializerMethodField()
-    clinic_address = serializers.SerializerMethodField()
-    clinic_phone = serializers.SerializerMethodField()
 
     class Meta:
         model = Order
         fields = ('id', 'doctor', 'address', 'ankita_name', 'price', 'payment_status', 'service', 'type', 'datetime',
-                  'clinic', 'clinic_address', 'clinic_phone')
+                  'clinic')
 
     def get_service(self, obj):
         return ServiceSerializer(obj.service.all(), many=True, context={'request': self.context['request']}).data
@@ -49,18 +48,8 @@ class MyOrderListSerializers(serializers.ModelSerializer):
 
     def get_clinic(self, obj):
         if obj.clinic:
-            return obj.clinic.name
+            return ClinicSerializers(obj.clinic, context={'request': self.context['request']}).data
         return None
-
-    def get_clinic_address(self, obj):
-        if obj.clinic:
-            return obj.clinic.address
-        return None
-
-    def get_clinic_phone(self, obj):
-        if obj.clinic:
-            return obj.clinic.phone
-        return
 
 
 class MyOrderSerializers(serializers.ModelSerializer):
