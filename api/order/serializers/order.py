@@ -149,7 +149,8 @@ class OrderSerializers(serializers.ModelSerializer):
             'service',
             'phone',
             'phone_numbers',
-            'price'
+            'price',
+            'clinic'
         ]
         read_only_fields = ['id', 'created_at']
 
