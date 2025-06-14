@@ -2,6 +2,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from apps.basic.models import AdminClinic
 from doctor.clinic.serializers.info import ClinicSerializers
 
 
@@ -10,5 +11,6 @@ class ClinicInfo(APIView):
 
     def get(self, request):
         clinic = request.user.specialist
-        ser = ClinicSerializers(clinic, context={'request': request})
+        admin = AdminClinic.objects.filter(specialist=clinic).first()
+        ser = ClinicSerializers(admin, context={'request': request})
         return Response(ser.data)
