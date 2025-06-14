@@ -140,7 +140,7 @@ class WorkerByIDSerializers(serializers.ModelSerializer):
         return obj.clinic.name
 
     def get_service(self, obj):
-        service = ClinicService.objects.filter(clinic=obj.clinic, status='active').first()
+        service = ClinicService.objects.filter(clinic=obj.clinic, status='active')
         return ServiceSerializer(service, many=True).data
 
     def get_date(self, obj):
