@@ -1,4 +1,4 @@
-from payment import Payme
+from payme.classes.client import Payme
 from rest_framework import viewsets, permissions, status, generics
 from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
@@ -49,8 +49,7 @@ class OrderViewSet(generics.CreateAPIView):
         payme = Payme(payme_id="6830068ddfc9ac0473674de8")  # <-- o'zingizning `payme_id` ni kiriting
         pay_link = payme.initializer.generate_pay_link(
             id=order.id,
-            amount=order.amount,  # modelda `amount` bo‘lishi kerak
-            return_url="https://example.com/return-url"
+            amount=order.amount,
         )
 
         # Javobni qaytarish (order va payme link bilan)
