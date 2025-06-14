@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from apps.basic.models import Worker
+from apps.users.model import Image
 
 
 class WorkerDoctorSerializer(serializers.Serializer):
@@ -15,7 +16,8 @@ class WorkerDoctorSerializer(serializers.Serializer):
 
     def get_image(self, obj):
         request = self.context.get('request')
-        if obj.clinic.image:
-            return request.build_absolute_uri(obj.clinic.image.url)
+        if obj.clinic:
+            image = Image.objects.filter(clinic=obj.clinic)
+            return request.build_absolute_uri(image.url)
         return None
 
