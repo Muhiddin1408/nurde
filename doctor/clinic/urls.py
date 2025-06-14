@@ -4,6 +4,7 @@ from rest_framework.routers import DefaultRouter
 from doctor.clinic.views.change_worker import ChangeWorker, ImageCreateAPIView
 from doctor.clinic.views.clinic_doctor import AdminClinicDoctorView
 from doctor.clinic.views.info import ClinicInfo, DoctorInfo
+from doctor.clinic.views.order import OrderView
 from doctor.clinic.views.schedule import WorkTimeCreateClinicView, WorkTimeDoctorClinicView
 from doctor.clinic.views.service import ServiceViewSet
 from doctor.clinic.views.worker import WorkerView
@@ -20,4 +21,5 @@ urlpatterns = [
     path('image/', ImageCreateAPIView.as_view(), name='image'),
     path('info/', ClinicInfo.as_view(), name='clinic-info'),
     path('time/doctor/', DoctorInfo.as_view(), name='clinic-info'),
+    path('order/', OrderView.as_view(), name='order-info'),
 ] + router.urls
