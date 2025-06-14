@@ -17,7 +17,7 @@ class WorkerDoctorSerializer(serializers.Serializer):
     def get_image(self, obj):
         request = self.context.get('request')
         if obj.clinic:
-            image = Image.objects.filter(clinic=obj.clinic)
+            image = Image.objects.filter(clinic=obj.clinic).last()
             return request.build_absolute_uri(image.url)
         return None
 
