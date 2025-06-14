@@ -83,7 +83,6 @@ class WorkTimeBulkWrapperSerializer(serializers.Serializer):
         # bulk_create – tezroq
         WorkTime.objects.bulk_create(created_worktimes)
 
-        # bulk_create qaytarmaydi id'lar bilan to‘ldirilgan obyektlar, shuning uchun qayta olib kelamiz
         return created_worktimes
 
     def to_representation(self, instance):
@@ -103,31 +102,38 @@ class WorkTimeBulkClinicSerializer(serializers.Serializer):
         request = self.context.get('request')
         WorkTime.objects.filter(user__user=request.user).delete()
         try:
-            specialist = request.user.specialist.adminclinic.clinic
+            clinic = request.user.specialist.adminclinic.clinic
 
         except Specialist.DoesNotExist:
             raise serializers.ValidationError({'user': 'Specialist not found'})
-        created_worktimes = [
-            WorkTime(
-                user=None,
-                weekday=item['weekday'],  # DRF allaqachon Weekday instance qilib beradi
-                date=item.get('date'),
-                finish=item.get('finish'),
-                clinic=specialist
+        worktime_data = validated_data.pop('data')
+        result = []
+        for item in worktime_data:
+            weekday = item['weekday']
+            date = item.get('date')
+            finish = item.get('finish')
 
+            # clinic va weekday bo‘yicha tekshirib update yoki create qilish
+            obj, _ = WorkTime.objects.update_or_create(
+                clinic=clinic,
+                weekday=weekday,
+                defaults={
+                    'date': date,
+                    'finish': finish,
+                    'clinic': clinic
+                }
             )
-            for item in validated_data['data']
-        ]
+            result.append(obj)
         fields_to_update = ['phone', 'latitude', 'longitude', 'address', 'description']
         updated = False
 
         for field in fields_to_update:
             if field in validated_data:
-                setattr(specialist, field, validated_data[field])
+                setattr(clinic, field, validated_data[field])
                 updated = True
 
         if updated:
-            specialist.save()
+            clinic.save()
         image_id = validated_data.get('image_id')
         if image_id:
             try:
@@ -136,7 +142,7 @@ class WorkTimeBulkClinicSerializer(serializers.Serializer):
                 image.save()
             except Image.DoesNotExist:
                 raise serializers.ValidationError({'image_id': 'Image not found'})
-        WorkTime.objects.bulk_create(created_worktimes)
+
         return created_worktimes
 
 

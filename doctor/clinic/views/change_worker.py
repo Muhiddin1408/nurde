@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from apps.basic.models import Worker
+from apps.users.model import Image
 from doctor.clinic.serializers.change import ImageSerializer
 
 
@@ -39,8 +40,11 @@ class ImageCreateAPIView(APIView):
     parser_classes = (MultiPartParser, FormParser)  # Rasm yuklash uchun kerak
 
     def post(self, request):
+        clinic = request.user.specialist.adminclinic.clinic
         serializer = ImageSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            Image.objects.filter(clinic=clinic).delete()
+            serializer.save(clinic=clinic)
+
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

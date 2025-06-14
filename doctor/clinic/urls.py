@@ -2,7 +2,7 @@ from django.urls import path
 
 from doctor.clinic.views.change_worker import ChangeWorker, ImageCreateAPIView
 from doctor.clinic.views.clinic_doctor import AdminClinicDoctorView
-from doctor.clinic.views.info import ClinicInfo
+from doctor.clinic.views.info import ClinicInfo, DoctorInfo
 from doctor.clinic.views.schedule import WorkTimeCreateClinicView, WorkTimeDoctorClinicView
 from doctor.clinic.views.worker import WorkerView
 
@@ -14,4 +14,5 @@ urlpatterns = [
     path('change/status/', ChangeWorker.as_view(), name='change-status'),
     path('image/', ImageCreateAPIView.as_view(), name='image'),
     path('info/', ClinicInfo.as_view(), name='clinic-info'),
+    path('time/doctor/', DoctorInfo.as_view(), name='clinic-info'),
 ]
