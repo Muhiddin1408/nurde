@@ -49,7 +49,7 @@ def confirm(request):
     if not order_id or not action_type:
         return Response({'detail': 'order and status are required'}, status=status.HTTP_400_BAD_REQUEST)
 
-    order = get_object_or_404(Order, pk=order_id, doctor__user=request.user)
+    order = get_object_or_404(Order, pk=order_id)
 
     if action_type == 'active':
         order.status = 'active'
