@@ -9,8 +9,7 @@ class ServiceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Service
         fields = '__all__'
+        read_only_fields = ['clinic']
 
     def get_category_name(self, obj):
-        if obj.category:
-            return obj.category.name
-        return None
+        return obj.category.name if obj.category else None
