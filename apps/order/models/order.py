@@ -24,7 +24,7 @@ class Order(models.Model):
     )
     customer = models.ForeignKey(Patient, on_delete=models.CASCADE)
     doctor = models.ForeignKey(Specialist, on_delete=models.CASCADE)
-    address = models.ForeignKey(Address, on_delete=models.CASCADE)
+    address = models.ForeignKey(Address, on_delete=models.CASCADE, blank=True, null=True)
     payment_status = models.BooleanField(default=False)
     payment_type = models.CharField(max_length=20, blank=True, null=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='wait')
