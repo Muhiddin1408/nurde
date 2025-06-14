@@ -19,10 +19,14 @@ class MyOrderListSerializers(serializers.ModelSerializer):
     doctor = serializers.SerializerMethodField()
     address = serializers.SerializerMethodField()
     ankita_name = serializers.SerializerMethodField()
+    clinic = serializers.SerializerMethodField()
+    clinic_address = serializers.SerializerMethodField()
+    clinic_phone = serializers.SerializerMethodField()
 
     class Meta:
         model = Order
-        fields = ('id', 'doctor', 'address', 'ankita_name', 'price', 'payment_status', 'service', 'type', 'datetime')
+        fields = ('id', 'doctor', 'address', 'ankita_name', 'price', 'payment_status', 'service', 'type', 'datetime',
+                  'clinic', 'clinic_address', 'clinic_phone')
 
     def get_service(self, obj):
         return ServiceSerializer(obj.service.all(), many=True, context={'request': self.context['request']}).data
@@ -42,6 +46,21 @@ class MyOrderListSerializers(serializers.ModelSerializer):
     def get_ankita_name(self, obj):
 
         return obj.ankita.name
+
+    def get_clinic(self, obj):
+        if obj.clinic:
+            return obj.clinic.name
+        return None
+
+    def get_clinic_address(self, obj):
+        if obj.clinic:
+            return obj.clinic.address
+        return None
+
+    def get_clinic_phone(self, obj):
+        if obj.clinic:
+            return obj.clinic.phone
+        return
 
 
 class MyOrderSerializers(serializers.ModelSerializer):
