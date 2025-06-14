@@ -75,7 +75,7 @@ def create(request):
     if not order_id:
         return Response({'detail': 'order is required'}, status=status.HTTP_400_BAD_REQUEST)
 
-    order = get_object_or_404(Order, pk=order_id, doctor__user=request.user)
+    order = get_object_or_404(Order, pk=order_id)
 
     # Create Recommendations
     recommendations = Recommendations.objects.create(
