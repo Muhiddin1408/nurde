@@ -42,21 +42,21 @@ class OrderViewSet(generics.CreateAPIView):
         serializer.is_valid(raise_exception=True)
 
         # Order saqlanadi
-        user = Patient.objects.filter(user=request.user.id).last()
+        # user = Patient.objects.filter(user=request.user.id).last()
         order = serializer.save()
 
         # Payme bilan to'lov havolasini yaratish
-        payme = Payme(payme_id="6830068ddfc9ac0473674de8")  # <-- o'zingizning `payme_id` ni kiriting
-        pay_link = payme.initializer.generate_pay_link(
-            id=order.id,
-            amount=order.amount,
-        )
+        # payme = Payme(payme_id="6830068ddfc9ac0473674de8")  # <-- o'zingizning `payme_id` ni kiriting
+        # pay_link = payme.initializer.generate_pay_link(
+        #     id=order.id,
+        #     amount=order.amount,
+        # )
 
         # Javobni qaytarish (order va payme link bilan)
         return Response({
             'order_id': order.id,
             'amount': order.amount,
-            'pay_link': pay_link
+            # 'pay_link': pay_link
         }, status=status.HTTP_201_CREATED)
 
 
