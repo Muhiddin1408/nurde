@@ -1,7 +1,9 @@
 from rest_framework import serializers
 
 from apps.clinic.models import Clinic
+from apps.service.models.service import WorkTime
 from apps.users.model import Image
+from doctor.profile.serializers.schedule import WorkTimeSerializer
 
 
 class ClinicSerializers(serializers.Serializer):
@@ -16,10 +18,12 @@ class ClinicSerializers(serializers.Serializer):
     description = serializers.CharField(read_only=True)
 
     types = serializers.SerializerMethodField()
+    date = serializers.DateField(read_only=True)
 
     class Meta:
         model = Clinic
-        fields = ('id', 'name', 'address', 'phone', 'image', 'category', 'latitude', 'longitude', 'description', 'types')
+        fields = ('id', 'name', 'address', 'phone', 'image', 'category', 'latitude', 'longitude', 'description',
+                  'types', 'date')
 
     def get_image(self, obj):
         request = self.context.get('request')  # request ni olib olamiz
@@ -30,13 +34,13 @@ class ClinicSerializers(serializers.Serializer):
             return image.image.url  # fallback
         return None
 
-
-
-
-
-
-
     def get_types(self, obj):
         if obj.types:
             return obj.types.name
+        return None
+
+    def get_date(self, obj):
+        work = WorkTime.objects.filter(clinic=obj, user=None)
+        if work:
+            return WorkTimeSerializer(work, many=True).data
         return None
