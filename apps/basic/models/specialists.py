@@ -62,6 +62,12 @@ class AdminClinic(models.Model):
 
 
 class Worker(models.Model):
+    STATUS_CHOICES = (
+        ('active', "active"),
+        ('inactive', "inactive"),
+        ('waiting', "waiting"),
+        ('rejected', "rejected"),
+    )
     specialist = models.ForeignKey(Specialist, on_delete=models.CASCADE)
     clinic = models.ForeignKey(Clinic, on_delete=models.CASCADE)
-    status = models.BooleanField(default=False)
+    status = models.CharField(max_length=100, default='waiting', choices=STATUS_CHOICES)
