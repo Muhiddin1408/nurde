@@ -131,10 +131,12 @@ class WorkerByIDSerializers(serializers.ModelSerializer):
     clinic = serializers.SerializerMethodField(read_only=True)
     service = serializers.SerializerMethodField(read_only=True)
     date = serializers.SerializerMethodField(read_only=True)
+    id = serializers.SerializerMethodField(read_only=True)
+    address = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Worker
-        fields = ('clinic', 'service', 'date')
+        fields = ('id', 'clinic', 'service', 'date', 'address')
 
     def get_clinic(self, obj):
         return obj.clinic.name
@@ -162,6 +164,12 @@ class WorkerByIDSerializers(serializers.ModelSerializer):
                     time.append({'time': i.date})
             data.append({'date': date, 'time': time})
         return data
+
+    def get_id(self, obj):
+        return obj.clinic.id
+
+    def get_address(self, obj):
+        return obj.clinic.address
 
 
 
