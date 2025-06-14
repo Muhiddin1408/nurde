@@ -260,4 +260,4 @@ class SpecialistByIdSerializers(serializers.ModelSerializer):
     def get_clinic(self, obj):
         request = self.context['request']
         work = Worker.objects.filter(specialist=obj)
-        return WorkerByIDSerializers(work, context={"request": request})
+        return WorkerByIDSerializers(work, many=True, context={"request": request})
