@@ -18,7 +18,7 @@ class ClinicSerializers(serializers.Serializer):
     description = serializers.CharField(read_only=True)
 
     types = serializers.SerializerMethodField()
-    date = serializers.DateField(read_only=True)
+    date = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Clinic
