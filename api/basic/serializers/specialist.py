@@ -134,7 +134,7 @@ class WorkerByIDSerializers(serializers.ModelSerializer):
 
     class Meta:
         model = Worker
-        fields = ('clinic', 'service',)
+        fields = ('clinic', 'service', 'date')
 
     def get_clinic(self, obj):
         return obj.clinic.name
