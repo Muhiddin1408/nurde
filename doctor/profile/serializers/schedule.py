@@ -1,9 +1,9 @@
 from rest_framework import serializers, status
 from rest_framework.response import Response
 
-from apps.basic.models import Specialist
+from apps.basic.models import Specialist, Worker
 from apps.service.models.service import WorkTime
-from apps.users.model import Weekday
+from apps.users.model import Weekday, Image
 
 
 class WeekdaySerializer(serializers.ModelSerializer):
@@ -91,11 +91,12 @@ class WorkTimeBulkWrapperSerializer(serializers.Serializer):
 
 
 class WorkTimeBulkClinicSerializer(serializers.Serializer):
-    data = WorkTimeSerializer(many=True)
-    phone = serializers.IntegerField(write_only=True)
-    latitude = serializers.FloatField(write_only=True)
-    longitude = serializers.FloatField(write_only=True)
-    address = serializers.CharField(write_only=True)
+    data = WorkTimeSerializer(many=True, read_only=True)
+    phone = serializers.IntegerField(write_only=True, required=False)
+    latitude = serializers.FloatField(write_only=True, required=False)
+    longitude = serializers.FloatField(write_only=True, required=False)
+    address = serializers.CharField(write_only=True, required=False)
+    image_id = serializers.IntegerField(write_only=True, required=False)
 
     def create(self, validated_data):
         request = self.context.get('request')
@@ -126,6 +127,39 @@ class WorkTimeBulkClinicSerializer(serializers.Serializer):
 
         if updated:
             specialist.save()
+        if validated_data.get('image_id'):
+            Image.objects.get(id=validated_data.get('image_id')).update(clinic=specialist)
+        WorkTime.objects.bulk_create(created_worktimes)
+        return created_worktimes
+
+
+class WorkTimeClinicSerializer(serializers.Serializer):
+    data = WorkTimeSerializer(many=True, read_only=True)
+    status = serializers.CharField(write_only=True, required=False)
+    specialist = serializers.IntegerField(write_only=True)
+
+    def create(self, validated_data):
+        request = self.context.get('request')
+        WorkTime.objects.filter(user__user=request.user).delete()
+        try:
+            clinic = request.user.specialist.adminclinic.clinic
+
+        except Specialist.DoesNotExist:
+            raise serializers.ValidationError({'user': 'Specialist not found'})
+        created_worktimes = [
+            WorkTime(
+                user_id=validated_data['specialist'],
+                weekday=item['weekday'],
+                date=item.get('date'),
+                finish=item.get('finish'),
+                clinic=clinic
+
+            )
+            for item in validated_data['data']
+        ]
+        if validated_data['status']:
+            Worker.objects.filter(specialist_id=validated_data['specialist']).update(status=validated_data['status'])
+
         WorkTime.objects.bulk_create(created_worktimes)
         return created_worktimes
 
