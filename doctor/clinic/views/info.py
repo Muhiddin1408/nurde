@@ -26,4 +26,4 @@ class DoctorInfo(APIView):
         clinic = request.user.specialist
         admin = AdminClinic.objects.filter(specialist=clinic).first()
         work = WorkTime.objects.filter(user_id=specialist_id, clinic=admin.clinic)
-        return WorkTimeSerializer(work, many=True).data
+        return Response(WorkTimeSerializer(work, many=True).data)
