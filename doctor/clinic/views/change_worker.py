@@ -21,8 +21,8 @@ class ChangeWorker(APIView):
 
         try:
             worker = Worker.objects.filter(specialist_id=specialist_id).last()
-            if worker.clinic.id == request.user.specialist.clinic.id:
-                return Response({"error": "Admin Xato"},)
+            if worker.clinic.id == request.user.specialist.adminclinic.clinic.id:
+                return Response({"error": "Admin Xato"})
             if not worker:
                 return Response({"error": "Worker topilmadi"}, status=status.HTTP_404_NOT_FOUND)
 
