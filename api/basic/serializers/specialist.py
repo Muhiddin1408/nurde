@@ -150,7 +150,7 @@ class WorkerByIDSerializers(serializers.ModelSerializer):
         for i in range(11):
             date = today + timedelta(days=i)
             time = []
-            work_qs = WorkTime.objects.filter(user=obj.user, weekday__name=date.weekday(), clinic=obj.clinic)
+            work_qs = WorkTime.objects.filter(user=obj.specialist, weekday__name=date.weekday(), clinic=obj.clinic)
             for i in work_qs:
                 in_time = i.date
                 if in_time is None:
