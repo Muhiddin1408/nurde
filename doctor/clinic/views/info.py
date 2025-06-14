@@ -22,8 +22,8 @@ class DoctorInfo(APIView):
     permission_classes = (IsAuthenticated,)
 
     def get(self, request):
-        specialist = request.parmas['specialist']
+        specialist_id = request.query_params.get('specialist')
         clinic = request.user.specialist
         admin = AdminClinic.objects.filter(specialist=clinic).first()
-        work = WorkTime.objects.filter(user_id=specialist, clinic=admin.clinic)
+        work = WorkTime.objects.filter(user_id=specialist_id, clinic=admin.clinic)
         return WorkTimeSerializer(work, many=True).data
