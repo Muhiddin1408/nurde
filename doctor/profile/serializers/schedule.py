@@ -91,7 +91,7 @@ class WorkTimeBulkWrapperSerializer(serializers.Serializer):
 
 
 class WorkTimeBulkClinicSerializer(serializers.Serializer):
-    data = WorkTimeSerializer(many=True, read_only=True)
+    data = WorkTimeSerializer(many=True, required=True)
     phone = serializers.IntegerField(write_only=True, required=False)
     latitude = serializers.FloatField(write_only=True, required=False)
     longitude = serializers.FloatField(write_only=True, required=False)
