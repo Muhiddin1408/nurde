@@ -16,14 +16,14 @@ class ClinicSerializers(serializers.Serializer):
     latitude = serializers.FloatField(read_only=True)
     longitude = serializers.FloatField(read_only=True)
     description = serializers.CharField(read_only=True)
-
+    balance = serializers.IntegerField(read_only=True)
     types = serializers.SerializerMethodField()
     date = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Clinic
         fields = ('id', 'name', 'address', 'phone', 'image', 'category', 'latitude', 'longitude', 'description',
-                  'types', 'date')
+                  'types', 'date', 'balance')
 
     def get_image(self, obj):
         request = self.context.get('request')  # request ni olib olamiz
@@ -44,3 +44,6 @@ class ClinicSerializers(serializers.Serializer):
         if work:
             return WorkTimeSerializer(work, many=True).data
         return None
+
+    def get_balance(self, obj):
+        return 50000

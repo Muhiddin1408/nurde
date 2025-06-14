@@ -65,11 +65,12 @@ class MyOrderSerializers(serializers.ModelSerializer):
     image = serializers.SerializerMethodField()
     diagnosis = serializers.SerializerMethodField()
     result = serializers.SerializerMethodField()
+    clinic = serializers.SerializerMethodField()
 
     class Meta:
         model = Order
         fields = ('id', 'specialist', 'payment_status', 'address', 'datetime', 'created_at', 'price',
-                'type', 'ankita', 'service', 'payment_type', 'image', 'diagnosis', 'result')
+                'type', 'ankita', 'service', 'payment_type', 'image', 'diagnosis', 'result', 'clinic')
 
     def get_specialist(self, obj):
         request = self.context.get('request')
@@ -109,6 +110,12 @@ class MyOrderSerializers(serializers.ModelSerializer):
         if result.exists():
             return RecommendationsSerializer(result, many=True, context={'request': self.context['request']}).data
         return None
+
+    def get_clinic(self, obj):
+        if obj.clinic:
+            return ClinicSerializers(obj.clinic, context={'request': self.context['request']}).data
+        return None
+
 
 
 

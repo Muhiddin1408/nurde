@@ -13,9 +13,13 @@ class ProfileSerializer(serializers.Serializer):
     pinfl = serializers.CharField()
     description = serializers.CharField()
     username = serializers.SerializerMethodField()
+    balance = serializers.SerializerMethodField()
 
     def get_username(self, obj):
         return obj.user.username[1:] if obj.user.username else ''
+
+    def get_balance(self, obj):
+        return 50000
 
     class Meta:
         model = Specialist
