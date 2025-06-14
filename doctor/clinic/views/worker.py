@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from api.basic.serializers.specialist import SpecialistSerializers
+from api.basic.views.specialist import SmallPagesPagination
 from apps.basic.models import AdminClinic, Worker
 from doctor.clinic.serializers.worker import WorkerSerializer
 
@@ -15,14 +16,17 @@ class WorkerView(APIView):
         user = request.user.specialist
 
         admin = AdminClinic.objects.filter(specialist=user, status=True).last()
+        if not admin:
+            return Response({"error": "Admin topilmadi yoki status noto‘g‘ri"}, status=404)
 
-        if admin:
-            clinic = admin.clinic
-            worker = None
-            if status_param:
-                worker = Worker.objects.filter(clinic=clinic, status=status_param)
+        clinic = admin.clinic
+        queryset = Worker.objects.filter(clinic=clinic)
 
-            serializer = WorkerSerializer(worker, many=True, context={"request": request})
-            return Response(serializer.data)
+        if status_param is not None:
+            queryset = queryset.filter(status=status_param)
 
-        return Response({"error": "Admin topilmadi yoki status noto‘g‘ri"}, status=404)
+        paginator = SmallPagesPagination()
+        page = paginator.paginate_queryset(queryset, request)
+        serializer = WorkerSerializer(page, many=True, context={"request": request})
+
+        return paginator.get_paginated_response(serializer.data)

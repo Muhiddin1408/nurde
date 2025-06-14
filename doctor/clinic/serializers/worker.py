@@ -40,8 +40,9 @@ class WorkerSerializer(serializers.Serializer):
         return obj.specialist.type_service
 
     def get_photo(self, obj):
-        if obj.specialist.photo:
-            return obj.specialist.photo.url
+        request = self.context.get('request')  # Serializer contextdan requestni olamiz
+        if obj.specialist.photo and request:
+            return request.build_absolute_uri(obj.specialist.photo.url)
         return None
     def get_type(self, obj):
         return obj.specialist.type
