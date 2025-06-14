@@ -12,5 +12,5 @@ class ClinicInfo(APIView):
     def get(self, request):
         clinic = request.user.specialist
         admin = AdminClinic.objects.filter(specialist=clinic).first()
-        ser = ClinicSerializers(admin, context={'request': request})
+        ser = ClinicSerializers(admin.clinic, context={'request': request})
         return Response(ser.data)
