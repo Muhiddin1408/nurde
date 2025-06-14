@@ -42,7 +42,8 @@ class OrderViewSet(generics.CreateAPIView):
         serializer.is_valid(raise_exception=True)
 
         # Order saqlanadi
-        order = serializer.save(user=request.user)
+        user = Patient.objects.filter(user=request.user.id).last()
+        order = serializer.save()
 
         # Payme bilan to'lov havolasini yaratish
         payme = Payme(payme_id="6830068ddfc9ac0473674de8")  # <-- o'zingizning `payme_id` ni kiriting
