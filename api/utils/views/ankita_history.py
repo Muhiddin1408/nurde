@@ -11,4 +11,5 @@ class AnkitaHistoryViewSet(APIView):
     permission_classes = (IsAuthenticated,)
     def get(self, request, *args, **kwargs):
         order = Order.objects.filter(ankita_id=kwargs['pk'])
-        return Response(MyOrderSerializers(order, many=True).data)
+        serializer = MyOrderSerializers(order, many=True, context={'request': request})
+        return Response(serializer.data)
