@@ -55,7 +55,7 @@ class OrderViewSet(generics.CreateAPIView):
         # Javobni qaytarish (order va payme link bilan)
         return Response({
             'order_id': order.id,
-            'amount': order.amount,
+            # 'amount': order.amount,
             # 'pay_link': pay_link
         }, status=status.HTTP_201_CREATED)
 
