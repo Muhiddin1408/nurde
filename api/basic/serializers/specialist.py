@@ -14,6 +14,7 @@ from apps.service.models.service import WorkTime, Service
 from apps.utils.models import Category
 from apps.utils.models.like import Like
 from doctor.profile.serializers.work import WorkSerializer
+from apps.clinic.models.service import Service as ClinicService
 
 
 class WorkTimeSerializer(serializers.ModelSerializer):
@@ -127,7 +128,41 @@ class SpecialistSerializers(serializers.ModelSerializer):
 
 
 class WorkerByIDSerializers(serializers.ModelSerializer):
-    pass
+    clinic = serializers.SerializerMethodField(read_only=True)
+    service = serializers.SerializerMethodField(read_only=True)
+    date = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = Worker
+        fields = ('clinic', 'service',)
+
+    def get_clinic(self, obj):
+        return obj.clinic.name
+
+    def get_service(self, obj):
+        service = ClinicService.objects.filter(clinic=obj.clinic, status='active').first()
+        return ServiceSerializer(service, many=True).data
+
+    def get_date(self, obj):
+        today = datetime.today().date()
+
+        data = []
+        for i in range(11):
+            date = today + timedelta(days=i)
+            time = []
+            work_qs = WorkTime.objects.filter(user=obj.user, weekday__name=date.weekday(), clinic=obj.clinic)
+            for i in work_qs:
+                in_time = i.date
+                if in_time is None:
+                    in_time = dt_time(0, 0)
+                now = datetime.now()
+                combined_datetime = datetime.combine(date, in_time)
+                book = Booked.objects.filter(worktime=i).exists()
+                if not book and combined_datetime > now and not i.date is None:
+                    time.append({'time': i.date})
+            data.append({'date': date, 'time': time})
+        return data
+
 
 
 class SpecialistByIdSerializers(serializers.ModelSerializer):
@@ -174,7 +209,7 @@ class SpecialistByIdSerializers(serializers.ModelSerializer):
         for i in range(11):
             date = today + timedelta(days=i)
             time = []
-            work_qs = WorkTime.objects.filter(user=obj.id, weekday__name=date.weekday())
+            work_qs = WorkTime.objects.filter(user=obj.id, weekday__name=date.weekday(), clinic=None)
             for i in work_qs:
                 in_time = i.date
                 if in_time is None:
@@ -223,5 +258,6 @@ class SpecialistByIdSerializers(serializers.ModelSerializer):
         return EducationSerializer(education, many=True).data
 
     def get_clinic(self, obj):
+        request = self.context['request']
         work = Worker.objects.filter(specialist=obj)
-        return WorkerByIDSerializers(work, context={""})
+        return WorkerByIDSerializers(work, context={"request": request})
