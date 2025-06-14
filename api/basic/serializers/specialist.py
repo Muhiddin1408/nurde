@@ -261,5 +261,5 @@ class SpecialistByIdSerializers(serializers.ModelSerializer):
         request = self.context['request']
         work = Worker.objects.filter(specialist=obj)
         if work:
-            return WorkerByIDSerializers(work, many=True, context={"request": request})
+            return WorkerByIDSerializers(work, many=True, context={"request": request}).data
         return None
