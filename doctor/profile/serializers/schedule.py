@@ -102,38 +102,33 @@ class WorkTimeBulkClinicSerializer(serializers.Serializer):
         request = self.context.get('request')
         WorkTime.objects.filter(user__user=request.user).delete()
         try:
-            clinic = request.user.specialist.adminclinic.clinic
-
+            specialist = request.user.specialist.adminclinic.clinic
+            WorkTime.objects.filter(clinic=specialist, user=None).delete()
         except Specialist.DoesNotExist:
             raise serializers.ValidationError({'user': 'Specialist not found'})
-        worktime_data = validated_data.pop('data')
-        result = []
-        for item in worktime_data:
-            weekday = item['weekday']
-            date = item.get('date')
-            finish = item.get('finish')
+        created_worktimes = [
+            WorkTime(
+                user=None,
+                weekday=item['weekday'],  # DRF allaqachon Weekday instance qilib beradi
+                date=item.get('date'),
+                finish=item.get('finish'),
+                clinic=specialist
 
-            # clinic va weekday bo‘yicha tekshirib update yoki create qilish
-            obj, _ = WorkTime.objects.update_or_create(
-                clinic=clinic,
-                weekday=weekday,
-                defaults={
-                    'date': date,
-                    'finish': finish,
-                    'clinic': clinic
-                }
             )
-            result.append(obj)
+            for item in validated_data['data']
+        ]
+
+        WorkTime.objects.bulk_create(created_worktimes)
         fields_to_update = ['phone', 'latitude', 'longitude', 'address', 'description']
         updated = False
 
         for field in fields_to_update:
             if field in validated_data:
-                setattr(clinic, field, validated_data[field])
+                setattr(specialist, field, validated_data[field])
                 updated = True
 
         if updated:
-            clinic.save()
+            specialist.save()
         image_id = validated_data.get('image_id')
         if image_id:
             try:
