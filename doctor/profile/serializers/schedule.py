@@ -127,8 +127,14 @@ class WorkTimeBulkClinicSerializer(serializers.Serializer):
 
         if updated:
             specialist.save()
-        if validated_data.get('image_id'):
-            Image.objects.get(id=validated_data.get('image_id')).update(clinic=specialist)
+        image_id = validated_data.get('image_id')
+        if image_id:
+            try:
+                image = Image.objects.get(id=image_id)
+                image.clinic = specialist
+                image.save()
+            except Image.DoesNotExist:
+                raise serializers.ValidationError({'image_id': 'Image not found'})
         WorkTime.objects.bulk_create(created_worktimes)
         return created_worktimes
 
