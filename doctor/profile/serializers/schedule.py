@@ -140,7 +140,7 @@ class WorkTimeBulkClinicSerializer(serializers.Serializer):
 
 
 class WorkTimeClinicSerializer(serializers.Serializer):
-    data = WorkTimeSerializer(many=True, read_only=True)
+    data = WorkTimeSerializer(many=True, required=True)
     status = serializers.CharField(write_only=True, required=False)
     specialist = serializers.IntegerField(write_only=True)
 
