@@ -117,7 +117,7 @@ class OrderSerializers(serializers.ModelSerializer):
         queryset=Specialist.objects.all()
     )
     address = serializers.PrimaryKeyRelatedField(
-        queryset=Address.objects.all()
+        queryset=Address.objects.all(), required=False
     )
     ankita = serializers.PrimaryKeyRelatedField(
         queryset=Ankita.objects.all(),
