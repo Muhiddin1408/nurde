@@ -12,7 +12,7 @@ class WorkerViewSet(APIView):
     def get(self, request):
         status_param = request.query_params.get('status')
         user = request.user.specialist
-        queryset = Worker.objects.filter(clinic=user, status=status_param)
+        queryset = Worker.objects.filter(specialist=user, status=status_param)
         paginator = SmallPagesPagination()
         page = paginator.paginate_queryset(queryset, request)
         serializer = WorkerDoctorSerializer(page, many=True, context={"request": request})
