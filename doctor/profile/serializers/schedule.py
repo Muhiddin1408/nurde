@@ -97,6 +97,7 @@ class WorkTimeBulkClinicSerializer(serializers.Serializer):
     longitude = serializers.FloatField(write_only=True, required=False)
     address = serializers.CharField(write_only=True, required=False)
     image_id = serializers.IntegerField(write_only=True, required=False)
+    description = serializers.CharField(write_only=True, required=False)
 
     def create(self, validated_data):
         request = self.context.get('request')
@@ -117,7 +118,7 @@ class WorkTimeBulkClinicSerializer(serializers.Serializer):
             )
             for item in validated_data['data']
         ]
-        fields_to_update = ['phone', 'latitude', 'longitude', 'address']
+        fields_to_update = ['phone', 'latitude', 'longitude', 'address', 'description']
         updated = False
 
         for field in fields_to_update:

@@ -125,7 +125,8 @@ def password_conf(request):
         token = RefreshToken.for_user(user)
         return Response({
             'access': str(token.access_token),
-            'refresh': str(token)
+            'refresh': str(token),
+            'type': user.specialist.type
         }, status=status.HTTP_200_OK)
 
     except ObjectDoesNotExist:
@@ -163,6 +164,7 @@ def login(request):
             result = {
                 'access': str(token.access_token),
                 'refresh': str(token),
+                'type': user.specialist.type
             }
 
             return Response(result, status=status.HTTP_200_OK)
@@ -237,6 +239,7 @@ class LoginWithSocialDoctorViewSet(viewsets.GenericViewSet):
                 res = {
                     'refresh': refresh,
                     'access': access,
+                    'type': user.specialist.type
                     # 'user': user_data
                 }
 
@@ -277,6 +280,7 @@ class LoginWithSocialDoctorViewSet(viewsets.GenericViewSet):
                 res = {
                     'refresh': refresh,
                     'access': access,
+                    'type': user.specialist.type
                 }
 
                 return Response(res, 200)
