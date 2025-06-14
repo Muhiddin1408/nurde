@@ -1,15 +1,17 @@
 from django.db import models
 
 from apps.basic.models import Specialist
+from apps.clinic.models import Clinic
 from apps.users.model.weekday import Weekday
 from apps.utils.models import Category
 
 
 class WorkTime(models.Model):
-    user = models.ForeignKey(Specialist, on_delete=models.CASCADE)
+    user = models.ForeignKey(Specialist, on_delete=models.CASCADE, blank=True, null=True)
     weekday = models.ForeignKey(Weekday, on_delete=models.CASCADE)
     date = models.TimeField(blank=True, null=True)
     finish = models.TimeField(blank=True, null=True)
+    clinic = models.ForeignKey(Clinic, on_delete=models.CASCADE, blank=True, null=True,)
 
 
 class Service(models.Model):

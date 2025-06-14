@@ -89,3 +89,46 @@ class WorkTimeBulkWrapperSerializer(serializers.Serializer):
     def to_representation(self, instance):
         return WorkTimeSerializer(instance, many=True, context=self.context).data
 
+
+class WorkTimeBulkClinicSerializer(serializers.Serializer):
+    data = WorkTimeSerializer(many=True)
+    phone = serializers.IntegerField(write_only=True)
+    latitude = serializers.FloatField(write_only=True)
+    longitude = serializers.FloatField(write_only=True)
+    address = serializers.CharField(write_only=True)
+
+    def create(self, validated_data):
+        request = self.context.get('request')
+        WorkTime.objects.filter(user__user=request.user).delete()
+        try:
+            specialist = request.user.specialist.adminclinic.clinic
+
+        except Specialist.DoesNotExist:
+            raise serializers.ValidationError({'user': 'Specialist not found'})
+        created_worktimes = [
+            WorkTime(
+                user=None,
+                weekday=item['weekday'],  # DRF allaqachon Weekday instance qilib beradi
+                date=item.get('date'),
+                finish=item.get('finish'),
+                clinic=specialist
+
+            )
+            for item in validated_data['data']
+        ]
+        fields_to_update = ['phone', 'latitude', 'longitude', 'address']
+        updated = False
+
+        for field in fields_to_update:
+            if field in validated_data:
+                setattr(specialist, field, validated_data[field])
+                updated = True
+
+        if updated:
+            specialist.save()
+        WorkTime.objects.bulk_create(created_worktimes)
+        return created_worktimes
+
+    def to_representation(self, instance):
+        return WorkTimeSerializer(instance, many=True, context=self.context).data
+
