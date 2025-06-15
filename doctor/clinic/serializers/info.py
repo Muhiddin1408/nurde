@@ -16,7 +16,7 @@ class ClinicSerializers(serializers.Serializer):
     latitude = serializers.FloatField(read_only=True)
     longitude = serializers.FloatField(read_only=True)
     description = serializers.CharField(read_only=True)
-    balance = serializers.IntegerField(read_only=True)
+    balance = serializers.SerializerMethodField(read_only=True)
     types = serializers.SerializerMethodField()
     date = serializers.SerializerMethodField(read_only=True)
 
