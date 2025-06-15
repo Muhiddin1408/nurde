@@ -1,9 +1,9 @@
 from django.urls import path
 
-from .views import PaymeCallBackAPIView
+from payment.views.payme import payme_callback
 
 urlpatterns = [
 
-    path("payment/update/", PaymeCallBackAPIView.as_view()),
+    path('payme/callback/', payme_callback, name='payme-callback')
 
 ]

@@ -14,6 +14,7 @@ class ProfileSerializer(serializers.Serializer):
     description = serializers.CharField()
     username = serializers.SerializerMethodField()
     balance = serializers.SerializerMethodField()
+    id = serializers.IntegerField()
 
     def get_username(self, obj):
         return obj.user.username[1:] if obj.user.username else ''
