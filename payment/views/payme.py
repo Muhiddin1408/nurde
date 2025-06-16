@@ -44,7 +44,7 @@ def generate_payme_link(order_id, amount):
     payload = f"{MERCHANT_ID}:{order_id}".encode('utf-8')
     encoded_id = base64.b64encode(payload).decode('utf-8')
 
-    return f"https://checkout.paycom.uz/{encoded_id}?amount={amount_in_tiyin}&account[order_id]={order_id}"
+    return f"https://checkout.paycom.uz/{encoded_id}?amount={amount_in_tiyin}&order_id={order_id}"
 
 
 class PaymeInitAPIView(APIView):

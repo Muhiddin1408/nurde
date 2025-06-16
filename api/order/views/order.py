@@ -57,7 +57,7 @@ class OrderViewSet(generics.CreateAPIView):
         return Response({
             'order_id': order.id,
             # 'amount': order.amount,
-            'pay_link': generate_payme_link(order, order.price)
+            'pay_link': generate_payme_link(order.id, order.price)
         }, status=status.HTTP_201_CREATED)
 
 
