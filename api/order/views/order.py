@@ -8,6 +8,7 @@ from api.order.serializers.order import MyOrderSerializers, OrderSerializers, Or
     MyOrderListSerializers
 from apps.order.models import Order, OrderFile, Diagnosis
 from apps.users.model import Patient
+from payment.views.payme import generate_payme_link
 
 
 class MyOrderViewSet(viewsets.ReadOnlyModelViewSet):
@@ -56,7 +57,7 @@ class OrderViewSet(generics.CreateAPIView):
         return Response({
             'order_id': order.id,
             # 'amount': order.amount,
-            # 'pay_link': pay_link
+            'pay_link': generate_payme_link(order, order.price)
         }, status=status.HTTP_201_CREATED)
 
 
