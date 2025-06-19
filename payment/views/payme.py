@@ -35,7 +35,7 @@ MERCHANT_ID = "6830068ddfc9ac0473674de8"  # o'zgaruvchi sifatida tashqariga chiq
 # utils/payme.py
 import base64
 
-def generate_payme_link(order_id, amount):
+def generate_payme_link(order_id, amount, MERCHANT_ID):
     """
     amount so'mda (masalan: 5000)
     Payme uchun tiyin kerak => amount * 100
