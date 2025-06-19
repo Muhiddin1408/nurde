@@ -55,7 +55,7 @@ def payme_callback_doctor(request):
 
     if method == "CheckPerformTransaction":
         balance = Balance.objects.get(user=user)
-        amount = params["amount"]
+        amount = params.get("amount")
         if balance.excit():
             balance.amount += amount
             balance.save()
@@ -80,7 +80,9 @@ def payme_callback_doctor(request):
             "result": {
                 # "create_time": int(order.created_at.timestamp() * 1000),
                 "transaction": params.get("id"),
-                "state": 1
+                "state": 1,
+                'username': username,
+                "amount": params.get("amount"),
             }
         })
 
