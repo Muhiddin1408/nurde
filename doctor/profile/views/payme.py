@@ -60,7 +60,7 @@ def payme_callback_doctor(request):
             balance.balance += amount
             balance.save()
         else:
-            balance = Balance(user=user, amount=amount)
+            balance = Balance(user=user, balance=amount)
 
         Payment.objects.create(user=user, amount=amount, status='doctor')
 
