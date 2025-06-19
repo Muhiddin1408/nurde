@@ -41,7 +41,7 @@ def payme_callback_doctor(request):
 
     method = data.get("method")
     params = data.get("params", {})
-    amount = data.get("amount")
+    # amount = data.get("amount")
     username = params.get("account", {}).get("username")
 
     # if not order_id:
@@ -55,6 +55,7 @@ def payme_callback_doctor(request):
 
     if method == "CheckPerformTransaction":
         balance = Balance.objects.get(user=user)
+        amount = params["amount"]
         if balance.excit():
             balance.amount += amount
             balance.save()
