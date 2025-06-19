@@ -57,7 +57,7 @@ def payme_callback_doctor(request):
         balance = Balance.objects.filter(user=user).last()
         amount = params.get("amount")
         if balance:
-            balance.amount += amount
+            balance.balance += amount
             balance.save()
         else:
             balance = Balance(user=user, amount=amount)
