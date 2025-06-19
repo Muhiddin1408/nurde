@@ -5,6 +5,7 @@ from doctor.profile.views.chat import MessageViewSet
 from doctor.profile.views.edu import EducationListCreateView, EducationRetrieveUpdateDestroyView, \
     FileEducationListCreateView
 from doctor.profile.views.order import OrderView, OrderDetailView, confirm, create, comment
+from doctor.profile.views.payme import payment, payme_callback_doctor
 from doctor.profile.views.ranking import RankingView, CommentView
 from doctor.profile.views.schedule import MyScheduleView, WeekdayView, WorkTimeCreateView
 from doctor.profile.views.service import ServiceViewSet, ServiceDetail, MyCategoryViewSet
@@ -35,4 +36,7 @@ urlpatterns = [
     path('weekday/', WeekdayView.as_view(), name='weekday'),
     path('create/work/', WorkerDoctorCreat.as_view()),
     path('work/', WorkerViewSet.as_view()),
+    path('payment/', payment),
+    path('doctor/callback/', payme_callback_doctor),
+
 ]
