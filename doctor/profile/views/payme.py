@@ -54,9 +54,9 @@ def payme_callback_doctor(request):
     user = User.objects.get(username=username)
 
     if method == "CheckPerformTransaction":
-        balance = Balance.objects.get(user=user)
+        balance = Balance.objects.filter(user=user).last()
         amount = params.get("amount")
-        if balance.excit():
+        if balance:
             balance.amount += amount
             balance.save()
         else:
