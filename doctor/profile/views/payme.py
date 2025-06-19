@@ -2,6 +2,7 @@ import base64
 
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -32,8 +33,11 @@ def payment(request):
     """
     user = request.user
     username = user.username
-    link = generate_doctor_link(username)
-    return Response({'link': link})
+    doctor = user.specialist
+    if doctor:
+        link = generate_doctor_link(username)
+        return Response({'link': link})
+    return JsonResponse({'error': 'Doctor not found'}, status=status.HTTP_404_NOT_FOUND)
 
 @csrf_exempt
 def payme_callback_doctor(request):
