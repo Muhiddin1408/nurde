@@ -35,7 +35,7 @@ MERCHANT_ID = "6830068ddfc9ac0473674de8"  # o'zgaruvchi sifatida tashqariga chiq
 # utils/payme.py
 import base64
 
-def generate_payme_link(order_id, amount, MERCHANT_ID):
+def generate_payme_link(order_id, amount):
     """
     amount so'mda (masalan: 5000)
     Payme uchun tiyin kerak => amount * 100
@@ -56,7 +56,7 @@ class PaymeInitAPIView(APIView):
             return Response({'error': 'Amount is required'}, status=400)
 
         order = Order.objects.create(user=request.user, amount=amount)
-        payme_link = generate_payme_link(order.id, order.amount, MERCHANT_ID)
+        payme_link = generate_payme_link(order.id, order.amount)
 
         return Response({
             "order_id": order.id,
