@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Specialist, ReadMore, CommentReadMore, Story, OpinionColleague, AdminClinic, Worker
+from .models import Specialist, ReadMore, CommentReadMore, Story, OpinionColleague, AdminClinic, Worker, Balance, \
+    Payment
 from .models.education import Education
 from .models.in_work import InWork
 from .models.work import Work
@@ -7,9 +8,9 @@ from .models.work import Work
 # Register your models here.
 
 admin.site.register(Specialist)
-# admin.site.register(ReadMore)
+admin.site.register(Balance)
 admin.site.register(CommentReadMore)
-# admin.site.register(Story)
+admin.site.register(Payment)
 admin.site.register(OpinionColleague)
 admin.site.register(Education)
 admin.site.register(InWork)
