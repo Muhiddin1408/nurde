@@ -77,12 +77,12 @@ def payme_callback(request):
     order_id = params.get("account", {}).get("order_id")
 
     if not order_id:
-        return JsonResponse({"error": -31050}, status=400)
+        return JsonResponse({"error": -32504}, status=400)
 
     try:
         order = Order.objects.get(id=order_id)
     except Order.DoesNotExist:
-        return JsonResponse({"error": -31050}, status=404)
+        return JsonResponse({"error": -32504}, status=404)
 
     if method == "CheckPerformTransaction":
         return JsonResponse({
