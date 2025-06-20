@@ -145,6 +145,7 @@ def payme_callback_doctor(request):
             payme.cancel_at = int(datetime.now().timestamp() * 1000)
             payme.save()
         payme.state = -2
+        payme.save()
         return JsonResponse({
             "result": {
                 "transaction": params.get("id"),
