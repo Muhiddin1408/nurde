@@ -77,12 +77,48 @@ def payme_callback(request):
     order_id = params.get("account", {}).get("order_id")
 
     if not order_id:
-        return JsonResponse({"error": -32504}, status=400)
+        return JsonResponse({
+            "error": {
+                "message": {
+                    'en': "User not found",
+                    'ru': "Такой пользователь не найден",
+                    'uz': "Bunaqa user topilmadi"
+                },
+                "code": -32504,
+            },
+            "id": data.get("id"),
+            "jsonrpc": data.get("jsonrpc"),
+        })
 
     try:
         order = Order.objects.get(id=order_id)
     except Order.DoesNotExist:
-        return JsonResponse({"error": -32504}, status=404)
+        return JsonResponse({
+            "error": {
+                "message": {
+                    'en': "User not found",
+                    'ru': "Такой пользователь не найден",
+                    'uz': "Bunaqa user topilmadi"
+                },
+                "code": -31050,
+            },
+            "id": data.get("id"),
+            "jsonrpc": data.get("jsonrpc"),
+        })
+
+    if int(order.price) != int(params.get("amount", 0)):
+        return JsonResponse({
+            "error": {
+                "message": {
+                    'en': "User not found",
+                    'ru': "Такой пользователь не найден",
+                    'uz': "Bunaqa user topilmadi"
+                },
+                "code": -31001,
+            },
+            "id": data.get("id"),
+            "jsonrpc": data.get("jsonrpc"),
+        })
 
     if method == "CheckPerformTransaction":
         return JsonResponse({
