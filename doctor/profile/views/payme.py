@@ -50,7 +50,7 @@ def payme_callback_doctor(request):
     if not username:
         return JsonResponse({
             "error": {
-                "massage": {
+                "message": {
                     'en': "User not found",
                     'ru': "Такой пользователь не найден",
                     'uz': "Bunaqa user topilmadi"
