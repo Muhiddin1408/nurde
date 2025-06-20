@@ -163,7 +163,7 @@ def payme_callback(request):
         return JsonResponse({
             "result": {
                 "transaction": params.get("id"),
-                "perform_time": int(datetime.now().timestamp() * 1000),
+                "perform_time": payme.perform_time,
                 "state": 2
             }
         })
