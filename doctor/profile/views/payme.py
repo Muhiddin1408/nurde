@@ -160,10 +160,10 @@ def payme_callback_doctor(request):
         return JsonResponse({
             "result": {
                 "transaction": params.get("id"),
-                "cancel_time": get.cancel_at,
-                "create_time": get.crated_at,
+                "cancel_time": get.cancel_at or 0,
+                "create_time": get.crated_at or 0,
                 "reason": None,
-                "perform_time": get.perform_time,
+                "perform_time": get.perform_time or 0,
                 "state": get.state
             },
             "id": data.get("id"),
