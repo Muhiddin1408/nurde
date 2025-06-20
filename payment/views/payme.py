@@ -19,12 +19,14 @@
 #         Handle the cancelled payment. You can override this method
 #         """
 #         print(f"Transaction cancelled for this params: {params} and cancelled_result: {result}")
+from datetime import datetime
 
 # views.py
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
+from apps.basic.models.payme import Payme
 from apps.order.models import Order
 
 # from .models import Order
@@ -127,38 +129,69 @@ def payme_callback(request):
             }
         })
 
+
     elif method == "CreateTransaction":
-        order.payme_transaction_id = params.get("id")
-        order.save()
+
+        # order.payme_transaction_id = params.get("id")
+
+        # order.save()
+
+        Payme.objects.create(id_name=params.get("id"), amount=params.get("amount"), method="CreateTransaction",
+                             crated_at=params.get("time"))
+
         return JsonResponse({
+
             "result": {
-                "create_time": int(order.created_at.timestamp() * 1000),
+
+                "create_time": params.get('time'),
+
                 "transaction": params.get("id"),
-                "state": 1
+
+                "state": 1,
+
+
+                "amount": params.get("amount"),
+
             }
+
         })
 
     elif method == "PerformTransaction":
-        order.is_paid = True
-        order.save()
         return JsonResponse({
             "result": {
-                "transaction": order.payme_transaction_id,
-                "perform_time": int(order.created_at.timestamp() * 1000),
+                "transaction": params.get("id"),
+                "perform_time": int(datetime.now().timestamp() * 1000),
                 "state": 2
             }
         })
 
     elif method == "CancelTransaction":
-        order.is_paid = False
-        order.save()
+        payme = Payme.objects.filter(id_name=params.get("id")).last()
+        payme.cancel_at = int(datetime.now().timestamp() * 1000)
+        payme.save()
         return JsonResponse({
             "result": {
-                "transaction": order.payme_transaction_id,
-                "cancel_time": int(order.created_at.timestamp() * 1000),
+                "transaction": params.get("id"),
+                "cancel_time": int(datetime.now().timestamp() * 1000),
                 "state": -1
             }
         })
 
+    elif method == "CheckTransaction":
+        # order.is_paid = False
+        # order.save()
+        get = Payme.objects.filter(id_name=params.get("id")).last()
+        return JsonResponse({
+            "result": {
+                "transaction": params.get("id"),
+                "cancel_time": 0,
+                "create_time": get.crated_at,
+                "reason": None,
+                "perform_time": 0,
+                "state": 1
+            },
+            "id": data.get("id"),
+            "jsonrpc": data.get("jsonrpc"),
+        })
     return JsonResponse({"error": "Unknown method"}, status=400)
 
