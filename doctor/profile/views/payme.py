@@ -60,7 +60,7 @@ def payme_callback_doctor(request):
         return JsonResponse({
             "result": {
                 "allow": False,
-                "status": -32504,
+                "error": -32504,
             }
         })
 
