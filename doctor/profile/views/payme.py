@@ -1,4 +1,5 @@
 import base64
+from datetime import datetime
 
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -91,7 +92,7 @@ def payme_callback_doctor(request):
         else:
             Balance.objects.create(user=user, balance=amount)
 
-        Payment.objects.create(user=user, amount=amount, status='doctor')
+        payment = Payment.objects.create(user=user, amount=amount, status='doctor')
 
         return JsonResponse({
             "result": {
@@ -107,7 +108,7 @@ def payme_callback_doctor(request):
         # order.save()
         return JsonResponse({
             "result": {
-                # "create_time": int(order.created_at.timestamp() * 1000),
+                "create_time": int(datetime.now().timestamp() * 1000),
                 "transaction": params.get("id"),
                 "state": 1,
                 'username': username,
@@ -120,8 +121,8 @@ def payme_callback_doctor(request):
         # order.save()
         return JsonResponse({
             "result": {
-                # "transaction": order.payme_transaction_id,
-                # "perform_time": int(order.created_at.timestamp() * 1000),
+                "transaction": user.id,
+                "perform_time": int(datetime.now().timestamp() * 1000),
                 "state": 2
             }
         })
@@ -131,8 +132,8 @@ def payme_callback_doctor(request):
         # order.save()
         return JsonResponse({
             "result": {
-                # "transaction": order.payme_transaction_id,
-                # "cancel_time": int(order.created_at.timestamp() * 1000),
+                "transaction": user.id,
+                "cancel_time": int(datetime.now().timestamp() * 1000),
                 "state": -1
             }
         })
