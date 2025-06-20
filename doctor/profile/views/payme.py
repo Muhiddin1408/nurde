@@ -55,21 +55,7 @@ def payme_callback_doctor(request):
     # try:
     #     order = Order.objects.get(id=order_id)
     # except Order.DoesNotExist:
-    #     return JsonResponse({"error": "Order not found"}, status=404)
-    user = User.objects.filter(username=username).last()
-    if not user:
-        return JsonResponse({
-            "error": {
-                "message": {
-                    'en': "User not found",
-                    'ru': "Такой пользователь не найден",
-                    'uz': "Bunaqa user topilmadi"
-                },
-                "code": -31050,
-            },
-            "id": data.get("id"),
-            "jsonrpc": data.get("jsonrpc"),
-        })
+
 
     if method == "CheckPerformTransaction":
         if not username:
@@ -136,7 +122,7 @@ def payme_callback_doctor(request):
         # order.save()
         return JsonResponse({
             "result": {
-                "transaction": user.id,
+                "transaction": params.get("id"),
                 "perform_time": int(datetime.now().timestamp() * 1000),
                 "state": 2
             }
@@ -147,7 +133,7 @@ def payme_callback_doctor(request):
         # order.save()
         return JsonResponse({
             "result": {
-                "transaction": user.id,
+                "transaction": params.get("id"),
                 "cancel_time": int(datetime.now().timestamp() * 1000),
                 "state": -1
             }
