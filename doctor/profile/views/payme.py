@@ -58,10 +58,16 @@ def payme_callback_doctor(request):
     user = User.objects.filter(username=username).last()
     if not user:
         return JsonResponse({
-            "result": {
-                "allow": False,
-                "error": -32504,
-            }
+            "error": {
+                "massage": {
+                    'en': "User not found",
+                    'ru': "Такой пользователь не найден",
+                    'uz': "Bunaqa user topilmadi"
+                },
+                "code": -32504,
+            },
+            "id": data.get("id"),
+            "jsonrpc": data.get("jsonrpc"),
         })
 
     if method == "CheckPerformTransaction":
