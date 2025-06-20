@@ -138,7 +138,7 @@ def payme_callback_doctor(request):
                 "state": -1
             }
         })
-    elif method == "CancelTransaction":
+    elif method == "CheckTransaction":
         # order.is_paid = False
         # order.save()
         return JsonResponse({
