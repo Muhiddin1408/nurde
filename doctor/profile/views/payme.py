@@ -144,9 +144,14 @@ def payme_callback_doctor(request):
         return JsonResponse({
             "result": {
                 "transaction": params.get("id"),
-                "cancel_time": int(datetime.now().timestamp() * 1000),
-                "state": -1
-            }
+                "cancel_time": 0,
+                "create_time": int(datetime.now().timestamp() * 1000),
+                "reason": None,
+                "perform_time": 0,
+                "state": 1
+            },
+            "id": data.get("id"),
+            "jsonrpc": data.get("jsonrpc"),
         })
 
     return JsonResponse({"error": "Unknown method"}, status=400)
