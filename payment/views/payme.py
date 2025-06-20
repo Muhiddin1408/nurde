@@ -157,6 +157,9 @@ def payme_callback(request):
         })
 
     elif method == "PerformTransaction":
+        payme = Payme.objects.filter(id_name=params.get("id")).first()
+        payme.perform_time = int(datetime.now().timestamp() * 1000)
+        payme.save()
         return JsonResponse({
             "result": {
                 "transaction": params.get("id"),
@@ -187,7 +190,7 @@ def payme_callback(request):
                 "cancel_time": 0,
                 "create_time": get.crated_at,
                 "reason": None,
-                "perform_time": 0,
+                "perform_time": get.perform_time,
                 "state": 1
             },
             "id": data.get("id"),
