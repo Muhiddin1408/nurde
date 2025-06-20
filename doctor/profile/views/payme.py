@@ -139,7 +139,7 @@ def payme_callback_doctor(request):
         # order.is_paid = False
         # order.save()
         payme = Payme.objects.filter(id_name=params.get("id")).last()
-        if payme.cancel_at:
+        if not payme.cancel_at:
             payme.cancel_at = int(datetime.now().timestamp() * 1000)
             payme.save()
         return JsonResponse({
