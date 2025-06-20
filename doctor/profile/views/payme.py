@@ -71,12 +71,12 @@ def payme_callback_doctor(request):
     if not user:
         return JsonResponse({
             "error": {
-                "massage": {
+                "message": {
                     'en': "User not found",
                     'ru': "Такой пользователь не найден",
                     'uz': "Bunaqa user topilmadi"
                 },
-                "code": -32504,
+                "code": -31001,
             },
             "id": data.get("id"),
             "jsonrpc": data.get("jsonrpc"),
