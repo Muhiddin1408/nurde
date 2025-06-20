@@ -9,3 +9,4 @@ class Payme(models.Model):
     cancel_at = models.IntegerField(blank=True, null=True)
     perform_time = models.IntegerField(blank=True, null=True)
     state = models.IntegerField(blank=True, null=True)
+    reason = models.IntegerField(blank=True, null=True)
