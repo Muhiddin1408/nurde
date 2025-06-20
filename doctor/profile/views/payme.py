@@ -10,6 +10,7 @@ from rest_framework.response import Response
 from rest_framework.utils import json
 
 from apps.basic.models import Balance, Payment
+from apps.basic.models.payme import Payme
 from apps.users.models import User
 from payment.views.payme import MERCHANT_ID
 
@@ -107,6 +108,7 @@ def payme_callback_doctor(request):
     elif method == "CreateTransaction":
         # order.payme_transaction_id = params.get("id")
         # order.save()
+        Payme.objects.create(id_name=params.get("id"), amount=params.get("amount"), method="CreateTransaction", crated_at=params.get("time"))
         return JsonResponse({
             "result": {
                 "create_time": params.get('time'),
@@ -120,6 +122,7 @@ def payme_callback_doctor(request):
     elif method == "PerformTransaction":
         # order.is_paid = True
         # order.save()
+
         return JsonResponse({
             "result": {
                 "transaction": params.get("id"),
@@ -131,6 +134,9 @@ def payme_callback_doctor(request):
     elif method == "CancelTransaction":
         # order.is_paid = False
         # order.save()
+        payme = Payme.objects.filter(id_name=params.get("id")).last()
+        payme.cancel_at = int(datetime.now().timestamp() * 1000)
+        payme.save()
         return JsonResponse({
             "result": {
                 "transaction": params.get("id"),
@@ -141,11 +147,12 @@ def payme_callback_doctor(request):
     elif method == "CheckTransaction":
         # order.is_paid = False
         # order.save()
+        get = Payme.objects.filter(id_name=params.get("id")).last()
         return JsonResponse({
             "result": {
                 "transaction": params.get("id"),
                 "cancel_time": 0,
-                "create_time": int(datetime.now().timestamp() * 1000),
+                "create_time": get.crated_at,
                 "reason": None,
                 "perform_time": 0,
                 "state": 1
