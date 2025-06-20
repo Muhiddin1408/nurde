@@ -139,12 +139,13 @@ def payme_callback_doctor(request):
         # order.is_paid = False
         # order.save()
         payme = Payme.objects.filter(id_name=params.get("id")).last()
-        payme.cancel_at = int(datetime.now().timestamp() * 1000)
-        payme.save()
+        if payme.cancel_at:
+            payme.cancel_at = int(datetime.now().timestamp() * 1000)
+            payme.save()
         return JsonResponse({
             "result": {
                 "transaction": params.get("id"),
-                "cancel_time": int(datetime.now().timestamp() * 1000),
+                "cancel_time": payme.cancel_at,
                 "state": -2
             }
         })
@@ -155,7 +156,7 @@ def payme_callback_doctor(request):
         return JsonResponse({
             "result": {
                 "transaction": params.get("id"),
-                "cancel_time": 0,
+                "cancel_time": get.cancel_at,
                 "create_time": get.crated_at,
                 "reason": None,
                 "perform_time": get.perform_time,
