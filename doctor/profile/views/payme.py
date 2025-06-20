@@ -47,7 +47,19 @@ def payme_callback_doctor(request):
     params = data.get("params", {})
     # amount = data.get("amount")
     username = params.get("account", {}).get("username")
-
+    if not username:
+        return JsonResponse({
+            "error": {
+                "massage": {
+                    'en': "User not found",
+                    'ru': "Такой пользователь не найден",
+                    'uz': "Bunaqa user topilmadi"
+                },
+                "code": -32504,
+            },
+            "id": data.get("id"),
+            "jsonrpc": data.get("jsonrpc"),
+        })
     # if not order_id:
     #     return JsonResponse({"error": "order_id not found"}, status=400)
     #
