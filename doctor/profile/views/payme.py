@@ -108,7 +108,7 @@ def payme_callback_doctor(request):
     elif method == "CreateTransaction":
         # order.payme_transaction_id = params.get("id")
         # order.save()
-        Payme.objects.create(id_name=params.get("id"), amount=params.get("amount"), method="CreateTransaction", crated_at=params.get("time"))
+        Payme.objects.create(id_name=params.get("id"), amount=params.get("amount"), method="CreateTransaction", crated_at=params.get("time"), state=1)
         return JsonResponse({
             "result": {
                 "create_time": params.get('time'),
@@ -127,6 +127,7 @@ def payme_callback_doctor(request):
                 payme.save()
         else:
             payme = Payme.objects.create(id_name=params.get("id"), payment_time=int(datetime.now().timestamp() * 1000))
+        payme.state = 2
         return JsonResponse({
             "result": {
                 "transaction": params.get("id"),
@@ -142,6 +143,7 @@ def payme_callback_doctor(request):
         if not payme.cancel_at:
             payme.cancel_at = int(datetime.now().timestamp() * 1000)
             payme.save()
+        payme.state = -2
         return JsonResponse({
             "result": {
                 "transaction": params.get("id"),
@@ -160,7 +162,7 @@ def payme_callback_doctor(request):
                 "create_time": get.crated_at,
                 "reason": None,
                 "perform_time": get.perform_time,
-                "state": 1
+                "state": get.state
             },
             "id": data.get("id"),
             "jsonrpc": data.get("jsonrpc"),
