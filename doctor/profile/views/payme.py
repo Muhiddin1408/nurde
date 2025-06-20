@@ -128,11 +128,12 @@ def payme_callback_doctor(request):
         else:
             payme = Payme.objects.create(id_name=params.get("id"), payment_time=int(datetime.now().timestamp() * 1000))
         payme.state = 2
+        payme.save()
         return JsonResponse({
             "result": {
                 "transaction": params.get("id"),
                 "perform_time": payme.perform_time,
-                "state":2
+                "state": 2
             }
         })
 
