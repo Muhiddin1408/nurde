@@ -48,19 +48,7 @@ def payme_callback_doctor(request):
     params = data.get("params", {})
     # amount = data.get("amount")
     username = params.get("account", {}).get("username")
-    if not username:
-        return JsonResponse({
-            "error": {
-                "message": {
-                    'en': "User not found",
-                    'ru': "Такой пользователь не найден",
-                    'uz': "Bunaqa user topilmadi"
-                },
-                "code": -32504,
-            },
-            "id": data.get("id"),
-            "jsonrpc": data.get("jsonrpc"),
-        })
+
     # if not order_id:
     #     return JsonResponse({"error": "order_id not found"}, status=400)
     #
@@ -84,6 +72,33 @@ def payme_callback_doctor(request):
         })
 
     if method == "CheckPerformTransaction":
+        if not username:
+            return JsonResponse({
+                "error": {
+                    "message": {
+                        'en': "User not found",
+                        'ru': "Такой пользователь не найден",
+                        'uz': "Bunaqa user topilmadi"
+                    },
+                    "code": -32504,
+                },
+                "id": data.get("id"),
+                "jsonrpc": data.get("jsonrpc"),
+            })
+        user = User.objects.filter(username=username).last()
+        if not user:
+            return JsonResponse({
+                "error": {
+                    "message": {
+                        'en': "User not found",
+                        'ru': "Такой пользователь не найден",
+                        'uz': "Bunaqa user topilmadi"
+                    },
+                    "code": -31050,
+                },
+                "id": data.get("id"),
+                "jsonrpc": data.get("jsonrpc"),
+            })
         balance = Balance.objects.filter(user=user).last()
         amount = params.get("amount")
         if balance:
@@ -108,7 +123,7 @@ def payme_callback_doctor(request):
         # order.save()
         return JsonResponse({
             "result": {
-                "create_time": int(datetime.now().timestamp() * 1000),
+                "create_time": params.get('time'),
                 "transaction": params.get("id"),
                 "state": 1,
                 'username': username,
