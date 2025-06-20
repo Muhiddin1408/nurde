@@ -55,7 +55,14 @@ def payme_callback_doctor(request):
     #     order = Order.objects.get(id=order_id)
     # except Order.DoesNotExist:
     #     return JsonResponse({"error": "Order not found"}, status=404)
-    user = User.objects.get(username=username)
+    user = User.objects.filter(username=username).last()
+    if not user:
+        return JsonResponse({
+            "result": {
+                "allow": False,
+                "status": -31050,
+            }
+        })
 
     if method == "CheckPerformTransaction":
         balance = Balance.objects.filter(user=user).last()
