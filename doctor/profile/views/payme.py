@@ -145,7 +145,7 @@ def payme_callback_doctor(request):
             "result": {
                 "transaction": params.get("id"),
                 "cancel_time": int(datetime.now().timestamp() * 1000),
-                "state": -1
+                "state": -2
             }
         })
     elif method == "CheckTransaction":
