@@ -138,6 +138,16 @@ def payme_callback_doctor(request):
                 "state": -1
             }
         })
+    elif method == "CancelTransaction":
+        # order.is_paid = False
+        # order.save()
+        return JsonResponse({
+            "result": {
+                "transaction": params.get("id"),
+                "cancel_time": int(datetime.now().timestamp() * 1000),
+                "state": -1
+            }
+        })
 
     return JsonResponse({"error": "Unknown method"}, status=400)
 
