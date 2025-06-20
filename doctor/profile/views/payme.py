@@ -76,7 +76,7 @@ def payme_callback_doctor(request):
                     'ru': "Такой пользователь не найден",
                     'uz': "Bunaqa user topilmadi"
                 },
-                "code": -31001,
+                "code": -31050,
             },
             "id": data.get("id"),
             "jsonrpc": data.get("jsonrpc"),
