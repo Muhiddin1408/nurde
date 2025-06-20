@@ -122,8 +122,9 @@ def payme_callback_doctor(request):
     elif method == "PerformTransaction":
         payme = Payme.objects.filter(id_name=params.get("id")).last()
         if payme:
-            payme.perform_time = int(datetime.now().timestamp() * 1000)
-            payme.save()
+            if not payme.perform_time:
+                payme.perform_time = int(datetime.now().timestamp() * 1000)
+                payme.save()
         else:
             payme = Payme.objects.create(id_name=params.get("id"), payment_time=int(datetime.now().timestamp() * 1000))
         return JsonResponse({
