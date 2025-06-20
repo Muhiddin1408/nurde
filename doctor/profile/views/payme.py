@@ -163,7 +163,7 @@ def payme_callback_doctor(request):
                 "transaction": params.get("id"),
                 "cancel_time": get.cancel_at or 0,
                 "create_time": get.crated_at or 0,
-                "reason": None,
+                "reason": get.reason,
                 "perform_time": get.perform_time or 0,
                 "state": get.state
             },
