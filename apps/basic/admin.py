@@ -3,6 +3,7 @@ from .models import Specialist, ReadMore, CommentReadMore, Story, OpinionColleag
     Payment
 from .models.education import Education
 from .models.in_work import InWork
+from .models.payme import Payme
 from .models.work import Work
 
 # Register your models here.
@@ -17,3 +18,4 @@ admin.site.register(InWork)
 admin.site.register(Work)
 admin.site.register(AdminClinic)
 admin.site.register(Worker)
+admin.site.register(Payme)
