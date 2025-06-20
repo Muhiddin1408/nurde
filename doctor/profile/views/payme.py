@@ -131,7 +131,7 @@ def payme_callback_doctor(request):
             "result": {
                 "transaction": params.get("id"),
                 "perform_time": payme.perform_time,
-                "state":1
+                "state":2
             }
         })
 
