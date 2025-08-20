@@ -287,7 +287,7 @@ class LoginWithSocialAccountViewSet(viewsets.GenericViewSet):
                 username = 'u' + user_data
                 user = User.objects.filter(username=username).exists()
                 if user:
-                    if user.is_active == True:
+                    if user.is_active:
                         user = User.objects.get(username=username)
                     else:
                         User.objects.get(username=username).delete()
@@ -308,5 +308,5 @@ class LoginWithSocialAccountViewSet(viewsets.GenericViewSet):
         except Exception as e:
             trace_back = sys.exc_info()[2]
             line = trace_back.tb_lineno
-            res = {'message': _(str(e) + ' - line -' + str(line))}
+            res = {'message': _(str(e) + ' - line -' + str(line) + str(user.is_active))}
             return Response(res, status=400)
