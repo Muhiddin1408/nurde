@@ -308,5 +308,5 @@ class LoginWithSocialAccountViewSet(viewsets.GenericViewSet):
         except Exception as e:
             trace_back = sys.exc_info()[2]
             line = trace_back.tb_lineno
-            res = {'message': _(str(e) + ' - line -' + str(line) + str(user.is_active))}
+            res = {'message': _(str(e) + ' - line -' + str(line) + str(status) + str(user_data))}
             return Response(res, status=400)
