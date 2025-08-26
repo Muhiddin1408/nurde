@@ -17,24 +17,17 @@ class ProfileUpdateView(generics.RetrieveUpdateAPIView):
 
         # Foydalanuvchi tekshiruvi
         if not user or not user.is_authenticated:
-            raise NotAuthenticated("Avval tizimga kiring.")
+            raise NotAuthenticated("Please log in to access this resource.")
 
         try:
-            # Kerak bo‘lsa select_related bilan optimallashtirish
             patient = Patient.objects.select_related("user").get(user=user)
-            # Agar object-level permissionlar bo‘lsa, shu yerda tekshirish mumkin:
-            # self.check_object_permissions(self.request, patient)
             return patient
         except Patient.DoesNotExist:
-            # Faqat o‘zi (request.user) ga tegishli patient topilmadi
-            raise NotFound("Ushbu foydalanuvchiga tegishli patient topilmadi.")
+            raise NotFound("No patient found for the current user.")
 
         except Patient.MultipleObjectsReturned:
-            # Noto‘g‘ri ma’lumotlar holati: bitta bo‘lishi kerak edi.
-            # Xohlasangiz eng so‘nggisini qaytarib turishingiz mumkin,
-            # yoki darhol xatolik ko‘taring. Quyida aniq xatolik ko‘tariladi:
             raise APIException(
-                "Ichki xatolik: ushbu foydalanuvchi uchun bir nechta patient yozuvi mavjud."
+                "Internal error: multiple patient records found for this user."
             )
 
 
