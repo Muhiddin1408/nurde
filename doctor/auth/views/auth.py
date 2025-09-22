@@ -222,14 +222,15 @@ class LoginWithSocialDoctorViewSet(viewsets.GenericViewSet):
         try:
 
             auth_token = request.data['auth_token']
-            print(auth_token)
             status, user_data = google.Google.verify_auth_token(auth_token)
             if status:
-                if User.objects.get(username='d' + user_data['email']).is_active:
-                    user = User.objects.get(username='d' + user_data['email'])
-                else:
-                    User.objects.get(username='d' + user_data['email']).delete()
-                    user = register_social_doctor(user_data['email'], user_data.get('given_name'), user_data.get('family_name'), 'google')
+                user = User.objects.filter(username='d' + user_data['email']).last()
+                if user:
+                    if user.is_active:
+                        user = User.objects.get(username='d' + user_data['email'])
+                    else:
+                        User.objects.get(username='d' + user_data['email']).delete()
+                        user = register_social_doctor(user_data['email'], user_data.get('given_name'), user_data.get('family_name'), 'google')
 
                 refresh, access = get_tokens_for_user(user)
                 if Specialist.objects.get(user=user):
@@ -260,8 +261,7 @@ class LoginWithSocialDoctorViewSet(viewsets.GenericViewSet):
             status, user_data = apple.AppleOAuth2().do_auth(auth_token)
             if status:
                 username = 'd' + user_data
-                print(username)
-                user = User.objects.filter(username=username).exists()
+                user = User.objects.filter(username=username).last()
                 if user:
                     if user.is_active:
                         user = User.objects.get(username=username)

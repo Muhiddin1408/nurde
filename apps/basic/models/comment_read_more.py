@@ -13,7 +13,7 @@ class CommentReadMore(models.Model):
     user = models.ForeignKey(Patient, on_delete=models.CASCADE)
     service_rendered = models.DateField(blank=True, null=True)
     experts_response = models.CharField(max_length=255, blank=True, null=True)
-    read_more = models.ForeignKey(Specialist, on_delete=models.CASCADE)
+    read_more = models.ForeignKey(Specialist, on_delete=models.CASCADE, related_name='commentreadmore')
     created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     order = models.ForeignKey(Order, on_delete=models.CASCADE, blank=True, null=True)
 

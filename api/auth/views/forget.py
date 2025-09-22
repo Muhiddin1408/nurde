@@ -7,7 +7,9 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 
+from api.auth.views.registration import is_all_digits
 from api.utils.eskiz import SendSmsApiWithEskiz
+from api.utils.gmail_sms import send_sms
 from apps.users.models import User
 
 
@@ -17,15 +19,19 @@ def forget(request):
     try:
         username = request.data['username']
         user = User.objects.filter(username='u' + username).last()
-        print(user)
         if user:
-            print(user)
             sms_code = random.randint(1000, 9999)
             user = User.objects.get(username='u' + username)
             user.sms_code = sms_code
             user.save()
-            SendSmsApiWithEskiz(message="https://star-one.uz/ Tasdiqlash kodi " + str(sms_code),
+            if username.isdigit():
+                if is_all_digits(username):
+                    SendSmsApiWithEskiz(message="https://star-one.uz/ Tasdiqlash kodi " + str(sms_code),
                                 phone=int(username)).send()
+            else:
+                send_sms(username, f'Код подтверждения для приложения OVI '
+                                f'Ваш код подтверждения для входа в приложение OVI: {sms_code}'
+                                'Если у вас возникнут вопросы или потребуется помощь, пожалуйста, сообщите.')
             return Response({'status': True}, status=status.HTTP_200_OK)
         else:
             return Response({'status': False}, status=status.HTTP_404_NOT_FOUND)

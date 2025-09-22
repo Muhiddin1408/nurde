@@ -1,3 +1,6 @@
+from datetime import datetime, time
+
+from django.db.models import Avg, Count
 from rest_framework import viewsets, permissions, status, generics, filters
 from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound
@@ -32,9 +35,10 @@ class SpecialistCategoryViewSet(viewsets.ReadOnlyModelViewSet):
     pagination_class = SmallPagesPagination
 
     def get_queryset(self):
-        category_ids = self.request.query_params.getlist('category')  # to'g'ridan to'g'ri list oladi
-        sort_by = self.request.query_params.get('sort')
-        type_ = self.request.query_params.get('type')
+        params = self.request.query_params
+        category_ids = params.getlist('category')  # to'g'ridan to'g'ri list oladi
+        sort_by = params.get('sort')
+        type_ = params.get('type')
 
         queryset = Specialist.objects.all()
 
@@ -46,9 +50,41 @@ class SpecialistCategoryViewSet(viewsets.ReadOnlyModelViewSet):
                 queryset = queryset.filter(type='doctor')
             elif type_ == '2':
                 queryset = queryset.filter(type='nurses')
-        #
-        # if sort_by == 'ranking':
-        #     queryset = queryset.order_by('-ranking')
+
+        date = params.get('date')
+        if date:
+            dt = datetime.strptime(date, "%Y-%m-%d")
+            queryset = queryset.filter(specialistinwork__weekday__name=dt)
+
+        time_period=params.get('time_period')
+        if time_period:
+            if time_period == 'morning':
+                queryset = queryset.filter(specialistinwork__start__lte=time(12, 0))
+            elif time_period == 'afternoon':
+                queryset = queryset.filter(specialistinwork__start__lte=time(18, 0),
+                                           specialistinwork__end__gte=time(12, 0))
+            elif time_period == 'evening':
+                queryset = queryset.filter(specialistinwork__start__gte=time(18, 0),)
+
+        min_rating = params.get('min_rating')
+        if min_rating:
+            queryset = queryset.annotate(avg_ranking=Avg('commentreadmore__ranking')).filter(avg_ranking__gt=4)
+
+        gender = params.get('gender')
+        if gender:
+            if gender == 'male':
+                queryset = queryset.filter(gender='man')
+            elif gender == 'female':
+                queryset = queryset.filter(gender='woman')
+
+
+        if sort_by == '1':
+            queryset = queryset
+        elif sort_by == '2':
+            queryset = queryset.annotate(avg_ranking=Avg('commentreadmore__ranking')).order_by('-avg_ranking')
+        elif sort_by == '4':
+            queryset = queryset.annotate(comment_count=Count('commentreadmore')).order_by('-comment_count')
+
 
         return queryset
 
