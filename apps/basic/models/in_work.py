@@ -6,6 +6,6 @@ from apps.users.model.weekday import Weekday
 
 class InWork(models.Model):
     weekday = models.ForeignKey(Weekday, on_delete=models.CASCADE)
-    specialist = models.ForeignKey(Specialist, on_delete=models.CASCADE)
+    specialist = models.ForeignKey(Specialist, on_delete=models.CASCADE, related_name='specialistinwork')
     start = models.TimeField()
     finish = models.TimeField()

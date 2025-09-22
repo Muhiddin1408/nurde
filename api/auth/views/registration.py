@@ -284,7 +284,7 @@ class LoginWithSocialAccountViewSet(viewsets.GenericViewSet):
             status, user_data = apple.AppleOAuth2().do_auth(auth_token)
             if status:
                 username = 'u' + user_data
-                user = User.objects.filter(username=username).exists()
+                user = User.objects.filter(username=username).last()
                 if user:
                     if user.last().is_active:
                         user = User.objects.get(username=username)
