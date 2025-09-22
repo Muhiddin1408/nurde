@@ -1,4 +1,4 @@
-from rest_framework import viewsets, permissions, status, generics
+from rest_framework import viewsets, permissions, status, generics, filters
 from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound
 from rest_framework.pagination import PageNumberPagination
@@ -17,6 +17,7 @@ from apps.utils.models import Category
 class SpecialistViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializers
+    filter_backends = [filters.SearchFilter]
     search_fields = ['name']
 
 
