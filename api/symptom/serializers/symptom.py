@@ -27,7 +27,7 @@ class SymptomTypeSerializer(serializers.ModelSerializer):
         return SymptomSubTypeSerializer(query, many=True).data
 
 
-class SymptomSerializers(serializers.Serializer):
+class SymptomSerializers(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     name = serializers.CharField(read_only=True)
     description = serializers.CharField(read_only=True)
@@ -37,6 +37,18 @@ class SymptomSerializers(serializers.Serializer):
         model = Symptom
         fields = ('id', 'name', 'description', 'info')
         read_only_fields = ('id',)
+
+    def get_name(self, obj):
+        request = self.context.get('request')
+        if request:
+            language = request.META.get('HTTP_ACCEPT_LANGUAGE', 'uz')
+            language = language.split('-')[0].split(',')[0].lower()
+            if language == 'ru' and obj.name_ru:
+                return obj.name_ru
+            elif language == 'en' and obj.name_en:
+                return obj.name_en
+            else:
+                return obj.name
 
     def get_info(self, obj):
         request = self.context.get('request')

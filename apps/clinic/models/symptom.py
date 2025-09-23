@@ -7,6 +7,8 @@ class Symptom(models.Model):
         ('diagnoses', 'Diagnoses'),
     )
     name = models.CharField(max_length=100)
+    name_ru = models.CharField(max_length=100, blank=True, null=True)
+    name_en = models.CharField(max_length=100, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     type = models.CharField(max_length=100, blank=True, null=True, choices=TYPE_CHOICES)
 

@@ -21,7 +21,7 @@ class SpecialistViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializers
     filter_backends = [filters.SearchFilter]
-    search_fields = ['name']
+    search_fields = ['name', 'name_ru', 'name_en']
 
 
 class SmallPagesPagination(PageNumberPagination):

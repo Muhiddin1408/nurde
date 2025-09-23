@@ -25,9 +25,9 @@ class WorkTimeSerializer(serializers.ModelSerializer):
         fields = ('time',)
 
 
-class CategorySerializers(serializers.Serializer):
+class CategorySerializers(serializers.ModelSerializer):
     id = serializers.IntegerField()
-    name = serializers.CharField()
+    name = serializers.SerializerMethodField()
     icon = serializers.FileField()
 
     class Meta:
@@ -37,18 +37,9 @@ class CategorySerializers(serializers.Serializer):
 
     def get_name(self, obj):
         request = self.context.get('request')
-
         if request:
-            # Header dan til kodini olish (Accept-Language yoki custom header)
             language = request.META.get('HTTP_ACCEPT_LANGUAGE', 'uz')
-
-            # Yoki custom header ishlatish
-            # language = request.META.get('HTTP_LANGUAGE', 'uz')
-
-            # Til kodini tozalash (masalan: 'en-US' -> 'en')
             language = language.split('-')[0].split(',')[0].lower()
-
-            # Til bo'yicha nom qaytarish
             if language == 'ru' and obj.name_ru:
                 return obj.name_ru
             elif language == 'en' and obj.name_en:
