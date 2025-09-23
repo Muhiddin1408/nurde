@@ -29,7 +29,7 @@ class SymptomTypeSerializer(serializers.ModelSerializer):
 
 class SymptomSerializers(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
-    name = serializers.CharField(read_only=True)
+    name = serializers.SerializerMethodField()
     description = serializers.CharField(read_only=True)
     info = serializers.SerializerMethodField()
 
