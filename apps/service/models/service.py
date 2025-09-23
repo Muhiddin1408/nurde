@@ -7,7 +7,7 @@ from apps.utils.models import Category
 
 
 class WorkTime(models.Model):
-    user = models.ForeignKey(Specialist, on_delete=models.CASCADE, blank=True, null=True)
+    user = models.ForeignKey(Specialist, on_delete=models.CASCADE, blank=True, null=True, related_name='worktime_specialist')
     weekday = models.ForeignKey(Weekday, on_delete=models.CASCADE)
     date = models.TimeField(blank=True, null=True)
     finish = models.TimeField(blank=True, null=True)
