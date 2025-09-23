@@ -74,9 +74,9 @@ class SpecialistCategoryViewSet(viewsets.ReadOnlyModelViewSet):
         gender = params.get('gender')
         if gender:
             if gender == 'man':
-                queryset = queryset.filter(gender='man')
+                queryset = queryset.filter(gen='man')
             elif gender == 'woman':
-                queryset = queryset.filter(gender='woman')
+                queryset = queryset.filter(gen='woman')
 
 
         if sort_by == '1':

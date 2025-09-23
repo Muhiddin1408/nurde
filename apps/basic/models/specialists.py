@@ -32,7 +32,7 @@ class Specialist(models.Model):
     staff = models.ManyToManyField(Clinic, blank=True, null=True)
     info = models.TextField(blank=True)
     pinfl = models.CharField(max_length=100, blank=True)
-    gen = models.CharField(max_length=100, blank=True)
+    gen = models.CharField(max_length=100, blank=True, choices=GEN)
     city = models.CharField(max_length=100, blank=True)
     password = models.CharField(max_length=100, blank=True)
     description = models.TextField(blank=True)
