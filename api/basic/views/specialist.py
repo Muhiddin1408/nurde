@@ -54,7 +54,8 @@ class SpecialistCategoryViewSet(viewsets.ReadOnlyModelViewSet):
         date = params.get('date')
         if date:
             dt = datetime.strptime(date, "%Y-%m-%d")
-            queryset = queryset.filter(specialistinwork__weekday__name=dt)
+
+            queryset = queryset.filter(specialistinwork__weekday__name=dt.weekday())
 
         time_period=params.get('time_period')
         if time_period:
