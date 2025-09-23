@@ -21,10 +21,11 @@ def generate_doctor_link(username):
     Payme uchun tiyin kerak => amount * 100
     """
     # amount_in_tiyin = amount * 100
-    payload = f"{MERCHANT_ID}:{username}".encode('utf-8')
+    print('sssssssssssssssssssssssssssssssssssssss')
+    payload = f"{MERCHANT_ID}:{username}?order_id={username}".encode('utf-8')
     encoded_id = base64.b64encode(payload).decode('utf-8')
 
-    return f"https://checkout.paycom.uz/{encoded_id}?order_id={username}"
+    return f"https://checkout.paycom.uz/{encoded_id}"
 
 
 @api_view(['GET'])
@@ -36,6 +37,7 @@ def payment(request):
     user = request.user
     username = user.username
     doctor = user.specialist
+    print(doctor, 'ssssssssssssssssssssssssssssssssssssss')
     if doctor:
         link = generate_doctor_link(username)
         return Response({'link': link})
