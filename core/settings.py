@@ -155,15 +155,16 @@ LANGUAGES = (
 )
 PARLER_LANGUAGES = {
     None: (
+        {'code': 'uz'},
         {'code': 'en'},
         {'code': 'ru'},
-        {'code': 'uz'},
     ),
     'default': {
-        'fallbacks': ['en'],
+        'fallbacks': ['uz'],
         'hide_untranslated': False,
     }
 }
+PARLER_DEFAULT_LANGUAGE_CODE = 'uz'
 TIME_ZONE = 'Asia/Tashkent'
 
 USE_I18N = True

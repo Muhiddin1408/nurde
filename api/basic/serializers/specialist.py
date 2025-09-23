@@ -35,6 +35,27 @@ class CategorySerializers(serializers.Serializer):
         fields = ('id', 'name', 'icon')
         # ref_name = "SpecialistCategorySerializer"
 
+    def get_name(self, obj):
+        request = self.context.get('request')
+
+        if request:
+            # Header dan til kodini olish (Accept-Language yoki custom header)
+            language = request.META.get('HTTP_ACCEPT_LANGUAGE', 'uz')
+
+            # Yoki custom header ishlatish
+            # language = request.META.get('HTTP_LANGUAGE', 'uz')
+
+            # Til kodini tozalash (masalan: 'en-US' -> 'en')
+            language = language.split('-')[0].split(',')[0].lower()
+
+            # Til bo'yicha nom qaytarish
+            if language == 'ru' and obj.name_ru:
+                return obj.name_ru
+            elif language == 'en' and obj.name_en:
+                return obj.name_en
+            else:
+                return obj.name
+
     def get_icon(self, obj):
         print(obj)
         return obj.icon.url
