@@ -69,7 +69,7 @@ class SpecialistCategoryViewSet(viewsets.ReadOnlyModelViewSet):
 
         min_rating = params.get('min_rating')
         if min_rating:
-            queryset = queryset.annotate(avg_ranking=Avg('commentreadmore__ranking')).filter(avg_ranking__gt=4)
+            queryset = queryset.annotate(avg_ranking=Avg('commentreadmore__ranking')).filter(avg_ranking__gte=4)
 
         gender = params.get('gender')
         if gender:
