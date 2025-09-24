@@ -21,7 +21,7 @@ def generate_doctor_link(username):
     Payme uchun tiyin kerak => amount * 100
     """
     # amount_in_tiyin = amount * 100
-    payload = f"m={MERCHANT_ID};as.order_id={username};a=100;l=uz".encode()
+    payload = f"m={MERCHANT_ID};ac.username={username};a=100;l=uz".encode()
     encoded_id = base64.b64encode(payload).decode()
 
     return f"https://checkout.paycom.uz/{encoded_id}"
