@@ -33,7 +33,7 @@ from apps.order.models import Order
 # from .serializers import OrderSerializer
 # from .utils.payme import generate_payme_link
 
-MERCHANT_ID = "6830068ddfc9ac0473674de8"  # o'zgaruvchi sifatida tashqariga chiqarib qo'ying4
+MERCHANT_ID = "68543ad8ce1722a4c53b76bd"  # o'zgaruvchi sifatida tashqariga chiqarib qo'ying4
 # utils/payme.py
 import base64
 
