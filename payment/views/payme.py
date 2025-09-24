@@ -43,10 +43,10 @@ def generate_payme_link(order_id, amount):
     Payme uchun tiyin kerak => amount * 100
     """
     amount_in_tiyin = amount * 100
-    payload = f"{MERCHANT_ID}:{order_id}".encode('utf-8')
+    payload = f"m={MERCHANT_ID};ac.username={order_id};a={amount_in_tiyin}".encode('utf-8')
     encoded_id = base64.b64encode(payload).decode('utf-8')
 
-    return f"https://checkout.paycom.uz/{encoded_id}?amount={amount_in_tiyin}&order_id={order_id}"
+    return f"https://checkout.paycom.uz/{encoded_id}"
 
 
 class PaymeInitAPIView(APIView):
