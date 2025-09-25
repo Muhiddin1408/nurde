@@ -36,7 +36,7 @@ class SpecialistCategoryViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         params = self.request.query_params
-        category_ids = params.getlist('category')  # to'g'ridan to'g'ri list oladi
+        category_ids = params.getlist('category')
         sort_by = params.get('sort')
         type_ = params.get('type')
 

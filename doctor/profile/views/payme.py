@@ -15,13 +15,13 @@ from apps.users.models import User
 from payment.views.payme import MERCHANT_ID
 
 
-def generate_doctor_link(username):
+def generate_doctor_link(username, amount):
     """
     amount so'mda (masalan: 5000)
     Payme uchun tiyin kerak => amount * 100
     """
     # amount_in_tiyin = amount * 100
-    payload = f"m={MERCHANT_ID};ac.username={username};a=500".encode()
+    payload = f"m={MERCHANT_ID};ac.username={username};a={amount}".encode()
     encoded_id = base64.b64encode(payload).decode()
 
     return f"https://checkout.paycom.uz/{encoded_id}"
@@ -36,9 +36,10 @@ def payment(request):
     user = request.user
     username = user.username
     doctor = user.specialist
-    print(doctor, 'ssssssssssssssssssssssssssssssssssssss')
+    amount = int(request.GET.get('amount'))
+    print(amount)
     if doctor:
-        link = generate_doctor_link(username)
+        link = generate_doctor_link(username, amount)
         return Response({'link': link})
     return JsonResponse({'error': 'Doctor not found'}, status=status.HTTP_404_NOT_FOUND)
 
