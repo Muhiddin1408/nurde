@@ -20,8 +20,8 @@ def generate_doctor_link(username, amount):
     amount so'mda (masalan: 5000)
     Payme uchun tiyin kerak => amount * 100
     """
-    # amount_in_tiyin = amount * 100
-    payload = f"m={MERCHANT_ID};ac.username={username};a={amount}".encode()
+    amount_in_tiyin = amount * 100
+    payload = f"m={MERCHANT_ID};ac.username={username};a={amount_in_tiyin}".encode()
     encoded_id = base64.b64encode(payload).decode()
 
     return f"https://checkout.paycom.uz/{encoded_id}"
