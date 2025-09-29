@@ -37,13 +37,13 @@ MERCHANT_ID = "68543ad8ce1722a4c53b76bd"  # o'zgaruvchi sifatida tashqariga chiq
 # utils/payme.py
 import base64
 
-def generate_payme_link(order_id, amount):
+def generate_payme_link(order_id, amount, user):
     """
     amount so'mda (masalan: 5000)
     Payme uchun tiyin kerak => amount * 100
     """
     amount_in_tiyin = amount * 100
-    payload = f"m={MERCHANT_ID};ac.username={order_id};a={amount_in_tiyin}".encode('utf-8')
+    payload = f"m={MERCHANT_ID};ac.username={user};a={amount_in_tiyin};order_id={order_id}".encode('utf-8')
     encoded_id = base64.b64encode(payload).decode('utf-8')
 
     return f"https://checkout.paycom.uz/{encoded_id}"
